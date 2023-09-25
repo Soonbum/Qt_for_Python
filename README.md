@@ -509,8 +509,90 @@ Qt와 Python  모두 이러한 상호 작용으로 이익을 얻게 되리라고
 
 Qt for Python을 빌드하기 전에 다음 필수 구성요소를 설치해야 합니다. Linux의 경우 운영체제 패키지 매니저를 통해 설치할 수 있습니다. macOS의 경우 `brew`를 통해 설치할 수 있습니다. Windows의 경우 각 웹사이트에서 인스톨러를 다운로드할 수 있습니다.
 
-* Python: 3.7 이상
-* Qt: 6.4 이상
-* CMake: 3.18 이상
-* Git: 2.0 이상
-* libclang 라이브러리: 
+* Python: 3.7 이상 [공식 Python 웹사이트](https://www.python.org/downloads/)
+* Qt: 6.4 이상 [온라인 인스톨러](https://download.qt.io/official_releases/online_installers/)
+* CMake: 3.18 이상 [공식 CMake 웹사이트](https://cmake.org/download/)
+* Git: 2.0 이상 [공식 Git 웹사이트](https://git-scm.com/downloads)
+* libclang: libclang 라이브러리는 Qt 6.0 이상의 경우 버전 10을 권장함. 각 OS에 대한 미리 빌드된 버전의 경우 [여기](https://download.qt.io/development_releases/prebuilt/libclang/)에서 다운로드 할 수 있음
+* [Qt가 지원되는 플랫폼](https://doc.qt.io/qt-6/supported-platforms.html)을 확인하십시오.
+
+#### 플랫폼 별 가이드
+
+자세한 내용은 생략한다.
+
+### 패키지 세부사항
+
+설치 커맨드 한 줄이면 Qt 프레임워크와 같은 큰 프로젝트를 사용할 수 있습니다:
+
+`pip install pyside6`
+
+매우 유용하지만 초심자들에게는 당혹스러울 수 있습니다.
+
+IDE 외에도 Qt 애플리케이션을 개발하기 위해 다른 어떤 것도 설치할 필요가 없습니다. 왜냐하면 이 한 줄로 UI 설계, QML 타입 사용, 파일 자동 생성, 애플리케이션 번역 등 많은 도구들이 설치되기 때문입니다.
+
+#### 패키지 의존성
+
+6.3.0부터 `pyside6` 패키지는 거의 비어 있으며 모든 모듈을 제대로 사용하기 위해 필요한 다른 패키지에 대한 참조만을 포함하고 있습니다. 이 패키지는 다음과 같습니다.
+
+* `pyside6-essentials`, [필수 Qt 모듈](https://pypi.org/project/PySide6-Essentials/)
+* `pyside6-addons`, [추가 Qt 모듈](https://pypi.org/project/PySide6-Addons/)
+* `shiboken6`, 유틸리티 Python 모듈
+
+`pip list`를 실행해서 Python (가상) 환경에 설치된 패키지를 확인할 수 있습니다.
+
+`pyside6-essentials`와 `pyside6-addons`는 Qt 바이너리(`.so`, `.dll` 또는 `.dylib`)를 가지고 있는데 Python에서 Qt 모듈을 사용할 수 있도록 해주는 Python 랩퍼가 이것들을 사용합니다. 예를 들어 Linux 플랫폼의 경우 `QtCore` 모듈에서 다음을 찾을 수 있습니다.
+
+* `PySide6/QtCore.abi3.so`, 그리고
+* `PySide6/Qt/lib/libQt6Core.so.6`
+
+당신의 (가상) 환경의 `site-packages` 디렉토리 안에서 찾을 수 있습니다. 1번째는 importable 모듈이고 이것은 원래 QtCore 라이브러리인 2번째 파일에 의존하고 있습니다.
+
+#### 포함된 도구
+
+패키지 안에도 `uic`, `rcc` 등 Qt 애플리케이션 개발 워크플로우에서 중요한 Qt 도구들이 포함되어 있습니다.
+
+모든 도구는 반드시 PySide 랩퍼를 통해 사용되어야 하고 직접 사용해서는 안 됩니다. 예를 들어, 설치된 `site-packages/` 디렉토리를 탐색하려면 (Windows의 경우) `uic.exe`를 찾고 싶으면 그것을 클릭하지 말고 `pyside6-uic.exe`를 대신 사용해야 합니다. 이렇게 하는 이유는 설치된 Python 패키지로 적절하게 작업하려면 PATH, 플러그인 등의 적절한 설정을 하기 위해서입니다.
+
+다음은 주제 별로 그룹화된 버전 6.3.0부터 Qt for Python에 포함된 도구들입니다.
+
+##### 프로젝트 개발
+
+* `pyside6-project`: `.pyproject` 파일에 있는 Qt Designer 폼(`.ui` 파일), 리소스 파일(`.qrc), QML 타입 파일(`.qmltype)을 빌드함.
+
+##### 위젯 개발
+
+* `pyside6-designer`: 위젯 UI를 설계하기 위한 드래그-앤-드롭 도구. (`.ui` 파일 생성)
+* `pyside6-uic`: `.ui` 폼 파일로부터 Python 코드 생성함.
+* `pyside6-rcc`: `.qrc` 리소스 파일로부터 직렬화된 데이터 생성함. 이 파일들은 다른 비-위젯 프로젝트에서 사용할 수 있음을 명심하십시오.
+
+##### QML 개발
+
+* `pyside6-qmllint`: QML 파일의 구문 유효성을 검증함.
+* `pyside6-qmltyperegistrar`: 메타 타입을 읽고 관련 매크로와 함께 표시된 모든 타입을 등록하기 위해 필요한 코드를 포함하는 파일을 생성함.
+* `pyside6-qmlimportscanner`: 프로젝트/QML 파일로부터 가져온 QML 모듈을 식별하고 JSON 배열로 결과를 덤프함.
+* `pyside6-qmlcachegen`: 바이너리로 번들링하기 위해 컴파일 시간에 QML을 바이트코드로 컴파일함.
+* `pyside6-qmlsc`: `pyside6-qmlcachegen`을 대체함. 이 도구는 QML을 바이트코드로 컴파일할뿐만 아니라 철저한 분석을 위해 C++ 코드도 생성함. 이것은 상업용 전용 도구임.
+
+##### 번역
+
+* `pyside6-linguist`: 애플리케이션에서 텍스트를 번역하기 위함.
+* `pyside6-lrelease`: 애플리케이션을 위한 런타임 번역 파일을 생성함.
+* `pyside6-lupdate`: 소스 파일과 번역 파일을 동기화함.
+
+##### Qt 도움말
+
+* `pyside6-assistant`: Qt Help 파일 포맷으로 된 온라인 문서를 보기 위함. 이 포맷에 대한 자세한 것은 [QtHelp Framework](https://doc.qt.io/qt-6/qthelp-framework.html) 페이지를 보십시오.
+
+##### PySide 유틸리티
+
+* `pyside6-genpyi`: Qt 모듈을 위한 Python 스텁(`.pyi` 파일)을 생성함
+* `pyside6-metaobjectdump`: `qmltyperegistrar`의 입력으로 사용될 JSON 형식의 메타타입 정보를 출력하기 위한 도구.
+
+##### 배포
+
+* `pyside6-deploy`: PySide6 애플리케이션을 데스크톱 플랫폼(Linux, Windows, macOS)에 배포하기 위함.
+* `pyside6-android-deploy`: PySide6 애플리케이션을 Android 플랫폼(aarch64, armv7a, i686, x86_64)에 배포하기 위함.
+
+## 모듈 API
+
+...
