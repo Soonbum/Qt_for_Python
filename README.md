@@ -809,12 +809,12 @@ from PySide6.QtWidgets import QWidget
 
 class Button(QWidget):
 
-    clicked = Signal(Qt.MouseButton)  # clicked 시그널 선언
+    clicked = Signal(Qt.MouseButton)     # clicked 시그널 선언
 
     ...
 
-    def mousePressEvent(self, event):
-        self.clicked.emit(event.button())
+    def mousePressEvent(self, event):    # 마우스 버튼을 누르는 이벤트가 발생하면
+        self.clicked.emit(event.button())  # 클릭 시그널 방출
 ```
 
 `Signal`의 생성자는 Python 타입 또는 C 타입의 튜플 또는 리스트를 인수로 받습니다:
@@ -872,10 +872,8 @@ import sys
 from PySide6.QtWidgets import QApplication, QPushButton
 from PySide6.QtCore import QObject, Signal, Slot
 
-
 class Communicate(QObject):
-    # create two new signals on the fly: one will handle
-    # int type, the other will handle strings
+    # 즉시 2개의 새 시그널을 만듭니다: 하나는 int 타입, 다른 하나는 string 타입을 처리함
     speak = Signal((int,), (str,))
 
     def __init__(self, parent=None):
@@ -884,8 +882,7 @@ class Communicate(QObject):
         self.speak[int].connect(self.say_something)
         self.speak[str].connect(self.say_something)
 
-    # define a new slot that receives a C 'int' or a 'str'
-    # and has 'say_something' as its name
+    # C 'int' 또는 'str'을 수신하고 'say_something'이라는 이름을 갖는 새로운 슬롯을 정의함
     @Slot(int)
     @Slot(str)
     def say_something(self, arg):
@@ -898,8 +895,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     someone = Communicate()
 
-    # emit 'speak' signal with different arguments.
-    # we have to specify the str as int is the default
+    # 서로 다른 인수를 갖는 'speak' 시그널을 방출함
     someone.speak.emit(10)
     someone.speak[str].emit("Hello everybody!")
 ```
