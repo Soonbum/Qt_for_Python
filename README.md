@@ -713,14 +713,10 @@ Python에서 QML 언어로 상호작용하기 위해 다음 모듈을 사용하�
 
 * [Qt3D Logic](https://doc.qt.io/qtforpython-6/PySide6/Qt3DLogic/index.html#module-PySide6.Qt3DLogic): 프레임을 Qt 3D 백엔드와 동기화할 수 있게 해줌.
 
-[Qt3D Render](https://doc.qt.io/qtforpython-6/PySide6/Qt3DRender/index.html#module-PySide6.Qt3DRender)
-Qt 3D를 사용하여 2D 및 3D 렌더링을 지원하는 기능이 포함되어 있음.
+* [Qt3D Render](https://doc.qt.io/qtforpython-6/PySide6/Qt3DRender/index.html#module-PySide6.Qt3DRender): Qt 3D를 사용하여 2D 및 3D 렌더링을 지원하는 기능이 포함되어 있음.
 
-[Qt CoAP](https://doc.qt.io/qtforpython-6/PySide6/QtCoap/index.html#module-PySide6.QtCoap)
-RFC 7252에서 정의한 CoAP의 클라이언트 사이드를 구현함.
+* [Qt CoAP](https://doc.qt.io/qtforpython-6/PySide6/QtCoap/index.html#module-PySide6.QtCoap): RFC 7252에서 정의한 CoAP의 클라이언트 사이드를 구현함.
 
-[Qt OPC UA](https://doc.qt.io/qtforpython-6/PySide6/QtOpcUa/index.html#module-PySide6.QtOpcUa)
-산업 애플리케이션에서 데이터 모델링 및 데이터 교환을 위한 프로토콜.
+* [Qt OPC UA](https://doc.qt.io/qtforpython-6/PySide6/QtOpcUa/index.html#module-PySide6.QtOpcUa): 산업 애플리케이션에서 데이터 모델링 및 데이터 교환을 위한 프로토콜.
 
-[Qt MQTT](https://doc.qt.io/qtforpython-6/PySide6/QtMqtt/index.html#module-PySide6.QtMqtt)
-MQTT 프로토콜 사양의 구현을 제공함.
+* [Qt MQTT](https://doc.qt.io/qtforpython-6/PySide6/QtMqtt/index.html#module-PySide6.QtMqtt): MQTT 프로토콜 사양의 구현을 제공함.
