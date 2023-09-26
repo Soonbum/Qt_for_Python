@@ -595,4 +595,186 @@ IDE 외에도 Qt 애플리케이션을 개발하기 위해 다른 어떤 것도 
 
 ## 모듈 API
 
-...
+#### 기본 모듈
+
+위젯 기반 UI를 만드는 데 도움을 주는 메인 모듈은 다음과 같습니다.
+
+[QtCore](https://doc.qt.io/qtforpython-6/PySide6/QtCore/index.html#module-PySide6.QtCore)
+시그널, 슬롯, 프로퍼티, 아이템 모델의 베이스 클래스, 직렬화 등 코어 비-GUI 기능을 제공함.
+
+[QtGui](https://doc.qt.io/qtforpython-6/PySide6/QtGui/index.html#module-PySide6.QtGui)
+QtCore의 GUI 기능을 확장함: 이벤트, 윈도우, 스크린, OpenGL, 래스터-기반 2D 그리기, 이미지.
+
+[QtWidgets](https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/index.html#module-PySide6.QtWidgets)
+애플리케이션에 위젯을 사용할 수 있도록 함. UI에 그래픽 요소를 포함시킴.
+
+#### QML과 Qt Quick
+
+Python에서 QML 언어로 상호작용하기 위해 다음 모듈을 사용하십시오.
+
+[QtQml](https://doc.qt.io/qtforpython-6/PySide6/QtQml/index.html#module-PySide6.QtQml)
+모듈과 상호작용하기 위한 베이스 Python API.
+
+[QtQuick](https://doc.qt.io/qtforpython-6/PySide6/QtQuick/index.html#module-PySide6.QtQuick)
+Qt 애플리케이션에 Qt Quick을 내장시키기 위한 클래스를 제공함.
+
+[QtQuickWidgets](https://doc.qt.io/qtforpython-6/PySide6/QtQuickWidgets/index.html#module-PySide6.QtQuickWidgets)
+위젯-기반 애플리케이션에 Qt Quick을 내장시키기 위한 QQuickWidget 클래스를 제공함.
+
+### Qt for Python이 지원하는 Qt 모듈
+
+[QtBluetooth](https://doc.qt.io/qtforpython-6/PySide6/QtBluetooth/index.html#module-PySide6.QtBluetooth)
+Bluetooth API는 Bluetooth 가능한 장비 간의 연결을 제공함.
+
+[QtCharts](https://doc.qt.io/qtforpython-6/PySide6/QtCharts/index.html#module-PySide6.QtCharts)
+차트 컴포넌트를 쉽게 사용할 수 있는 집합을 제공함.
+
+[QtConcurrent](https://doc.qt.io/qtforpython-6/PySide6/QtConcurrent/index.html#module-PySide6.QtConcurrent)
+저수준 쓰레드 프리미티브(뮤텍스, 읽기-쓰기 락, 대기 조건, 세마포어)를 사용하지 않고도 멀티-쓰레드 프로그램을 작성할 수 있는 고수준 API를 제공함.
+
+[QtCore](https://doc.qt.io/qtforpython-6/PySide6/QtCore/index.html#module-PySide6.QtCore)
+코어 비-GUI 기능을 제공함.
+
+[QtDataVisualization](https://doc.qt.io/qtforpython-6/PySide6/QtDataVisualization/index.html#module-PySide6.QtDataVisualization)
+데이터를 3D 막대, 산포도, 면 그래프로 시각화 할 수 있는 방법을 제공함.
+
+[QtDBus](https://doc.qt.io/qtforpython-6/PySide6/QtDBus/index.html#module-PySide6.QtDBus)
+D-Bus는 기존의 경쟁 IPC 솔루션을 하나의 통합 프로토콜로 대체하기 위해 Linux용으로 개발된 프로세스간 통신(IPC) 및 원격 프로시저 호출(RPC) 메커니즘입니다.
+
+[QtDesigner](https://doc.qt.io/qtforpython-6/PySide6/QtDesigner/index.html#module-PySide6.QtDesigner)
+Qt Designer를 확장하기 위한 클래스를 제공함.
+
+[QtGui](https://doc.qt.io/qtforpython-6/PySide6/QtGui/index.html#module-PySide6.QtGui)
+QtCore의 GUI 기능을 확장함.
+
+[QtHelp](https://doc.qt.io/qtforpython-6/PySide6/QtHelp/index.html#module-PySide6.QtHelp)
+애플리케이션의 온라인 문서를 통합하기 위한 클래스를 제공함.
+
+[Qt Multimedia](https://doc.qt.io/qtforpython-6/PySide6/QtMultimedia/index.html#module-PySide6.QtMultimedia)
+멀티미디어 특화 사용자 사례에 대한 API를 제공함.
+
+[Qt Multimedia Widgets](https://doc.qt.io/qtforpython-6/PySide6/QtMultimediaWidgets/index.html#module-PySide6.QtMultimediaWidgets)
+위젯 기반 멀티미디어 API를 제공함.
+
+[QtNetwork](https://doc.qt.io/qtforpython-6/PySide6/QtNetwork/index.html#module-PySide6.QtNetwork)
+TCP/IP 클라이언트 및 서버를 작성할 수 있도록 하는 클래스를 제공함.
+
+[Qt Network Authorization](https://doc.qt.io/qtforpython-6/PySide6/QtNetworkAuth/index.html#module-PySide6.QtNetworkAuth)
+Qt 애플리케이션이 사용자의 비밀번호를 노출하지 않고 온라인 계정 및 HTTP 서비스에 제한적으로 접근할 수 있도록 하는 API 집합을 제공함.
+
+[QtNfc](https://doc.qt.io/qtforpython-6/PySide6/QtNfc/index.html#module-PySide6.QtNfc)
+NFC API는 NFC 가능한 장치 간의 연결을 제공함.
+
+[QtOpenGL](https://doc.qt.io/qtforpython-6/PySide6/QtOpenGL/index.html#module-PySide6.QtOpenGL)
+Qt 애플리케이션에서 OpenGL을 쉽게 사용할 수 있도록 하는 클래스를 제공함.
+
+[QtOpenGL Widgets](https://doc.qt.io/qtforpython-6/PySide6/QtOpenGLWidgets/index.html#module-PySide6.QtOpenGLWidgets)
+위젯 트리의 특정 부분에 대해 OpenGL 렌더링을 활성화하는 OpenGLWidget 클래스를 제공함.
+
+[Qt Positioning](https://doc.qt.io/qtforpython-6/PySide6/QtPositioning/index.html#module-PySide6.QtPositioning)
+위치, 위성 정보, 지역 모니터링 클래스에 대한 접근을 제공함.
+
+[Qt PDF](https://doc.qt.io/qtforpython-6/PySide6/QtPdf/index.html#module-PySide6.QtPdf)
+PDF 문서를 렌더링하기 위한 클래스와 함수.
+
+[Qt PDF Widgets](https://doc.qt.io/qtforpython-6/PySide6/QtPdfWidgets/index.html#module-PySide6.QtPdfWidgets)
+PDF 뷰어 위젯.
+
+[QtPrintSupport](https://doc.qt.io/qtforpython-6/PySide6/QtPrintSupport/index.html#module-PySide6.QtPrintSupport)
+인쇄를 위한 광범위한 크로스-플랫폼 지원을 제공함.
+
+[QtQml](https://doc.qt.io/qtforpython-6/PySide6/QtQml/index.html#module-PySide6.QtQml)
+Qt QML을 위한 Python API.
+
+[QtQuick](https://doc.qt.io/qtforpython-6/PySide6/QtQuick/index.html#module-PySide6.QtQuick)
+Qt 애플리케이션에 Qt Quick을 내장시키기 위한 클래스를 제공함.
+
+[QtQuickControls2](https://doc.qt.io/qtforpython-6/PySide6/QtQuickControls2/index.html#module-PySide6.QtQuickControls2)
+C++의 컨트롤을 설정하기 위한 클래스를 제공함.
+
+[QtQuickWidgets](https://doc.qt.io/qtforpython-6/PySide6/QtQuickWidgets/index.html#module-PySide6.QtQuickWidgets)
+위젯 기반 애플리케이션에 Qt Quick을 내장시키기 위한 QQuickWidget 클래스를 제공함.
+
+[QtRemoteObjects](https://doc.qt.io/qtforpython-6/PySide6/QtRemoteObjects/index.html#module-PySide6.QtRemoteObjects)
+Qt를 위해 개발된 프로세스간 통신(IPC) 모듈. 이 모듈은 Qt의 기존 기능을 확장하여 프로세스 또는 컴퓨터 간의 정보 교환을 쉽게 할 수 있게 해줍니다.
+
+[Qt Scxml](https://doc.qt.io/qtforpython-6/PySide6/QtScxml/index.html#module-PySide6.QtScxml)
+SCXML 파일로부터 상태 머신을 생성 및 사용할 수 있게 해주는 클래스를 제공함.
+
+[Qt Sensors](https://doc.qt.io/qtforpython-6/PySide6/QtSensors/index.html#module-PySide6.QtSensors)
+센서 하드웨어에 대한 접근을 제공함.
+
+[Qt Serial Bus](https://doc.qt.io/qtforpython-6/PySide6/QtSerialBus/index.html#module-PySide6.QtSerialBus)
+시리얼 산업 버스 인터페이스에 대한 접근을 제공함. 현재 이 모듈은 CAN 버스와 Modbus 프로토콜을 지원함.
+
+[Qt Serial Port](https://doc.qt.io/qtforpython-6/PySide6/QtSerialPort/index.html#module-PySide6.QtSerialPort)
+하드웨어 및 가상 시리얼 포트와 상호작용하기 위한 클래스를 제공함.
+
+[Qt Spatial Audio](https://doc.qt.io/qtforpython-6/PySide6/QtSpatialAudio/index.html#module-PySide6.QtSpatialAudio)
+음원 및 서라운드를 3D 공간에 모델링하기 위한 API를 제공함.
+
+[QtSql](https://doc.qt.io/qtforpython-6/PySide6/QtSql/index.html#module-PySide6.QtSql)
+Qt 애플리케이션에 원활한 데이터베이스 통합을 제공함.
+
+[QtStateMachine](https://doc.qt.io/qtforpython-6/PySide6/QtStateMachine/index.html#module-PySide6.QtStateMachine)
+상태 그래프를 생성 및 실행하기 위한 클래스를 제공함.
+
+[QtSvg](https://doc.qt.io/qtforpython-6/PySide6/QtSvg/index.html#module-PySide6.QtSvg)
+SVG 파일의 내용을 표시하기 위한 클래스를 제공함.
+
+[QtSvgWidgets](https://doc.qt.io/qtforpython-6/PySide6/QtSvgWidgets/index.html#module-PySide6.QtSvgWidgets)
+SVG 파일의 내용을 표시하는 데 사용하는 위젯을 제공함.
+
+[QtTest](https://doc.qt.io/qtforpython-6/PySide6/QtTest/index.html#module-PySide6.QtTest)
+Qt 애플리케이션 및 라이브러리를 단위 테스트하기 위한 클래스를 제공함.
+
+[QtUiTools](https://doc.qt.io/qtforpython-6/PySide6/QtUiTools/index.html#module-PySide6.QtUiTools)
+Qt Designer로 생성된 폼을 처리하기 위한 클래스를 제공함.
+
+[Qt WebChannel](https://doc.qt.io/qtforpython-6/PySide6/QtWebChannel/index.html#module-PySide6.QtWebChannel)
+Qt 애플리케이션을 HTML/JavaScript 클라이언트와 원활하게 통합하기 위해 HTML 클라이언트로부터 QObject 또는 QML 객체에 대한 접근을 제공함.
+
+[QtWebEngine Core C++ Classes](https://doc.qt.io/qtforpython-6/PySide6/QtWebEngineCore/index.html#module-PySide6.QtWebEngineCore)
+QtWebEngine과 QtWebEngineWidgets이 공유하는 공용 API를 제공함.
+
+[QtWebEngine Widgets C++ Classes](https://doc.qt.io/qtforpython-6/PySide6/QtWebEngineWidgets/index.html#module-PySide6.QtWebEngineWidgets)
+QWidget 기반 애플리케이션에서 웹 컨텐츠를 렌더링하기 위한 C++ 클래스를 제공함.
+
+[QtWebEngine QML Types](https://doc.qt.io/qtforpython-6/PySide6/QtWebEngineQuick/index.html#module-PySide6.QtWebEngineQuick)
+QML 애플리케이션에서 웹 컨텐츠를 렌더링하기 위한 QML 타입을 제공함.
+
+[Qt WebSockets](https://doc.qt.io/qtforpython-6/PySide6/QtWebSockets/index.html#module-PySide6.QtWebSockets)
+RFC 6455를 준수하는 WebSocket 통신을 제공함.
+
+[QtWidgets](https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/index.html#module-PySide6.QtWidgets)
+Qt GUI의 C++ 위젯 기능을 확장함.
+
+[QtXml](https://doc.qt.io/qtforpython-6/PySide6/QtXml/index.html#module-PySide6.QtXml)
+DOM의 C++ 구현을 제공함.
+
+[Qt3DAnimation](https://doc.qt.io/qtforpython-6/PySide6/Qt3DAnimation/index.html#module-PySide6.Qt3DAnimation)
+3D 객체를 애니메이션화 하는 데 필요한 기본 요소를 제공함.
+
+[Qt3D Core](https://doc.qt.io/qtforpython-6/PySide6/Qt3DCore/index.html#module-PySide6.Qt3DCore)
+근실시간 시뮬레이션 시스템을 지원하기 위한 기능을 포함하고 있음.
+
+[Qt3D Extras](https://doc.qt.io/qtforpython-6/PySide6/Qt3DExtras/index.html#module-PySide6.Qt3DExtras)
+Qt 3D를 시작하는 데 도움을 주는 미리 빌드된 요소 집합을 제공함.
+
+[Qt3D Input](https://doc.qt.io/qtforpython-6/PySide6/Qt3DInput/index.html#module-PySide6.Qt3DInput)
+Qt 3D를 사용하는 애플리케이션에서 사용자 입력을 처리하기 위한 클래스를 제공함.
+
+[Qt3D Logic](https://doc.qt.io/qtforpython-6/PySide6/Qt3DLogic/index.html#module-PySide6.Qt3DLogic)
+프레임을 Qt 3D 백엔드와 동기화할 수 있게 해줌.
+
+[Qt3D Render](https://doc.qt.io/qtforpython-6/PySide6/Qt3DRender/index.html#module-PySide6.Qt3DRender)
+Qt 3D를 사용하여 2D 및 3D 렌더링을 지원하는 기능이 포함되어 있음.
+
+[Qt CoAP](https://doc.qt.io/qtforpython-6/PySide6/QtCoap/index.html#module-PySide6.QtCoap)
+RFC 7252에서 정의한 CoAP의 클라이언트 사이드를 구현함.
+
+[Qt OPC UA](https://doc.qt.io/qtforpython-6/PySide6/QtOpcUa/index.html#module-PySide6.QtOpcUa)
+산업 애플리케이션에서 데이터 모델링 및 데이터 교환을 위한 프로토콜.
+
+[Qt MQTT](https://doc.qt.io/qtforpython-6/PySide6/QtMqtt/index.html#module-PySide6.QtMqtt)
+MQTT 프로토콜 사양의 구현을 제공함.
