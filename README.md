@@ -532,6 +532,8 @@ IDE 외에도 Qt 애플리케이션을 개발하기 위해 다른 어떤 것도 
 
 #### 패키지 의존성
 
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/6316420d-e3ee-4449-93c2-03088ad0e91e)
+
 6.3.0부터 `pyside6` 패키지는 거의 비어 있으며 모든 모듈을 제대로 사용하기 위해 필요한 다른 패키지에 대한 참조만을 포함하고 있습니다. 이 패키지는 다음과 같습니다.
 
 * `pyside6-essentials`, [필수 Qt 모듈](https://pypi.org/project/PySide6-Essentials/)
@@ -722,6 +724,205 @@ Python에서 QML 언어로 상호작용하기 위해 다음 모듈을 사용하�
 * [Qt MQTT](https://doc.qt.io/qtforpython-6/PySide6/QtMqtt/index.html#module-PySide6.QtMqtt): MQTT 프로토콜 사양의 구현을 제공함.
 
 ## 튜토리얼
+
+### 처음 QtWidgets 애플리케이션
+
+```python
+import sys
+from PySide6.QtWidgets import QApplication, QLabel
+
+app = QApplication(sys.argv)      # app = QApplication([]) --> 커맨드 라인에서 인수를 안 받을 경우 이렇게 해도 됨
+label = QLabel("Hello World!")    # label = QLabel("<font color=red size=40>Hello World!</font>")  --> 이런 식으로 HTML 코드를 넣을 수도 있음
+label.show()
+app.exec()
+```
+
+### 간단한 Button 사용하기
+
+여기서는 시그널과 슬롯 개념이 나옵니다.
+시그널은 '클릭'과 같은 이벤트를 의미합니다.
+슬롯 함수는 시그널(이벤트)와 연결된 함수로 시그널이 발생하면 호출되는 함수를 의미합니다. @Slot() 데코레이터를 위에 붙여 주도록 합시다.
+
+```python
+#!/usr/bin/python
+
+import sys
+from PySide6.QtWidgets import QApplication, QPushButton
+from PySide6.QtCore import Slot
+
+@Slot()
+def say_hello():
+  print("Button clicked, Hello!")    # 콘솔 창에 메시지 출력
+
+app = QApplication(sys.argv)
+button = QPushButton("Click me")
+button.clicked.connect(say_hello)    # clicked 시그널과 say_hello 함수를 연결함
+button.show()
+app.exec()
+```
+
+### 시그널과 슬롯
+
+시그널과 슬롯은 `QObject` 간의 통신 메커니즘이며 Qt의 핵심 기능입니다. 시그널과 슬롯은 마치 스위치(시그널)와 전등(슬롯)과 같다고 볼 수 있습니다.
+
+`QWidget`과 같이 `QObject`에서 파생된 모든 클래스는 시그널과 슬롯을 갖고 있습니다. 객체의 상태가 바뀌면 다른 객체가 알아들을 수 있는 시그널이 방출됩니다. 어떤 객체가 시그널을 방출했는지는 알 수 없기 때문에 진정한 정보 캡슐화가 이루어진다고 볼 수 있습니다. 그리고 객체는 하나의 소프트웨어 컴포넌트 역할을 할 수 있습니다.
+
+시그널을 수신하는 슬롯은 일반 멤버 함수이기도 합니다. 객체는 누가 시그널을 받는지 알 수 없고, 슬롯 함수는 시그널이 어디에 연결되어 있는지 알 수 없습니다.
+
+슬롯 하나에 여러 시그널이 연결될 수도 있고, 시그널 하나에 여러 슬롯이 연결될 수도 있습니다. 심지어 시그널과 다른 시그널이 연결될 수도 있습니다. (이렇게 하면 1번째 시그널이 방출되면 2번째 시그널도 즉시 방출됨)
+
+Qt의 위젯은 미리 정의된 시그널, 슬롯을 많이 갖고 있습니다. 예를 들어 (버튼의 베이스 클래스인) `QAbstractButton`은 `clicked()` 시그널을 갖고 있고, (단일 라인 입력 필드인) `QLineEdit`는 `clear()`라는 슬롯을 갖고 있습니다. 그래서 텍스트를 지우기 위해 버튼이 딸린 텍스트 입력 필드를 구현하고자 할 때, `QLineEdit` 오른쪽에 `QToolButton`을 배치하고 `clicked()` 시그널과 `clear()` 슬롯을 연결하면 됩니다. 시그널의 `connect()` 메서드를 사용하면 됩니다.
+
+```python
+button = QToolButton()
+line_edit = QLineEdit()
+button.clicked.connect(line_edit.clear)
+```
+
+`connect()` 메서드는 `QMetaObject.Connection` 객체를 리턴합니다. 이 객체는 연결을 끊기 위해 `disconnect()` 메서드와 함께 사용될 수 있습니다.
+
+시그널은 일반 함수에도 연결될 수 있습니다:
+
+```python
+import sys
+from PySide6.QtWidgets import QApplication, QPushButton
+
+def function():
+    print("The 'function' has been called!")
+
+app = QApplication()
+button = QPushButton("Call function")
+button.clicked.connect(function)    # 시그널이 일반 함수와 연결됨
+button.show()
+sys.exit(app.exec())
+```
+
+코드 형태로 연결을 할 수도 있고, Qt Designer의 Signal-Slot Editor에서 설계된 위젯 폼에서도 연결할 수 있습니다.
+
+#### 시그널 클래스
+
+Python에서 클래스를 작성할 때, 시그널은 클래스 `QtCore.Signal()`의 클래스 레벨 변수로 선언됩니다. QWidget 기반 버튼은 다음과 같이 `clicked()` 시그널을 방출합니다.
+
+```python
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import QWidget
+
+class Button(QWidget):
+
+    clicked = Signal(Qt.MouseButton)  # clicked 시그널 선언
+
+    ...
+
+    def mousePressEvent(self, event):
+        self.clicked.emit(event.button())
+```
+
+`Signal`의 생성자는 Python 타입 또는 C 타입의 튜플 또는 리스트를 인수로 받습니다:
+
+```python
+signal1 = Signal(int)                 # Python 타입
+signal2 = Signal(QUrl)                # Qt 타입
+signal3 = Signal(int, str, int)       # 다수의 타입
+signal4 = Signal((float,), (QDate,))  # 선택적인 타입
+```
+
+그 외에도 시그널 이름을 정의하는 네임드 인수 `name`도 받을 수 있습니다. 만약 아무 것도 전달되지 않으면, 새로운 시그널은 할당될 변수와 같은 이름을 갖게 될 것입니다.
+
+```python
+# TODO
+signal5 = Signal(int, name='rangeChanged')
+# ...
+rangeChanged.emit(...)
+```
+
+`Signal`의 또 다른 유용한 옵션은 인수 이름이며, QML 애플리케이션에서 방출된 값을 이름으로 참조하는 데 유용합니다:
+
+```python
+sumResult = Signal(int, arguments=['sum'])
+```
+
+```python
+Connections {
+    target: ...
+    function onSumResult(sum) {
+        // do something with 'sum'
+    }
+```
+
+#### 슬롯 클래스
+
+QObject 파생 클래스에 있는 슬롯은 데코레이터 `@QtCore.Slot()`로 표시해야 합니다. 또, 시그네처를 정의하려면 `QtCore.Signal()` 클래스와 마찬가지로 타입을 넘겨주기만 하면 됩니다.
+
+```python
+@Slot(str)
+def slot_function(self, s):
+    ...
+```
+
+또 `Slot()`은 `name`과 `result` 키워드를 받아들입니다. `result` 키워드는 리턴될 타입을 정의하며 C 또는 Python 타입이 될 수 있습니다. `name` 키워드는 `Signal()`과 같은 방식으로 행동합니다. 만약 전달되는 이름이 없으면 새로운 슬롯은 데코레이트되는 함수와 같은 이름을 갖게 됩니다.
+
+#### 시그널과 슬롯을 다른 타입으로 오버로드하기
+
+다른 파라미터 타입 리스트를 가진 동일한 이름의 시그널과 슬롯을 사용할 수 있습니다. 이것은 Qt 5의 레거시이며 새로운 코드에 권장하지 않습니다. Qt 6에서는 시그널이 다른 타입에 대해 고유한 이름을 갖습니다.
+
+다음 예제에서는 시그널과 슬롯에 2개의 핸들러를 사용하여 서로 다른 기능을 보여 줍니다.
+
+```python
+import sys
+from PySide6.QtWidgets import QApplication, QPushButton
+from PySide6.QtCore import QObject, Signal, Slot
+
+
+class Communicate(QObject):
+    # create two new signals on the fly: one will handle
+    # int type, the other will handle strings
+    speak = Signal((int,), (str,))
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.speak[int].connect(self.say_something)
+        self.speak[str].connect(self.say_something)
+
+    # define a new slot that receives a C 'int' or a 'str'
+    # and has 'say_something' as its name
+    @Slot(int)
+    @Slot(str)
+    def say_something(self, arg):
+        if isinstance(arg, int):
+            print("This is a number:", arg)
+        elif isinstance(arg, str):
+            print("This is a string:", arg)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    someone = Communicate()
+
+    # emit 'speak' signal with different arguments.
+    # we have to specify the str as int is the default
+    someone.speak.emit(10)
+    someone.speak[str].emit("Hello everybody!")
+```
+
+#### 메서드 시그네처 문자열로 시그널과 슬롯 지정하기
+
+시그널과 슬롯은 `SIGNAL()`과 `SLOT()` 함수를 통해 전달되는 C++ 메서드 시그네처 문자열로 지정할 수도 있습니다:
+
+```python
+from PySide6.QtCore import SIGNAL, SLOT
+
+button.connect(SIGNAL("clicked(Qt::MouseButton)"),
+              action_handler, SLOT("action1(Qt::MouseButton)"))
+```
+
+이것은 시그널을 연결하는 데 권장하지 않으며, 주로 `QWizardPage::registerField()`와 같은 메서드로 시그널을 지정하는 데 사용합니다:
+
+```python
+wizard.registerField("text", line_edit, "text",
+                     SIGNAL("textChanged(QString)"))
+```
+
+### ...
 
 ## 예제
 
