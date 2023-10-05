@@ -1260,31 +1260,31 @@ Qt for Python을 필드할 때, 플러그인을 제대로 설치하기 위해 `-
 
 ### `.qrc` 파일 사용하기 (`pyside6-rcc`)
 
-The [Qt Resource System](https://doc.qt.io/qt-5/resources.html) is a mechanism for storing binary files in an application.
+[Qt 리소스 시스템](https://doc.qt.io/qt-5/resources.html)은 애플리케이션에 바이너리 파일을 저장하기 위한 메커니즘입니다.
 
-The files will be embedded into the application and be acessible for the `QFile` class and the constructors of the `QIcon` and `QPixmap` classes taking a file name by using a special file name starting with `:/`.
+애플리케이션에 내장되는 파일은 `QFile` 클래스로 접근할 수 있으며 `QIcon`과 `QPixmap` 클래스의 생성자는 `:/`로 시작하는 특수한 파일 이름을 사용하여 파일 이름을 취할 수 있습니다.
 
-The most common uses are for custom images, icons, fonts, among others.
+가장 일반적인 용도는 커스텀 이미지, 아이콘, 글꼴 등을 가져오는 것입니다.
 
-In this tutorial you will learn how to load custom images as button icons.
+이 튜토리얼에서는 커스텀 이미지를 버튼 아이콘으로 사용하는 방법을 배울 것입니다.
 
-For inspiration, we will try to adapt the multimedia player example from Qt.
+영감을 주기 위해 Qt의 멀티미디어 플레이어 예제를 각색해 보겠습니다.
 
-As you can see on the following image, the `QPushButton` that are used for the media actions (play, pause, stop, and so on) are using the default icons meant for such actions.
+다음 이미지에서 볼 수 있듯이, 미디어 액션(재생, 일시정지, 정지 등)을 위해 `QPushButton`을 사용합니다. 그리고 현재 기본 아이콘을 사용하고 있습니다.
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/e3ff4478-0fe2-48a9-a167-3a7c15c5bd62)
 
-You could make the application more attractive by designing the icons, but in case you don’t want to design them, you can download and use them.
+아이콘을 직접 설계해서 애플리케이션을 더 매력적으로 만들 수 있겠지만, 원치 않는다면 다운로드한 예제를 사용하셔도 됩니다.
 
 [아이콘 다운로드하기](https://doc.qt.io/qtforpython-6/_downloads/567affe64a389e6429072ff0b635887a/icons.zip)
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/be5ce1e8-195c-4d2e-8cc7-a434ae95755b)
 
-You can find more information about the `rcc` command, and `.qrc` file format, and the resource system in general in the [Qt Resource System](https://doc.qt.io/qt-5/resources.html) site.
+[Qt 리소스 시스템](https://doc.qt.io/qt-5/resources.html) 사이트에서 `rcc` 커맨드, `.qrc` 파일 포맷, 리소스 시스템에 대한 전반적인 내용을 찾을 수 있습니다.
 
-#### The `.qrc` file
+#### `.qrc` 파일
 
-Before running any command, add information about the resources to a `.qrc` file. In the following example, notice how the resources are listed in `icons.qrc`
+커맨드 실행에 앞서, `.qrc` 파일에 리소스에 대한 정보를 추가하십시오. 다음 예제에서 `icons.qrc` 안에 리소스가 어떻게 나열되어 있는지 보십시오.
 
 ```xml
 </ui>
@@ -1299,27 +1299,27 @@ Before running any command, add information about the resources to a `.qrc` file
 </RCC>
 ```
 
-#### Generating a Python file
+#### Python 파일 생성하기
 
-Now that the `icons.qrc` file is ready, use the `pyside6-rcc` tool to generate a Python class containing the binary information about the resources
+이제 `icons.qrc` 파일이 준비 되었습니다. 리소스에 대한 바이너리 정보를 포함하는 Python 클래스를 생성하기 위해 `pyside6-rcc` 도구를 사용하십시오.
 
-To do this, we need to run:
+그러기 위해서는 다음을 실행해야 합니다:
 
 ```
 pyside6-rcc icons.qrc -o rc_icons.py
 ```
 
-The `-o` option lets you specify the output filename, which is `rc_icons.py` in this case.
+`-o` 옵션은 출력 파일 이름을 지정할 수 있습니다. 이 경우 출력 파일의 이름은 `rc_icons.py`입니다.
 
-To use the generated file, add the following import at the top of your main Python file:
+생성된 파일을 사용하려면, 당신의 메인 Python 파일 최상단에 다음 import 문을 추가하십시오:
 
 ```python
 import rc_icons
 ```
 
-#### Changes in the code
+#### 코드 바꾸기
 
-As you are modifying an existing example, you need to modify the following lines:
+기존 예제를 수정하려면, 다음 라인을 변경해야 합니다:
 
 ```python
 from PySide6.QtGui import QIcon, QKeySequence
@@ -1330,7 +1330,7 @@ nextIcon = self.style().standardIcon(QStyle.SP_MediaSkipForward)
 stopIcon = self.style().standardIcon(QStyle.SP_MediaStop)
 ```
 
-and replace them with the following:
+위의 내용을 다음과 같이 바꾸십시오:
 
 ```python
 from PySide6.QtGui import QIcon, QKeySequence, QPixmap
@@ -1341,15 +1341,15 @@ nextIcon = QIcon(QPixmap(":/icons/forward.png"))
 stopIcon = QIcon(QPixmap(":/icons/stop.png"))
 ```
 
-This ensures that the new icons are used instead of the default ones provided by the application theme. Notice that the lines are not consecutive, but are in different parts of the file.
+이렇게 하면 애플리케이션 테마가 제공하는 기본 아이콘 대신 새로운 아이콘을 사용하게 됩니다.
 
-After all your imports, add the following
+다른 import 구문 밑에 다음을 추가하십시오.
 
 ```python
 import rc_icons
 ```
 
-Now, the constructor of your class should look like this:
+이제 클래스의 생성자는 다음과 같습니다:
 
 ```python
 def __init__(self):
@@ -1396,18 +1396,185 @@ def __init__(self):
     self.stopAction.triggered.connect(self.player.stop)
     playMenu.addAction(self.stopAction)
 
-    # many lines were omitted
+    # 여러 라인들이 생략됨
 ```
 
-#### Executing the example
+#### 예제 실행하기
 
-Run the application by calling `python main.py` to checkout the new icon-set:
+새로운 아이콘 집합을 확인하려면 `python main.py`를 호출하여 애플리케이션을 실행해 보십시오:
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/82479472-8349-4245-9ab3-cd199e3b4f48)
 
 ### 애플리케이션 번역하기
 
+#### Qt Linguist
+
+Qt Linguist and its related tools can be used to provide translations for applications.
+
+The `examples/widgets/linguist` example illustrates this. The example is very simple, it has a menu and shows a list of programming languages with multiselection.
+
+Translation works by passing the message strings through function calls that look up the translation. Each `QObject` instance provides a `tr()` function for that purpose. There is also `QCoreApplication.translate()` for adding translated texts to non-QObject classes.
+
+Qt ships its own translations containing the error messages and standard dialog captions.
+
+The linguist example has a number of messages enclosed in `self.tr()`. The status bar message shown in response to a selection change uses a plural form depending on a count:
+
+```python
+count = len(self._list_widget.selectionModel().selectedRows())
+message = self.tr("%n language(s) selected", "", count)
+```
+
+The translation workflow for the example is as follows: The translated messages are extracted using the `lupdate` tool, producing XML-based `.ts` files:
+
+```python
+pyside6-lupdate main.py -ts example_de.ts
+```
+
+If `example_de.ts` already exists, it will be updated with the new messages added to the code in-between.
+
+If there are form files (`.ui`) and/or QML files (`.qml`) in the project, they should be passed to the `pyside6-lupdate` tool as well:
+
+```python
+pyside6-lupdate main.py main.qml form.ui -ts example_de.ts
+```
+
+The source files generated by `pyside6-uic` from the form files should not be passed.
+
+`.ts` files are translated using Qt Linguist. Once this is complete, the files are converted to a binary form (`.qm` files):
+
+```
+mkdir translations
+pyside6-lrelease example_de.ts -qm translations/example_de.qm
+```
+
+To avoid having to ship the `.qm` files, it is recommend to put them into a Qt resource file along with icons and other applications resources (see [Using .qrc Files (pyside6-rcc)](https://doc.qt.io/qtforpython-6/tutorials/basictutorial/qrcfiles.html#using-qrc-files)). The resource file `linguist.qrc` provides the `example_de.qm` under `:/translations`:
+
+```xml
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>translations/example_de.qm</file>
+</qresource>
+</RCC>
+```
+
+At runtime, the translations need to be loaded using the `QTranslator` class:
+
+```python
+path = QLibraryInfo.location(QLibraryInfo.TranslationsPath)
+translator = QTranslator(app)
+if translator.load(QLocale.system(), 'qtbase', '_', path):
+    app.installTranslator(translator)
+translator = QTranslator(app)
+path = ':/translations'
+if translator.load(QLocale.system(), 'example', '_', path):
+    app.installTranslator(translator)
+```
+
+The code first loads the translations shipped for Qt and then the translations of the applications loaded from resources.
+
+The example can then be run in German:
+
+```
+LANG=de python main.py
+```
+
+#### GNU gettext
+
+The [GNU gettext](https://docs.python.org/3/library/gettext.html) module can be used to provide translations for applications.
+
+The `examples/widgets/gettext` example illustrates this. The example is very simple, it has a menu and shows a list of programming languages with multiselection.
+
+Translation works by passing the message strings through function calls that look up the translation. It is common to alias the main translation function to `_`. There is a special translation function for sentences that contain a plural form depending on a count (“{0} items(s) selected”). It is commonly aliased to `ngettext`.
+
+Those functions are defined at the top:
+
+```python
+import gettext
 ...
+_ = None
+ngettext = None
+```
+
+and later assigned as follows:
+
+```python
+src_dir = Path(__file__).resolve().parent
+try:
+    translation = gettext.translation('example', localedir=src_dir / 'locales')
+    if translation:
+        translation.install()
+        _ = translation.gettext
+        ngettext = translation.ngettext
+except FileNotFoundError:
+    pass
+if not _:
+    _ = gettext.gettext
+    ngettext = gettext.ngettext
+```
+
+This specifies that our translation file has the base name `example` and will be found in the source tree under `locales`. The code will try to load a translation matching the current language.
+
+Messages to be translated look like:
+
+```python
+file_menu = self.menuBar().addMenu(_("&File"))
+```
+
+The status bar message shown in response to a selection change uses a plural form depending on a count:
+
+```python
+count = len(self._list_widget.selectionModel().selectedRows())
+message = ngettext("{0} language selected",
+                   "{0} languages selected", count).format(count)
+```
+
+The `ngettext()` function takes the singular form, plural form and the count. The returned string still contains the formatting placeholder, so it needs to be passed through `format()`.
+
+In order to translate the messages to say German, a template file (`.pot`) is first created:
+
+```
+mkdir -p locales/de_DE/LC_MESSAGES
+xgettext -L Python -o locales/example.pot main.py
+```
+
+This file has a few generic placeholders which can be replaced by the appropriate values. It is then copied to the `de_DE/LC_MESSAGES` directory.
+
+```
+cd locales/de_DE/LC_MESSAGES/
+cp ../../example.pot .
+```
+
+Further adaptions need to be made to account for the German plural form and encoding:
+
+```
+"Project-Id-Version: PySide6 gettext example\n"
+"POT-Creation-Date: 2021-07-05 14:16+0200\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+```
+
+Below, the translated messages can be given:
+
+```
+#: main.py:57
+msgid "&File"
+msgstr "&Datei"
+```
+
+Finally, the `.pot` is converted to its binary form (machine object file, `.mo`), which needs to be deployed:
+
+```
+msgfmt -o example.mo example.pot
+```
+
+The example can then be run in German:
+
+```
+LANG=de python main.py
+```
 
 ### 위젯 애플리케이션 스타일 꾸미기
 
