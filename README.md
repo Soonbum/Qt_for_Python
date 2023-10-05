@@ -1409,9 +1409,9 @@ def __init__(self):
 
 #### Qt Linguist
 
-Qt Linguist and its related tools can be used to provide translations for applications.
+Qt Linguist 및 관련 도구는 애플리케이션을 위한 번역을 제공하는 데 사용할 수 있습니다.
 
-The `examples/widgets/linguist` example illustrates this. The example is very simple, it has a menu and shows a list of programming languages with multiselection.
+`examples/widgets/linguist` 예제가 이것을 설명하고 있습니다. 예제는 매우 간단한데 메뉴가 하나 있고 다중 선택이 가능한 프로그래밍 언어 리스트를 보여줍니다.
 
 Translation works by passing the message strings through function calls that look up the translation. Each `QObject` instance provides a `tr()` function for that purpose. There is also `QCoreApplication.translate()` for adding translated texts to non-QObject classes.
 
@@ -1578,7 +1578,7 @@ LANG=de python main.py
 
 ### 위젯 애플리케이션 스타일 꾸미기
 
-...
+... https://doc.qt.io/qtforpython-6/tutorials/basictutorial/widgetstyling.html
 
 ### 처음 QtQuick/QML 애플리케이션
 
