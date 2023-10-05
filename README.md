@@ -967,15 +967,296 @@ if __name__ == '__main__':
 
 ### Table 위젯을 사용하여 데이터 표시하기
 
-...
+표에 정렬된 데이터를 표시하고 싶으면 `QTableWidget`을 사용하십시오.
+
+`QTableWidget`을 사용하는 것만이 표에 정보를 표시하는 유일한 경로는 아닙니다. `QTableView`를 이용하여 데이터 모델을 만들고 표시할 수도 있지만 이 튜토리얼의 범위를 벗어납니다.
+
+```python
+import sys
+from PySide6.QtGui import QColor
+from PySide6.QtWidgets import (QApplication, QTableWidget, QTableWidgetItem)
+
+# 컬러의 이름과 HEX 코드 리스트를 포함하는 데이터 모델
+colors = [("Red", "#FF0000"),
+          ("Green", "#00FF00"),
+          ("Blue", "#0000FF"),
+          ("Black", "#000000"),
+          ("White", "#FFFFFF"),
+          ("Electric Green", "#41CD52"),
+          ("Dark Blue", "#222840"),
+          ("Yellow", "#F9E56d")]
+
+# HEX 코드를 RGB로 변환하는 함수
+def get_rgb_from_hex(code):
+    code_hex = code.replace("#", "")
+    rgb = tuple(int(code_hex[i:i+2], 16) for i in (0, 2, 4))
+    return QColor.fromRgb(rgb[0], rgb[1], rgb[2])
+
+app = QApplication()
+
+table = QTableWidget()
+table.setRowCount(len(colors))            # 표의 행 개수 = color 변수의 항목 개수
+table.setColumnCount(len(colors[0]) + 1)  # 표의 열 개수 = color 변수의 필드 개수 + 1 (Color 탭이 추가됨)
+table.setHorizontalHeaderLabels(["Name", "Hex Code", "Color"])    # 표의 헤더 라벨 설정
+
+# 표에 항목을 추가함
+for i, (name, code) in enumerate(colors):
+    item_name = QTableWidgetItem(name)
+    item_code = QTableWidgetItem(code)
+    item_color = QTableWidgetItem()
+    item_color.setBackground(get_rgb_from_hex(code))
+    table.setItem(i, 0, item_name)
+    table.setItem(i, 1, item_code)
+    table.setItem(i, 2, item_color)
+
+table.show()
+sys.exit(app.exec())
+```
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/ca3d3d2f-6a58-4aad-9f1c-897d0dec9cf9)
 
 ### Tree 위젯을 사용하여 데이터 표시하기
 
-...
+트리에 정렬된 데이터를 표시하고 싶으면 `QTreeWidget`을 사용하십시오.
+
+`QTreeWidget`을 사용하는 것만이 트리에 정보를 표시하는 유일한 경로는 아닙니다. `QTreeView`를 이용하여 데이터 모델을 만들고 표시할 수도 있지만 이 튜토리얼의 범위를 벗어납니다.
+
+```python
+import sys
+from PySide6.QtWidgets import QApplication, QTreeWidget, QTreeWidgetItem
+
+# 딕셔너리를 정의함, 그리고 각 프로젝트에 속한 파일의 이름을 리스트에 추가함
+data = {"Project A": ["file_a.py", "file_a.txt", "something.xls"],
+        "Project B": ["file_b.csv", "photo.jpg"],
+        "Project C": []}
+
+app = QApplication()
+
+tree = QTreeWidget()
+tree.setColumnCount(2)    # 2개의 열 (항목의 이름, 프로젝트 디렉토리의 파일 타입)
+tree.setHeaderLabels(["Name", "Type"])    # 트리의 헤더 라벨 설정
+
+items = []
+for key, values in data.items():
+    item = QTreeWidgetItem([key])
+    for value in values:
+        ext = value.split(".")[-1].upper()     # 파일 확장자 추출
+        child = QTreeWidgetItem([value, ext])  # 파일 이름과 파일 확장자를 자식 항목으로 만듦
+        item.addChild(child)
+    items.append(item)
+
+tree.insertTopLevelItems(0, items)
+
+tree.show()
+sys.exit(app.exec())
+```
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/5d85ffde-46b9-47c4-b023-49e682583f57)
 
 ### Designer의 `.ui` 파일 사용하기 또는 `QUiLoader` 및 `pyside6-uic`와 함께 QtCreator 사용하기
 
-...
+이 페이지는 Qt for Python 프로젝트를 위해 Qt Widgets 기반 그래픽 인터페이스를 만들기 위한 [Qt Designer](https://doc.qt.io/qt-6/qtdesigner-manual.html) 사용법을 설명합니다. Qt Designer는 그래픽 UI 설계 도구로서 독립형 바이너리(pyside6-designer)로 사용할 수도 있고 [Qt Creator IDE](https://doc.qt.io/qtcreator)에 포함시킬 수도 있습니다. Qt Creator 안에서 사용하는 방법은 [Qt Designer 사용하기](https://doc.qt.io/qtcreator/creator-using-qt-designer.html)에 나와 있습니다.
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/b66cccd2-e27c-4820-8ce6-36a1edcca096)
+
+설계한 내용은 XML 기반 포맷인 `.ui` 파일에 저장됩니다. 이 파일은 [pyside6-uic](https://doc.qt.io/qt-6/uic.html) 도구에 의해 프로젝트 빌드 시간 동안 위젯 인스턴스를 붙이는 Python 또는 C++ 코드로 변환됩니다.
+
+Qt Creator에서 새로운 Qt Design Form을 만들려면, `File/New File Or Project`를 선택하고 "Main Window" 템플릿을 선택하십시오. `mainwindow.ui`로 저장하십시오. 중앙 위젯의 중심에 `QPushButton`을 추가하십시오.
+
+당신이 저장한 `mainwindow.ui` 파일은 다음과 같이 나올 것입니다:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>80</y>
+      <width>201</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>400</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
+```
+
+이제 Python에서 UI 파일을 사용하는 방법을 선택할 준비가 되었습니다.
+
+#### 선택 A: Python 클래스 생성하기
+
+UI 파일과 상호작용할 수 있는 표준 방법은 UI 파일로부터 Python 클래스를 생성하는 것입니다. `pyside6-uic` 도구가 있기 때문에 가능합니다. 이 도구를 사용하려면 콘솔에서 다음 커맨드를 실행해야 합니다:
+
+```
+pyside6-uic mainwindow.ui -o ui_mainwindow.py
+```
+
+커맨드의 모든 출력을 `ui_mainwindow.py` 파일에 리다이렉트하면 직접 import 될 것입니다:
+
+```python
+import sys
+from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtCore import QFile
+from ui_mainwindow import Ui_MainWindow    # UI 파일에서 가져온 위젯 클래스
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super(MainWindow, self).__init__()
+        # UI 파일로부터 생성된 Python 클래스를 로딩함
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+
+    window = MainWindow()
+    window.show()
+
+    sys.exit(app.exec())
+```
+
+주의: UI 파일이 바뀔 때마다 `pyside6-uic`를 또 실행해야 합니다.
+
+#### 선택 B: 직접 로딩하기
+
+```python
+# File: main.py
+import sys
+from PySide6.QtUiTools import QUiLoader      # UI 파일을 직접 로드하기 위해 필요한 모듈
+from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import QFile, QIODevice
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+
+    # UI 파일 이름 지정
+    ui_file_name = "mainwindow.ui"
+    ui_file = QFile(ui_file_name)
+    if not ui_file.open(QIODevice.ReadOnly):
+        print(f"Cannot open {ui_file_name}: {ui_file.errorString()}")
+        sys.exit(-1)
+    # UI 파일을 동적으로 로드함
+    loader = QUiLoader()
+    window = loader.load(ui_file)
+
+    ui_file.close()
+    if not window:
+        print(loader.errorString())
+        sys.exit(-1)
+    window.show()
+
+    sys.exit(app.exec())
+```
+
+커맨드 프롬프트에서 다음과 같이 실행하면 됩니다:
+
+```
+python main.py
+```
+
+주의: `QUiLoader`는 시그널/슬롯 연결을 위해 문자열 인수 형태로 함수 시그니처를 취하는 `connect()` 호출을 사용합니다. 내부적으로 서로 다른 C++ 타입에 맵핑되기 때문에 Python에서 작성한 커스텀 위젯의 `str` 또는 `list`와 같은 Python 타입은 처리할 수 없습니다.
+
+#### Qt Designer에서의 커스텀 위젯
+
+Qt Designer는 커스텀 위젯을 사용할 수 있습니다. 커스텀 위젯은 위젯 박스 안에 있으며 Qt 위젯처럼 폼에 드래그할 수 있습니다. ([Qt Designer로 커스텀 위젯 사용하기](https://doc.qt.io/qt-6/designer-using-custom-widgets.html)를 보십시오) 일반적으로 [QDesignerCustomWidgetInterface](https://doc.qt.io/qt-6/qdesignercustomwidgetinterface.html)를 구현하는 C++로 작성된 Qt Designer에 플러그인으로 위젯을 구현해야 합니다.
+
+Qt for Python은 `registerCustomWidget()`와 마찬가지로 이를 위한 간단한 인터페이스를 제공합니다.
+
+widgetbinding 예제(`wigglywidget.py`) 또는 taskmenuextension 예제(`tictactoe.py`)에 나온 것처럼 위젯이 Python 모듈로 제공되어야 합니다.
+
+이름이 `register*.py`인 등록 스크립트를 제공하고 path-타입 환경 변수 `PYSIDE_DESIGNER_PLUGINS`가 해당 디렉토리를 가리키게 해서 이 위젯을 Qt Designer에 등록할 수 있습니다.
+
+등록 스크립트의 코드는 다음과 같습니다:
+
+```python
+# File: registerwigglywidget.py
+from wigglywidget import WigglyWidget
+
+import QtDesigner
+
+
+TOOLTIP = "A cool wiggly widget (Python)"
+DOM_XML = """
+<ui language='c++'>
+    <widget class='WigglyWidget' name='wigglyWidget'>
+        <property name='geometry'>
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>400</width>
+                <height>200</height>
+            </rect>
+        </property>
+        <property name='text'>
+            <string>Hello, world</string>
+        </property>
+    </widget>
+</ui>
+"""
+
+QPyDesignerCustomWidgetCollection.registerCustomWidget(WigglyWidget, module="wigglywidget", tool_tip=TOOLTIP, xml=DOM_XML)
+```
+
+QPyDesignerCustomWidgetCollection은 [QDesignerCustomWidgetCollectionInterface](https://doc.qt.io/qt-6/qdesignercustomwidgetcollectioninterface.html) 구현을 제공합니다. 이것은 정적 편의 함수로 타입 등록을 위해 Qt Designer에 커스텀 위젯을 노출시키거나, [QDesignerCustomWidgetInterface](https://doc.qt.io/qt-6/qdesignercustomwidgetinterface.html) 인스턴스를 추가할 수 있게 해줍니다.
+
+함수 [`registerCustomWidget()`](https://doc.qt.io/qtforpython-6/PySide6/QtDesigner/QPyDesignerCustomWidgetCollection.html#PySide6.QtDesigner.QPyDesignerCustomWidgetCollection.registerCustomWidget)은 Qt Designer에 위젯 타입을 등록하는 데 사용합니다. 단순한 경우에는 `QUiLoader.registerCustomWidget()`처럼 사용될 수 있습니다. 이 함수는 인수로 커스텀 위젯 타입, 그리고 [QDesignerCustomWidgetInterface](https://doc.qt.io/qt-6/qdesignercustomwidgetinterface.html)의 getter에 해당하는 값들을 전달하는 선택적인 키워드 인수 몇 가지를 필요로 합니다:
+
+`pyside6-designer`를 통해 Qt Designer를 실행할 때, 커스텀 위젯은 위젯 박스 안에 보여야 합니다.
+
+고급 사용법의 경우, [`addCustomWidget()`](https://doc.qt.io/qtforpython-6/PySide6/QtDesigner/QPyDesignerCustomWidgetCollection.html#PySide6.QtDesigner.QPyDesignerCustomWidgetCollection.addCustomWidget)에게 타입 대신 클래스 QDesignerCustomWidgetInterface 구현 함수를 전달할 수도 있습니다. 이것은 커스텀 위젯에 대해 커스텀 컨텐스트 메뉴가 등록된 taskmenuextension 예제에서 볼 수 있습니다. 예제는 C++ [Task Menu Extension 예제](https://doc.qt.io/qt-6/qtdesigner-taskmenuextension-example.html)의 포팅 버전입니다.
+
+#### Qt Designer 플러그인 문제해결하기
+
+`pyside6-designer`를 반드시 사용해야 합니다. 독립형 Qt Designer는 플러그인을 로드하지 않습니다.
+
+메뉴 항목 Help/About Plugin은 발견한 플러그인과 잠재적인 로드 오류 메시지를 보여주는 다이얼로그를 표시합니다.
+
+더 많은 오류 메시지는 콘솔 또는 Windows Debug 뷰를 확인하십시오.
+
+Python에 의한 출력 버퍼링 때문에 Qt Designer가 종류된 후에 오류 메시지가 나타날 수도 있습니다.
+
+Qt for Python을 필드할 때, 플러그인을 제대로 설치하기 위해 `--standalone` 옵션을 설정하시기 바랍니다.
 
 ### `.qrc` 파일 사용하기 (`pyside6-rcc`)
 
