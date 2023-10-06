@@ -1578,47 +1578,254 @@ LANG=de python main.py
 
 ### 위젯 애플리케이션 스타일 꾸미기
 
-... https://doc.qt.io/qtforpython-6/tutorials/basictutorial/widgetstyling.html
+Qt Widgets 애플리케이션은 플랫폼에 종속적인 기본 테마를 사용합니다. 일부의 경우, Qt 테마를 변경하는 시스템 전체 구성이 있을 수 있으며 애플리케이션이 다르게 표시됩니다.
+
+그러나 커스텀 위젯을 관리하고 각 구성요소에 커스텀 스타일을 제공할 수 있습니다. 예를 들어, 다음과 같은 간단한 코드를 봅시다:
+
+```python
+import sys
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication, QLabel
+
+if __name__ == "__main__":
+    app = QApplication()
+    w = QLabel("This is a placeholder text")
+    w.setAlignment(Qt.AlignCenter)
+    w.show()
+    sys.exit(app.exec())
+```
+
+이 코드를 실행하면, 당신은 placeholder text가 붙어 있는 중앙에 정렬된 간단한 `QLabel`을 보게 될 것입니다.
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/029f40e3-7c78-41e8-a824-3aa2ef09931a)
+
+CSS-유사 문법을 사용하여 애플리케이션의 스타일을 꾸밀 수 있습니다. 더 많은 정보는 [Qt 스타일 시트 레퍼런스](https://doc.qt.io/qt-5/stylesheet-reference.html)를 보십시오.
+
+`background-color`와 `font-family` 같은 CSS 속성을 설정하여 `QLabel`의 스타일을 꾸밀 수 있습니다. 이제 이 변경사항에 따라 코드가 어떻게 표시되는지 봅시다:
+
+```python
+import sys
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QApplication, QLabel
+
+if __name__ == "__main__":
+    app = QApplication()
+    w = QLabel("This is a placeholder text")
+    w.setAlignment(Qt.AlignCenter)
+    # 추가된 부분
+    w.setStyleSheet("""
+        background-color: #262626;
+        color: #FFFFFF;
+        font-family: Titillium;
+        font-size: 18px;
+        """)
+    w.show()
+    sys.exit(app.exec())
+```
+
+이제 코드를 실행하면 커스텀 스타일에 따라 QLabel이 다르게 보이는 것을 확인하실 수 있습니다:
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/08c6a61e-fff2-4587-b9f8-2de965f2949c)
+
+주의: 만약 글꼴 `Titillium`이 설치되어 있지 않다면, 다른 방법을 사용해 보실 수 있습니다. `QFontDatabase`, 특히 `families()` 메서드를 사용하여 설치된 글꼴의 목록을 보실 수 있습니다.
+
+각 UI 요소의 스타일을 일일이 꾸미는 것은 많은 작업을 필요로 합니다. 그 대안으로 Qt 스타일 시트를 사용하면 됩니다. Qt 스타일 시트란 애플리케이션의 UI 요소에 대한 스타일을 정의하는 1개 이상의 `.qss` 파일을 의미합니다.
+
+[Qt 스타일 시트 예제](https://doc.qt.io/qt-5/stylesheet-examples.html) 문서 페이지에서 더 많은 예제를 보실 수 있습니다.
+
+#### Qt 스타일 시트
+
+경고: 애플리케이션을 수정하기 전에 애플리케이션의 모든 그래픽 세부사항에 대해 사용자가 책임져야 한다는 것을 명심하십시오. 여백과 크기를 변경하면 이상하게, 혹은 비뚤어져 보일 수 있습니다. 그래서 스타일을 변경하는 것은 신중해야 합니다. 가능한 모든 경우를 대비하기 위해 완전히 새로운 Qt 스타일을 만드는 것을 권장합니다.
+
+`qss` 파일은 CSS 파일과 매우 비슷하지만, Widget 컴포넌트를 지정해야 하고 경우에 따라서는 객체의 이름을 지정해야 합니다:
+
+```css
+QLabel {
+    background-color: red;
+}
+
+QLabel#title {
+    font-size: 20px;
+}
+```
+
+1번째 스타일은 애플리케이션의 모든 `QLabel` 객체에 대한 `background-color`를 정의합니다. 반면, 2번째 스타일은 `title` 객체의 스타일만 정의합니다.
+
+주의: 아무 객체나 `setObjectName(str)` 함수를 이용하여 객체 이름을 설정할 수 있습니다. 예를 들면: `label = QLabel("Test")`의 경우, `label.setObjectName("title")`라고 작성할 수 있습니다.
+
+애플리케이션에 `qss` 파일이 있다면, 해당 파일을 읽고 `QApplication.setStyleSheet(str)` 함수를 사용하여 적용할 수 있습니다:
+
+```python
+if __name__ == "__main__":
+    app = QApplication()
+
+    w = Widget()
+    w.show()
+
+    with open("style.qss", "r") as f:
+        _style = f.read()
+        app.setStyleSheet(_style)
+
+    sys.exit(app.exec())
+```
+
+`qss` 파일을 사용하면 코드에서 스타일 관련 내용을 분리할 수 있습니다. 그리고 스타일을 쉽게 켜고 끌 수 있습니다.
+
+더 많은 위젯 구성요소를 가진 새로운 예제를 봅시다:
+
+```python
+class Widget(QWidget):
+    def __init__(self, parent=None):
+        super(Widget, self).__init__(parent)
+
+        menu_widget = QListWidget()
+        for i in range(10):
+            item = QListWidgetItem(f"Item {i}")
+            item.setTextAlignment(Qt.AlignCenter)
+            menu_widget.addItem(item)
+
+        text_widget = QLabel(_placeholder)
+        button = QPushButton("Something")
+
+        content_layout = QVBoxLayout()
+        content_layout.addWidget(text_widget)
+        content_layout.addWidget(button)
+        main_widget = QWidget()
+        main_widget.setLayout(content_layout)
+
+        layout = QHBoxLayout()
+        layout.addWidget(menu_widget, 1)
+        layout.addWidget(main_widget, 4)
+        self.setLayout(layout)
+```
+
+이것은 2개의 컬럼 위젯을 표시하는데, 왼쪽에는 `QListWidget`, 오른쪽에는 `QLabel`과 `QPushButton`가 나옵니다. 코드를 실행하면 다음과 같습니다:
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/206e419e-1192-408e-bd16-3a2369bb8bb7)
+
+앞에서 설명한 `style.qss` 파일에 내용을 추가하면, 예전 예제의 look-n-feel을 변경할 수 있습니다:
+
+```css
+QListWidget {
+    color: #FFFFFF;
+    background-color: #33373B;
+}
+
+QListWidget::item {
+    height: 50px;
+}
+
+QListWidget::item:selected {
+    background-color: #2ABf9E;
+}
+
+QLabel {
+    background-color: #FFFFFF;
+    qproperty-alignment: AlignCenter;
+}
+
+QPushButton {
+    background-color: #2ABf9E;
+    padding: 20px;
+    font-size: 18px;
+}
+```
+
+스타일은 주로 여러 위젯의 컬러를 변경하고, 간격을 포함하여 정렬을 변경합니다. 또한 QListWidget 항목에 대해 상태 기반 스타일을 사용할 수도 있습니다. 예를 들면, 선택 여부에 따라 스타일을 다르게 하는 것입니다.
+
+이 주제에 대해 탐색한 스타일을 모두 적용한 후에 `QLabel` 예제가 많이 달라 보일 것입니다. 코드를 실행하여 새로운 모습을 확인해 보십시오:
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/e83301d3-7f5a-4692-b935-1da9c5584f15)
+
+스타일 시트를 자유롭게 조정할 수 있으며 애플리케이션에 멋진 느낌을 줄 수 있습니다.
 
 ### 처음 QtQuick/QML 애플리케이션
 
-...
+[QML](https://doc.qt.io/qt-6/qmlapplications.html) is a declarative language that lets you develop applications faster than with traditional languages. It is ideal for designing the UI of your application because of its declarative nature. In QML, a user interface is specified as a tree of objects with properties. In this tutorial, we will show how to make a simple “Hello World” application with PySide6 and QML.
+
+A PySide6/QML application consists, at least, of two different files - a file with the QML description of the user interface, and a python file that loads the QML file. To make things easier, let’s save both files in the same directory.
+
+Here is a simple QML file called `view.qml`:
+
+```qml
+import QtQuick
+
+Rectangle {
+    id: main
+    width: 200
+    height: 200
+    color: "green"
+
+    Text {
+        text: "Hello World"
+        anchors.centerIn: main
+    }
+}
+```
+
+We start by importing `QtQuick`, which is a QML module.
+
+The rest of the QML code is pretty straightforward for those who have previously used HTML or XML files. Basically, we are creating a green rectangle with the size 200*200, and adding a Text element that reads “Hello World”. The code `anchors.centerIn: main` makes the text appear centered within the object with `id: main`, which is the Rectangle in this case.
+
+Now, let’s see how the code looks on the PySide6. Let’s call it `main.py`:
+
+```python
+import sys
+from PySide6.QtWidgets import QApplication
+from PySide6.QtQuick import QQuickView
+
+if __name__ == "__main__":
+    app = QApplication()
+    view = QQuickView()
+
+    view.setSource("view.qml")
+    view.show()
+    sys.exit(app.exec())
+```
+
+If you are already familiar with PySide6 and have followed our tutorials, you have already seen much of this code. The only novelties are that you must `import QtQuick` and set the source of the `QQuickView` object to the URL of your QML file. Then, similar to what you do with any Qt widget, you call `QQuickView.show()`.
+
+Note: If you are programming for desktop, you should consider adding view.setResizeMode(QQuickView.SizeRootObjectToView) before showing the view.
+
+When you execute the `main.py` script, you will see the following application:
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/b0759d76-4e22-4baf-9968-0a7e97edc971)
 
 ### Python-QML 통합
 
-...
+... https://doc.qt.io/qtforpython-6/tutorials/qmlintegration/qmlintegration.html
 
 ### QML 애플리케이션 튜토리얼
 
-...
+... https://doc.qt.io/qtforpython-6/tutorials/qmlapp/qmlapplication.html
 
 ### QML, SQL 및 PySide 통합 튜토리얼
 
-...
+... https://doc.qt.io/qtforpython-6/tutorials/qmlsqlintegration/qmlsqlintegration.html
 
 ### 파일 시스템 탐색기 확장하기 예제
 
-...
+... https://doc.qt.io/qtforpython-6/tutorials/extendedexplorer/extendedexplorer.html
 
 ### 데이터 시각화 도구 튜토리얼
 
-...
+... https://doc.qt.io/qtforpython-6/tutorials/datavisualize/index.html
 
 ### 경비 계산 도구 튜토리얼
 
-...
+... https://doc.qt.io/qtforpython-6/tutorials/expenses/expenses.html
 
 ### Qt 개요
 
-...
+... https://doc.qt.io/qtforpython-6/overviews/overviews-main.html
 
 ### C++ 애플리케이션을 Python으로 포팅하기
 
-...
+... https://doc.qt.io/qtforpython-6/tutorials/portingguide/index.html
 
 ### PySide6 애플리케이션의 C++ 확장 디버그하는 방법
 
-...
+... https://doc.qt.io/qtforpython-6/tutorials/debugging/mixed_debugging.html
 
 ## 예제
 
