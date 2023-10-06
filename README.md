@@ -1793,6 +1793,195 @@ if __name__ == "__main__":
 
 ### Python-QML 통합
 
+This tutorial provides a quick walk-through of a python application that loads, and interacts with a QML file. QML is a declarative language that lets you design UIs faster than a traditional language, such as C++. The QtQml and QtQuick modules provides the necessary infrastructure for QML-based UIs.
+
+In this tutorial, you will learn how to integrate Python with a QML application. This mechanism will help us to understand how to use Python as a backend for certain signals from the UI elements in the QML interface. Additionally, you will learn how to provide a modern look to your QML application using one of the features from Qt Quick Controls 2.
+
+The tutorial is based on an application that allow you to set many text properties, like increasing the font size, changing the color, changing the style, and so on. Before you begin, install the PySide6 Python packages.
+
+The following step-by-step process will guide you through the key elements of the QML based application and PySide6 integration:
+
+1. First, let’s start with the following QML-based UI:
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/896fb08e-8904-47c9-89eb-8189f4819d23)
+
+The design is based on a GridLayout, containing two ColumnLayout. Inside the UI you will find many RadioButton, Button, and a Slider.
+
+2. With the QML file in place, you can load it from Python:
+
+```python
+
+if __name__ == '__main__':
+    app = QGuiApplication(sys.argv)
+    QQuickStyle.setStyle("Material")
+    engine = QQmlApplicationEngine()
+
+    # Get the path of the current directory, and then add the name
+    # of the QML file, to load it.
+    qml_file = Path(__file__).parent / 'view.qml'
+    engine.load(qml_file)
+
+    if not engine.rootObjects():
+        sys.exit(-1)
+```
+
+Notice that we only need a `QQmlApplicationEngine` to `load` the QML file.
+
+3. Define the `Bridge` class, containing all the logic for the element that will be register in QML:
+
+```python
+# To be used on the @QmlElement decorator
+# (QML_IMPORT_MINOR_VERSION is optional)
+QML_IMPORT_NAME = "io.qt.textproperties"
+QML_IMPORT_MAJOR_VERSION = 1
+
+
+@QmlElement
+class Bridge(QObject):
+
+    @Slot(str, result=str)
+    def getColor(self, s):
+        if s.lower() == "red":
+            return "#ef9a9a"
+        elif s.lower() == "green":
+            return "#a5d6a7"
+        elif s.lower() == "blue":
+            return "#90caf9"
+        else:
+            return "white"
+
+    @Slot(float, result=int)
+    def getSize(self, s):
+        size = int(s * 34)
+        if size <= 0:
+            return 1
+        else:
+            return size
+
+    @Slot(str, result=bool)
+    def getItalic(self, s):
+        if s.lower() == "italic":
+            return True
+        else:
+            return False
+
+    @Slot(str, result=bool)
+    def getBold(self, s):
+        if s.lower() == "bold":
+            return True
+        else:
+            return False
+```
+
+Notice that the registration happens thanks to the `QmlElement` decorator, that underneath uses the reference to the `Bridge` class and the variables `QML_IMPORT_NAME` and `QML_IMPORT_MAJOR_VERSION`.
+
+4. Now, go back to the QML file and connect the signals to the slots defined in the `Bridge` class:
+
+```qml
+Bridge {
+   id: bridge
+}
+```
+
+Inside the `ApplicationWindow` we declare a component with the same name as the Python class, and provide an `id:`. This `id` will help you to get a reference to the element that was registered from Python.
+
+```qml
+            RadioButton {
+                id: italic
+                Layout.alignment: Qt.AlignLeft
+                text: "Italic"
+                onToggled: {
+                    leftlabel.font.italic = bridge.getItalic(italic.text)
+                    leftlabel.font.bold = bridge.getBold(italic.text)
+                    leftlabel.font.underline = bridge.getUnderline(italic.text)
+
+                }
+            }
+```
+
+The properties Italic, Bold, and Underline are mutually exclusive, this means only one can be active at any time. To achieve this each time we select one of these options, we check the three properties via the QML element property as you can see in the above snippet. Only one of the three will return True, while the other two will return False, that is how we make sure only one is being applied to the text.
+
+5. Each slot verifies if the selected option contains the text associated to the property:
+
+```python
+    @Slot(str, result=bool)
+    def getItalic(self, s):
+        if s.lower() == "italic":
+            return True
+        else:
+            return False
+```
+
+Returning True or False allows you to activate and deactivate the properties of the QML UI elements.
+
+It is also possible to return other values that are not Boolean, like the slot in charge of returning the font size:
+
+```python
+    @Slot(float, result=int)
+    def getSize(self, s):
+        size = int(s * 34)
+        if size <= 0:
+            return 1
+        else:
+```
+
+6. Now, for changing the look of our application, you have two options:
+
+1) Use the command line: execute the python file adding the option, `--style`:
+
+```
+python main.py --style material
+```
+
+2) Use a `qtquickcontrols2.conf` file:
+
+```
+[Controls]
+Style=Material
+
+[Universal]
+Theme=System
+Accent=Red
+
+[Material]
+Theme=Dark
+Accent=Red
+```
+
+Then add it to your `.qrc` file:
+
+```xml
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+    <file>qtquickcontrols2.conf</file>
+</qresource>
+</RCC>
+```
+
+Generate the rc file running, `pyside6-rcc style.qrc -o style_rc.py` And finally import it from your `main.py` script.
+
+```python
+import sys
+from pathlib import Path
+
+from PySide6.QtCore import QObject, Slot
+from PySide6.QtGui import QGuiApplication
+from PySide6.QtQml import QQmlApplicationEngine, QmlElement
+from PySide6.QtQuickControls2 import QQuickStyle
+
+import style_rc
+```
+
+You can read more about this configuration file [here](https://doc.qt.io/qt-5/qtquickcontrols2-configuration.html).
+
+The final look of your application will be:
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/74253d81-9f2a-4321-b171-35ad61192cad)
+
+다운로드 링크: [view.qml](https://doc.qt.io/qtforpython-6/_downloads/e1a28f9b527916d7a11c2cc59003a570/view.qml)
+
+다운로드 링크: [main.py](https://doc.qt.io/qtforpython-6/_downloads/63044c6135ff9f549e8ff800a8b2a856/main.py)
+
 ... https://doc.qt.io/qtforpython-6/tutorials/qmlintegration/qmlintegration.html
 
 ### QML 애플리케이션 튜토리얼
