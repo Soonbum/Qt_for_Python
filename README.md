@@ -1741,11 +1741,11 @@ QPushButton {
 
 ### 처음 QtQuick/QML 애플리케이션
 
-[QML](https://doc.qt.io/qt-6/qmlapplications.html) is a declarative language that lets you develop applications faster than with traditional languages. It is ideal for designing the UI of your application because of its declarative nature. In QML, a user interface is specified as a tree of objects with properties. In this tutorial, we will show how to make a simple “Hello World” application with PySide6 and QML.
+[QML](https://doc.qt.io/qt-6/qmlapplications.html)은 선언적 언어로서 기존 언어보다 빠르게 애플리케이션을 개발할 수 있게 해줍니다. 선언적 특성 때문에 애플리케이션의 UI를 설계할 때 이상적입니다. QML에서는 프로퍼티를 가진 객체 트리로 사용자 인터페이스를 지정합니다. 이 튜토리얼에서는 PySide6와 QML로 간단한 "Hello World" 애플리케이션을 만드는 방법을 보여드리겠습니다.
 
-A PySide6/QML application consists, at least, of two different files - a file with the QML description of the user interface, and a python file that loads the QML file. To make things easier, let’s save both files in the same directory.
+PySide6/QML 애플리케이션은 적어도 2개의 파일로 구성되어 있습니다. - 사용자 인터페이스의 QML 설명이 포함된 파일, QML 파일을 로드하는 Python 파일. 쉽게 만들기 위해 2개의 파일을 동일한 디렉토리 안에 저장해 둡시다.
 
-Here is a simple QML file called `view.qml`:
+다음은 `view.qml`이라는 간단한 QML 파일입니다:
 
 ```qml
 import QtQuick
@@ -1763,11 +1763,11 @@ Rectangle {
 }
 ```
 
-We start by importing `QtQuick`, which is a QML module.
+QML 모듈인 `QtQuick`을 가져오는 것부터 시작합니다.
 
-The rest of the QML code is pretty straightforward for those who have previously used HTML or XML files. Basically, we are creating a green rectangle with the size 200*200, and adding a Text element that reads “Hello World”. The code `anchors.centerIn: main` makes the text appear centered within the object with `id: main`, which is the Rectangle in this case.
+QML 코드의 나머지는 이전에 HTML이나 XML 파일을 사용한 사람들에게는 매우 간단할 것입니다. 기본적으로 크기가 200*200인 녹색 직사각형을 만들고 "Hello World"라고 읽는 Text 요소를 추가할 것입니다. 코드 `anchors.centerIn: main`은 `id: main`인 객체 내부의 중심에 텍스트가 나오게 합니다. 여기서 `id: main`는 Rectangle입니다.
 
-Now, let’s see how the code looks on the PySide6. Let’s call it `main.py`:
+이제 PySide6에서 코드가 어떻게 나오는지 봅시다. `main.py`를 호출해 봅시다:
 
 ```python
 import sys
@@ -1783,11 +1783,11 @@ if __name__ == "__main__":
     sys.exit(app.exec())
 ```
 
-If you are already familiar with PySide6 and have followed our tutorials, you have already seen much of this code. The only novelties are that you must `import QtQuick` and set the source of the `QQuickView` object to the URL of your QML file. Then, similar to what you do with any Qt widget, you call `QQuickView.show()`.
+만약 PySide6가 익숙하고 튜토리얼을 잘 따라왔다면, 이미 이 코드를 여러 번 보았을 것입니다. 다른 점이라면 `import QtQuick`을 반드시 넣어야 하고 `QQuickView` 객체의 소스를 QML 파일의 URL로 설정해야 한다는 것입니다. `QQuickView.show()`를 호출하면 Qt 위젯과 비슷한 것을 보실 것입니다.
 
-Note: If you are programming for desktop, you should consider adding view.setResizeMode(QQuickView.SizeRootObjectToView) before showing the view.
+주의: 만약 데스크톱용 프로그램을 만들고 있다면, view를 보여주기 전에 `view.setResizeMode(QQuickView.SizeRootObjectToView)`를 추가하는 것을 고려해야 합니다.
 
-When you execute the `main.py` script, you will see the following application:
+`main.py` 스크립트를 실행하면, 다음 애플리케이션을 보게 될 것입니다:
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/b0759d76-4e22-4baf-9968-0a7e97edc971)
 
