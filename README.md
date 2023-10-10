@@ -1983,50 +1983,44 @@ import style_rc
 
 ### QML 애플리케이션 튜토리얼
 
-This tutorial provides a quick walk-through of a python application that loads a QML file. QML is a declarative language that lets you design UIs faster than a traditional language, such as C++. The QtQml and QtQuick modules provides the necessary infrastructure for QML-based UIs.
+이 튜토리얼은 QML 파일을 로드하는 Python 애플리케이션에 대한 간단한 설명을 제공합니다. QML은 명령형 언어로서 C++과 같은 기존 언어보다 더 빨리 UI를 설계할 수 있게 해줍니다. QtQml과 QtQuick 모듈은 QML-기반 UI에 대한 필수 인프라를 제공합니다.
 
-In this tutorial, you’ll also learn how to provide data from Python as a QML initial property, which is then consumed by the ListView defined in the QML file.
+이 튜토리얼에서는 Python에서 QML 초기 프로퍼티 형태로 데이터를 제공하는 방법도 배우게 될 것입니다. 이 데이터는 QML 파일에 정의된 ListView가 사용할 것입니다.
 
-Before you begin, install the following prerequisites:
+시작하기 전에 다음 전제조건을 설치하십시오:
 
-* The [PySide6](https://pypi.org/project/PySide6/) Python packages.
-* Qt Creator v4.9 beta1 or later from [https://download.qt.io](https://download.qt.io/snapshots/qtcreator/).
+* [PySide6](https://pypi.org/project/PySide6/) Python 패키지.
+* [https://download.qt.io](https://download.qt.io/snapshots/qtcreator/)에서 Qt Creator v4.9 beta1 혹은 이후 버전.
 
-The following step-by-step instructions guide you through application development process using Qt Creator:
+다음 단계별 지침은 Qt Creator를 사용한 애플리케이션 개발 과정을 알려줄 것입니다:
 
-1. Open Qt Creator and select File > New File or Project.. menu item to open following dialog:
+1. 다음 다이얼로그를 열기 위해 Qt Creator를 열고 File > New File or Project.. 메뉴 항목을 선택하십시오:
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/693997c8-dbbf-4a9d-8ba4-54af83140928)
 
-2. Select Qt for Python - Empty from the list of application templates and select Choose.
+2. 애플리케이션 템플릿 목록에서 Qt for Python - Empty를 선택하고 Choose를 선택하십시오.
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/19d51462-d840-43b2-9f19-fc3c3cbcaf00)
 
-3. Give a Name to your project, choose its location in the filesystem, and select Finish to create an empty `main.py` and `main.pyproject`.
+3. 프로젝트에 Name을 부여하고, 파일시스템 내 위치를 선택하고, Finish를 선택하여 비어 있는 `main.py`와 `main.pyproject`를 생성합니다.
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/fd8d19e8-e44c-4fa6-9e31-69f3c2a9f488)
 
-This should create a `main.py` and `main.pyproject` files for the project.
+이렇게 하면 프로젝트에 대한 `main.py`와 `main.pyproject` 파일이 만들어집니다.
 
-4. Download
+4. 다운로드
 
-[view.qml](https://doc.qt.io/qtforpython-6/_downloads/279a926d2c82fe0f3cd682910167ecfb/view.qml)
+[view.qml](https://doc.qt.io/qtforpython-6/_downloads/279a926d2c82fe0f3cd682910167ecfb/view.qml)와 [logo.png](https://doc.qt.io/qtforpython-6/_downloads/913d54d1da47ccd2739779d9e1249d8d/logo.png)를 다운로드하고 프로젝트 폴더로 이동시킵니다.
 
-and
+5. 편집 모드에서 열기 위해 `main.pyproject`를 더블-클릭하고, 파일 목록에 `view.qml`과 `logo.png`를 추가하십시오. 이렇게 하면 프로젝트 파일은 다음과 같이 되어야 합니다:
 
-[logo.png](https://doc.qt.io/qtforpython-6/_downloads/913d54d1da47ccd2739779d9e1249d8d/logo.png)
-
-and move them to your project folder.
-
-5. Double-click on `main.pyproject` to open it in edit mode, and append `view.qml` and `logo.png` to the files list. This is how your project file should look after this change:
-
-```python
+```
 {
     "files": ["main.py", "view.qml", "logo.png"]
 }
 ```
 
-6. Now that you have the necessary bits for the application, import the Python modules in your `main.py`, and download country data and format it:
+6. 이제 애플리케이션에 필요한 것들이 확보되었으니, `main.py`에 Python 모듈을 가져오고 나서 국가별 데이터를 다운로드하고 서식을 만드십시오:
 
 ```python
 import sys
@@ -2041,17 +2035,17 @@ from PySide6.QtGui import QGuiApplication
 
 if __name__ == '__main__':
 
-    #get our data
+    # 데이터 가져오기
     url = "http://country.io/names.json"
     response = urllib.request.urlopen(url)
     data = json.loads(response.read().decode('utf-8'))
 
-    #Format and sort the data
+    # 데이터의 서식을 꾸미고 정렬함
     data_list = list(data.values())
     data_list.sort()
 ```
 
-7. Now, set up the application window using [PySide6.QtGui.QGuiApplication](https://doc.qt.io/qtforpython-6/PySide6/QtGui/QGuiApplication.html#qguiapplication), which manages the application-wide settings.
+7. 이제 애플리케이션 전체 설정을 관리하는 [PySide6.QtGui.QGuiApplication](https://doc.qt.io/qtforpython-6/PySide6/QtGui/QGuiApplication.html#qguiapplication)을 이용하여 애플리케이션 창을 설정하십시오.
 
 ```python
 import sys
@@ -2066,24 +2060,24 @@ from PySide6.QtGui import QGuiApplication
 
 if __name__ == '__main__':
 
-    #get our data
+    # 데이터 가져오기
     url = "http://country.io/names.json"
     response = urllib.request.urlopen(url)
     data = json.loads(response.read().decode('utf-8'))
 
-    #Format and sort the data
+    # 데이터의 서식을 꾸미고 정렬함
     data_list = list(data.values())
     data_list.sort()
 
-    #Set up the application window
+    # 애플리케이션 창 설정
     app = QGuiApplication(sys.argv)
     view = QQuickView()
     view.setResizeMode(QQuickView.SizeRootObjectToView)
 ```
 
-Note: Setting the resize policy is important if you want the root item to resize itself to fit the window or vice-a-versa. Otherwise, the root item will retain its original size on resizing the window.
+주의: 만약 창 크기에 맞게 루트 항목 자체가 리사이즈 되거나, 루트 항목 크기에 맞게 창 크기가 리사이즈 되기를 원한다면 리사이즈 정책을 설정하는 것이 중요합니다. 그렇게 하지 않으면 루트 항목은 창 크기가 변할 때 원래 크기를 유지할 것입니다.
 
-8. You can now expose the `data_list` variable as a QML initial property, which will be consumed by the QML ListView item in `view.qml`.
+8. 이제 `data_list` 변수를 QML 초기 프로퍼티로 노출시킬 수 있게 되었습니다. 이것은 `view.qml`에 있는 QML ListView가 사용할 것입니다.
 
 ```python
 import sys
@@ -2098,27 +2092,27 @@ from PySide6.QtGui import QGuiApplication
 
 if __name__ == '__main__':
 
-    #get our data
+    # 데이터 가져오기
     url = "http://country.io/names.json"
     response = urllib.request.urlopen(url)
     data = json.loads(response.read().decode('utf-8'))
 
-    #Format and sort the data
+    # 데이터의 서식을 꾸미고 정렬함
     data_list = list(data.values())
     data_list.sort()
 
-    #Set up the application window
+    # 애플리케이션 창 설정
     app = QGuiApplication(sys.argv)
     view = QQuickView()
     view.setResizeMode(QQuickView.SizeRootObjectToView)
 
-    #Expose the list to the Qml code
+    # QML 코드에 리스트 노출시키기
     my_model = QStringListModel()
     my_model.setStringList(data_list)
     view.setInitialProperties({"myModel": my_model})
 ```
 
-9. Load the `view.qml` to the `QQuickView` and call `show()` to display the application window.
+9. `view.qml`을 `QQuickView`에 로드하고 `show()`를 호출하여 애플리케이션 창에 표시합니다.
 
 ```python
 import sys
@@ -2133,36 +2127,36 @@ from PySide6.QtGui import QGuiApplication
 
 if __name__ == '__main__':
 
-    #get our data
+    # 데이터 가져오기
     url = "http://country.io/names.json"
     response = urllib.request.urlopen(url)
     data = json.loads(response.read().decode('utf-8'))
 
-    #Format and sort the data
+    # 데이터의 서식을 꾸미고 정렬함
     data_list = list(data.values())
     data_list.sort()
 
-    #Set up the application window
+    # 애플리케이션 창 설정
     app = QGuiApplication(sys.argv)
     view = QQuickView()
     view.setResizeMode(QQuickView.SizeRootObjectToView)
 
-    #Expose the list to the Qml code
+    # QML 코드에 리스트 노출시키기
     my_model = QStringListModel()
     my_model.setStringList(data_list)
     view.setInitialProperties({"myModel": my_model})
 
-    #Load the QML file
+    # QML 파일 로드하기
     qml_file = Path(__file__).parent / "view.qml"
     view.setSource(QUrl.fromLocalFile(qml_file.resolve()))
 
-    #Show the window
+    # 창 보여주기
     if view.status() == QQuickView.Error:
         sys.exit(-1)
     view.show()
 ```
 
-10. Finally, execute the application to start the event loop and clean up.
+10. 마지막으로 이벤트 루프를 시작하기 위해 애플리케이션을 실행하고 정리하십시오.
 
 ```python
 
@@ -2178,62 +2172,428 @@ from PySide6.QtGui import QGuiApplication
 
 if __name__ == '__main__':
 
-    #get our data
+    # 데이터 가져오기
     url = "http://country.io/names.json"
     response = urllib.request.urlopen(url)
     data = json.loads(response.read().decode('utf-8'))
 
-    #Format and sort the data
+    # 데이터의 서식을 꾸미고 정렬함
     data_list = list(data.values())
     data_list.sort()
 
-    #Set up the application window
+    # 애플리케이션 창 설정
     app = QGuiApplication(sys.argv)
     view = QQuickView()
     view.setResizeMode(QQuickView.SizeRootObjectToView)
 
-    #Expose the list to the Qml code
+    # QML 코드에 리스트 노출시키기
     my_model = QStringListModel()
     my_model.setStringList(data_list)
     view.setInitialProperties({"myModel": my_model})
 
-    #Load the QML file
+    # QML 파일 로드하기
     qml_file = Path(__file__).parent / "view.qml"
     view.setSource(QUrl.fromLocalFile(qml_file.resolve()))
 
-    #Show the window
+    # 창 보여주기
     if view.status() == QQuickView.Error:
         sys.exit(-1)
     view.show()
 
-    #execute and cleanup
+    # 실행하고 정리하기
     app.exec()
     del view
 ```
 
-11. Your application is ready to be run now. Select Projects mode to choose the Python version to run it.
+11. 이제 애플리케이션을 실행할 준비가 되었습니다. Projects 모드를 선택하고 실행할 Python 버전을 선택하십시오.
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/d3a9a40f-c035-496c-bbd1-8770de2c9750)
 
-Run the application by using the CTRL+R keyboard shortcut to see if it looks like this:
+만약 다음과 같이 나온다면 CTRL+R 키보드 단축키를 사용하여 애플리케이션을 실행하십시오:
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/24d3c325-2737-4baa-994e-41f5ca3ec324)
 
-You could also watch the following video tutorial for guidance to develop this application:
+또한 이 애플리케이션을 개발하기 위한 지침을 위해 다음 영상 튜토리얼을 보셔도 됩니다:
 
 [![Video Label](http://img.youtube.com/vi/JxfiUx60Mbg/0.jpg)](https://youtu.be/JxfiUx60Mbg)
 
 #### 관련 정보
 
-[QML Reference](https://doc.qt.io/qt-5/qmlreference.html)
+[QML 레퍼런스](https://doc.qt.io/qt-5/qmlreference.html)
 
-[Python-QML integration](https://doc.qt.io/qtforpython-6/tutorials/qmlintegration/qmlintegration.html)
-
-... https://doc.qt.io/qtforpython-6/tutorials/qmlapp/qmlapplication.html
+[Python-QML 통합](https://doc.qt.io/qtforpython-6/tutorials/qmlintegration/qmlintegration.html)
 
 ### QML, SQL 및 PySide 통합 튜토리얼
 
-... https://doc.qt.io/qtforpython-6/tutorials/qmlsqlintegration/qmlsqlintegration.html
+This tutorial is very similar to the [Qt Chat Tutorial](https://doc.qt.io/qt-6/qtquickcontrols-chattutorial-example.html) one but it focuses on explaining how to integrate a SQL database into a PySide6 application using QML for its UI.
+
+#### sqlDialog.py
+
+We import the pertinent libraries to our program, define a global variable that hold the name of our table, and define the global function `createTable()` that creates a new table if it doesn’t already exist. The database contains a single line to mock the beginning of a conversation.
+
+```python
+import datetime
+import logging
+
+from PySide6.QtCore import Qt, Slot
+from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlRecord, QSqlTableModel
+from PySide6.QtQml import QmlElement
+
+table_name = "Conversations"
+QML_IMPORT_NAME = "ChatModel"
+QML_IMPORT_MAJOR_VERSION = 1
+
+
+def createTable():
+    if table_name in QSqlDatabase.database().tables():
+        return
+
+    query = QSqlQuery()
+    if not query.exec_(
+        """
+        CREATE TABLE IF NOT EXISTS 'Conversations' (
+            'author' TEXT NOT NULL,
+            'recipient' TEXT NOT NULL,
+            'timestamp' TEXT NOT NULL,
+            'message' TEXT NOT NULL,
+        FOREIGN KEY('author') REFERENCES Contacts ( name ),
+        FOREIGN KEY('recipient') REFERENCES Contacts ( name )
+        )
+        """
+    ):
+        logging.error("Failed to query database")
+
+    # This adds the first message from the Bot
+    # and further development is required to make it interactive.
+    query.exec_(
+        """
+        INSERT INTO Conversations VALUES(
+            'machine', 'Me', '2019-01-07T14:36:06', 'Hello!'
+        )
+        """
+    )
+```
+
+The `SqlConversationModel` class offers the read-only data model required for the non-editable contacts list. It derives from the [QSqlQueryModel](https://doc.qt.io/qtforpython-6/PySide6/QtSql/QSqlQueryModel.html#qsqlquerymodel) class, which is the logical choice for this use case. Then, we proceed to create the table, set its name to the one defined previously with the [`setTable()`](https://doc.qt.io/qtforpython-6/PySide6/QtSql/QSqlTableModel.html#PySide6.QtSql.PySide6.QtSql.QSqlTableModel.setTable) method. We add the necessary attributes to the table, to have a program that reflects the idea of a chat application.
+
+```python
+@QmlElement
+class SqlConversationModel(QSqlTableModel):
+    def __init__(self, parent=None):
+        super(SqlConversationModel, self).__init__(parent)
+
+        createTable()
+        self.setTable(table_name)
+        self.setSort(2, Qt.DescendingOrder)
+        self.setEditStrategy(QSqlTableModel.OnManualSubmit)
+        self.recipient = ""
+
+        self.select()
+        logging.debug("Table was loaded successfully.")
+```
+
+In `setRecipient()`, you set a filter over the returned results from the database, and emit a signal every time the recipient of the message changes.
+
+```python
+    def setRecipient(self, recipient):
+        if recipient == self.recipient:
+            pass
+
+        self.recipient = recipient
+
+        filter_str = (f"(recipient = '{self.recipient}' AND author = 'Me') OR "
+                      f"(recipient = 'Me' AND author='{self.recipient}')")
+        self.setFilter(filter_str)
+        self.select()
+```
+
+The `data()` function falls back to `QSqlTableModel`’s implementation if the role is not a custom user role. If you get a user role, we can subtract `UserRole()` from it to get the index of that field, and then use that index to find the value to be returned.
+
+```python
+    def data(self, index, role):
+        if role < Qt.UserRole:
+            return QSqlTableModel.data(self, index, role)
+
+        sql_record = QSqlRecord()
+        sql_record = self.record(index.row())
+
+        return sql_record.value(role - Qt.UserRole)
+```
+
+In `roleNames()`, we return a Python dictionary with our custom role and role names as key-values pairs, so we can use these roles in QML. Alternatively, it can be useful to declare an Enum to hold all of the role values. Note that `names` has to be a hash to be used as a dictionary key, and that’s why we’re using the `hash` function.
+
+```python
+    def roleNames(self):
+        """Converts dict to hash because that's the result expected
+        by QSqlTableModel"""
+        names = {}
+        author = "author".encode()
+        recipient = "recipient".encode()
+        timestamp = "timestamp".encode()
+        message = "message".encode()
+
+        names[hash(Qt.UserRole)] = author
+        names[hash(Qt.UserRole + 1)] = recipient
+        names[hash(Qt.UserRole + 2)] = timestamp
+        names[hash(Qt.UserRole + 3)] = message
+
+        return names
+```
+
+The `send_message()` function uses the given recipient and message to insert a new record into the database. Using `OnManualSubmit()` requires you to also call `submitAll()`, since all the changes will be cached in the model until you do so.
+
+```python
+    # This is a workaround because PySide doesn't provide Q_INVOKABLE
+    # So we declare this as a Slot to be able to call it  from QML
+    @Slot(str, str, str)
+    def send_message(self, recipient, message, author):
+        timestamp = datetime.datetime.now()
+
+        new_record = self.record()
+        new_record.setValue("author", author)
+        new_record.setValue("recipient", recipient)
+        new_record.setValue("timestamp", str(timestamp))
+        new_record.setValue("message", message)
+
+        logging.debug(f'Message: "{message}" \n Received by: "{recipient}"')
+
+        if not self.insertRecord(self.rowCount(), new_record):
+            logging.error("Failed to send message: {self.lastError().text()}")
+            return
+
+        self.submitAll()
+        self.select()
+```
+
+#### chat.qml
+
+Let’s look at the `chat.qml` file.
+
+```python
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+```
+
+First, import the Qt Quick module. This gives us access to graphical primitives such as Item, Rectangle, Text, and so on. For a full list of types, see the [Qt Quick QML Types](https://doc.qt.io/qt-5/qtquick-qmlmodule.html) documentation. We then add QtQuick.Layouts import, which we’ll cover shortly.
+
+Next, import the Qt Quick Controls module. Among other things, this provides access to `ApplicationWindow`, which replaces the existing root type, Window:
+
+Let’s step through the `chat.qml` file.
+
+```qml
+ApplicationWindow {
+    id: window
+    title: qsTr("Chat")
+    width: 640
+    height: 960
+    visible: true
+```
+
+`ApplicationWindow` is a Window with some added convenience for creating a header and a footer. It also provides the foundation for popups and supports some basic styling, such as the background color.
+
+There are three properties that are almost always set when using ApplicationWindow: `width`, `height`, and `visible`. Once we’ve set these, we have a properly sized, empty window ready to be filled with content.
+
+Because we are exposing the `SqlConversationModel` class to QML, we will declare a component to access it:
+
+```qml
+    SqlConversationModel {
+        id: chat_model
+    }
+```
+
+There are two ways of laying out items in QML: [Item Positioners](https://doc.qt.io/qt-5/qtquick-positioning-layouts.html) and [Qt Quick Layouts](https://doc.qt.io/qt-5/qtquicklayouts-index.html).
+
+* Item positioners ([Row](https://doc.qt.io/qt-5/qml-qtquick-row.html), [Column](https://doc.qt.io/qt-5/qml-qtquick-column.html), and so on) are useful for situations where the size of items is known or fixed, and all that is required is to neatly position them in a certain formation.
+* The layouts in Qt Quick Layouts can both position and resize items, making them well suited for resizable user interfaces. Below, we use [ColumnLayout](https://doc.qt.io/qt-5/qml-qtquick-layouts-columnlayout.html) to vertically lay out a [ListView](https://doc.qt.io/qt-5/qml-qtquick-listview.html) and a [Pane](https://doc.qt.io/qt-5/qml-qtquick-controls2-pane.html).
+
+```qml
+    ColumnLayout {
+        anchors.fill: window
+
+        ListView {
+```
+
+```qml
+        Pane {
+            id: pane
+            Layout.fillWidth: true
+```
+
+Pane is basically a rectangle whose color comes from the application’s style. It’s similar to [Frame](https://doc.qt.io/qt-5/qml-qtquick-controls2-frame.html), but it has no stroke around its border.
+
+Items that are direct children of a layout have various [attached properties](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html) available to them. We use [Layout.fillWidth](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html#fillWidth-attached-prop) and [Layout.fillHeight](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html#fillHeight-attached-prop) on the [ListView](https://doc.qt.io/qt-5/qml-qtquick-listview.html) to ensure that it takes as much space within the [ColumnLayout](https://doc.qt.io/qt-5/qml-qtquick-layouts-columnlayout.html) as it can, and the same is done for the Pane. As [ColumnLayout](https://doc.qt.io/qt-5/qml-qtquick-layouts-columnlayout.html) is a vertical layout, there aren’t any items to the left or right of each child, so this results in each item consuming the entire width of the layout.
+
+On the other hand, the [Layout.fillHeight](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html#fillHeight-attached-prop) statement in the [ListView](https://doc.qt.io/qt-5/qml-qtquick-listview.html) enables it to occupy the remaining space that is left after accommodating the Pane.
+
+Let’s look at the `Listview` in detail:
+
+```qml
+        ListView {
+            id: listView
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.margins: pane.leftPadding + messageField.leftPadding
+            displayMarginBeginning: 40
+            displayMarginEnd: 40
+            verticalLayoutDirection: ListView.BottomToTop
+            spacing: 12
+            model: chat_model
+            delegate: Column {
+                anchors.right: sentByMe ? listView.contentItem.right : undefined
+                spacing: 6
+
+                readonly property bool sentByMe: model.recipient !== "Me"
+                Row {
+                    id: messageRow
+                    spacing: 6
+                    anchors.right: sentByMe ? parent.right : undefined
+
+                    Rectangle {
+                        width: Math.min(messageText.implicitWidth + 24,
+                            listView.width - (!sentByMe ? messageRow.spacing : 0))
+                        height: messageText.implicitHeight + 24
+                        radius: 15
+                        color: sentByMe ? "lightgrey" : "steelblue"
+
+                        Label {
+                            id: messageText
+                            text: model.message
+                            color: sentByMe ? "black" : "white"
+                            anchors.fill: parent
+                            anchors.margins: 12
+                            wrapMode: Label.Wrap
+                        }
+                    }
+                }
+
+                Label {
+                    id: timestampText
+                    text: Qt.formatDateTime(model.timestamp, "d MMM hh:mm")
+                    color: "lightgrey"
+                    anchors.right: sentByMe ? parent.right : undefined
+                }
+            }
+
+            ScrollBar.vertical: ScrollBar {}
+        }
+```
+
+After filling the `width` and `height` of its parent, we also set some margins on the view.
+
+Next, we set [displayMarginBeginning](https://doc.qt.io/qt-5/qml-qtquick-listview.html#displayMarginBeginning-prop) and [displayMarginEnd](https://doc.qt.io/qt-5/qml-qtquick-listview.html#displayMarginEnd-prop). These properties ensure that the delegates outside the view don’t disappear when you scroll at the edges of the view. To get a better understanding, consider commenting out the properties and then rerun your code. Now watch what happens when you scroll the view.
+
+We then flip the vertical direction of the view, so that first items are at the bottom.
+
+Additionally, messages sent by the contact should be distinguished from those sent by a contact. For now, when a message is sent by you, we set a `sentByMe` property, to alternate between different contacts. Using this property, we distinguish between different contacts in two ways:
+
+* Messages sent by the contact are aligned to the right side of the screen by setting `anchors.right` to `parent.right`.
+* We change the color of the rectangle depending on the contact. Since we don’t want to display dark text on a dark background, and vice versa, we also set the text color depending on who the contact is.
+
+At the bottom of the screen, we place a [TextArea](https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html) item to allow multi-line text input, and a button to send the message. We use Pane to cover the area under these two items:
+
+```qml
+        Pane {
+            id: pane
+            Layout.fillWidth: true
+
+            RowLayout {
+                width: parent.width
+
+                TextArea {
+                    id: messageField
+                    Layout.fillWidth: true
+                    placeholderText: qsTr("Compose message")
+                    wrapMode: TextArea.Wrap
+                }
+
+                Button {
+                    id: sendButton
+                    text: qsTr("Send")
+                    enabled: messageField.length > 0
+                    onClicked: {
+                        listView.model.send_message("machine", messageField.text, "Me");
+                        messageField.text = "";
+                    }
+                }
+            }
+        }
+```
+
+The [TextArea](https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html) should fill the available width of the screen. We assign some placeholder text to provide a visual cue to the contact as to where they should begin typing. The text within the input area is wrapped to ensure that it does not go outside of the screen.
+
+Lastly, we have a button that allows us to call the `send_message` method we defined on `sqlDialog.py`, since we’re just having a mock up example here and there is only one possible recipient and one possible sender for this conversation we’re just using strings here.
+
+#### main.py
+
+We use `logging` instead of Python’s `print()`, because it provides a better way to control the messages levels that our application will generate (errors, warnings, and information messages).
+
+```python
+import sys
+import logging
+
+from PySide6.QtCore import QDir, QFile, QUrl
+from PySide6.QtGui import QGuiApplication
+from PySide6.QtQml import QQmlApplicationEngine
+from PySide6.QtSql import QSqlDatabase
+
+# We import the file just to trigger the QmlElement type registration.
+import sqlDialog
+
+logging.basicConfig(filename="chat.log", level=logging.DEBUG)
+logger = logging.getLogger("logger")
+```
+
+`connectToDatabase()` creates a connection with the SQLite database, creating the actual file if it doesn’t already exist.
+
+```python
+def connectToDatabase():
+    database = QSqlDatabase.database()
+    if not database.isValid():
+        database = QSqlDatabase.addDatabase("QSQLITE")
+        if not database.isValid():
+            logger.error("Cannot add database")
+
+    write_dir = QDir("")
+    if not write_dir.mkpath("."):
+        logger.error("Failed to create writable directory")
+
+    # Ensure that we have a writable location on all devices.
+    abs_path = write_dir.absolutePath()
+    filename = f"{abs_path}/chat-database.sqlite3"
+
+    # When using the SQLite driver, open() will create the SQLite
+    # database if it doesn't exist.
+    database.setDatabaseName(filename)
+    if not database.open():
+        logger.error("Cannot open database")
+        QFile.remove(filename)
+```
+
+A few interesting things happen in the `main` function:
+
+* Declaring a [QGuiApplication](https://doc.qt.io/qtforpython-6/PySide6/QtGui/QGuiApplication.html#qguiapplication). You should use a [QGuiApplication](https://doc.qt.io/qtforpython-6/PySide6/QtGui/QGuiApplication.html#qguiapplication) instead of [QApplication](https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QApplication.html#qapplication) because we’re not using the QtWidgets module.
+* Connecting to the database,
+* Declaring a [QQmlApplicationEngine](https://doc.qt.io/qtforpython-6/PySide6/QtQml/QQmlApplicationEngine.html#qqmlapplicationengine). This allows you to access the QML Elements to connect Python and QML from the conversation model we built on `sqlDialog.py`.
+* Loading the `.qml` file that defines the UI.
+
+Finally, the Qt application runs, and your program starts.
+
+```python
+if __name__ == "__main__":
+    app = QGuiApplication()
+    connectToDatabase()
+
+    engine = QQmlApplicationEngine()
+    engine.load(QUrl("chat.qml"))
+
+    if not engine.rootObjects():
+        sys.exit(-1)
+
+    app.exec()
+```
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/0823331f-9db5-4bfc-a604-4a4d7e2afd8d)
 
 ### 파일 시스템 탐색기 확장하기 예제
 
