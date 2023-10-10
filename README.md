@@ -1793,21 +1793,21 @@ if __name__ == "__main__":
 
 ### Python-QML 통합
 
-This tutorial provides a quick walk-through of a python application that loads, and interacts with a QML file. QML is a declarative language that lets you design UIs faster than a traditional language, such as C++. The QtQml and QtQuick modules provides the necessary infrastructure for QML-based UIs.
+이 튜토리얼은 QML 파일을 로드하고 상호작용하는 Python 애플리케이션에 대한 간단한 설명을 제공합니다. QML은 명령형 언어로서 C++과 같은 기존 언어보다 더 빨리 UI를 설계할 수 있게 해줍니다. QtQml과 QtQuick 모듈은 QML-기반 UI에 대한 필수 인프라를 제공합니다.
 
-In this tutorial, you will learn how to integrate Python with a QML application. This mechanism will help us to understand how to use Python as a backend for certain signals from the UI elements in the QML interface. Additionally, you will learn how to provide a modern look to your QML application using one of the features from Qt Quick Controls 2.
+이 튜토리얼에서는 Python과 QML 애플리케이션을 통합하는 방법에 대해 배우게 될 것입니다. 이 메커니즘은 QML 인터페이스에서 UI 요소로부터 특정 시그널에 대한 백엔드로서 Python을 사용하는 방법을 이해하는 데 도움을 줄 것입니다. 게다가 Qt Quick Controls 2의 기능 중 하나를 사용하여 QML 애플리케이션에게 모던 룩을 제공하는 방법도 배우게 될 것입니다.
 
-The tutorial is based on an application that allow you to set many text properties, like increasing the font size, changing the color, changing the style, and so on. Before you begin, install the PySide6 Python packages.
+이 튜토리얼은 많은 텍스트 프로퍼티(가령 글꼴 크기를 증가시키거나 글꼴 색상을 변경하거나 스타일을 변경하는 등)를 설정할 수 있는 애플리케이션을 기반으로 하고 있습니다. 시작하기 전에 PySide6 Python 패키지를 설치하십시오.
 
-The following step-by-step process will guide you through the key elements of the QML based application and PySide6 integration:
+다음 단계별 과정은 QML 기반 애플리케이션과 PySide6 통합의 핵심 요소를 알려줄 것입니다:
 
-1. First, let’s start with the following QML-based UI:
+1. 먼저 다음 QML-기반 UI로 시작하겠습니다:
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/896fb08e-8904-47c9-89eb-8189f4819d23)
 
-The design is based on a GridLayout, containing two ColumnLayout. Inside the UI you will find many RadioButton, Button, and a Slider.
+설계는 2개의 ColumnLayout을 포함하는 GridLayout을 기반으로 하고 있습니다. UI 내부에는 여러 개의 RadioButton, Button, Slider가 있습니다.
 
-2. With the QML file in place, you can load it from Python:
+2. QML 파일이 제대로 있으면, Python에서 로드할 수 있습니다:
 
 ```python
 
@@ -1816,8 +1816,7 @@ if __name__ == '__main__':
     QQuickStyle.setStyle("Material")
     engine = QQmlApplicationEngine()
 
-    # Get the path of the current directory, and then add the name
-    # of the QML file, to load it.
+    # 현재 디렉토리의 경로를 가져와서 QML 파일의 이름을 추가하고 그것을 로드함
     qml_file = Path(__file__).parent / 'view.qml'
     engine.load(qml_file)
 
@@ -1825,13 +1824,13 @@ if __name__ == '__main__':
         sys.exit(-1)
 ```
 
-Notice that we only need a `QQmlApplicationEngine` to `load` the QML file.
+여기서 QML 파일을 `load`하기 위해 `QQmlApplicationEngine`만 필요하다는 것을 주목하십시오.
 
-3. Define the `Bridge` class, containing all the logic for the element that will be register in QML:
+3. QML에 등록될 요소에 대한 모든 논리를 포함하는 `Bridge` 클래스를 정의합니다:
 
 ```python
-# To be used on the @QmlElement decorator
-# (QML_IMPORT_MINOR_VERSION is optional)
+# @QmlElement 데코레이터에서 사용하려면
+# (QML_IMPORT_MINOR_VERSION은 선택적임)
 QML_IMPORT_NAME = "io.qt.textproperties"
 QML_IMPORT_MAJOR_VERSION = 1
 
@@ -1873,9 +1872,9 @@ class Bridge(QObject):
             return False
 ```
 
-Notice that the registration happens thanks to the `QmlElement` decorator, that underneath uses the reference to the `Bridge` class and the variables `QML_IMPORT_NAME` and `QML_IMPORT_MAJOR_VERSION`.
+등록은 `QmlElement` 데코레이터 덕분에 이루어지며, 그 아래는 `Bridge` 클래스와 변수 `QML_IMPORT_NAME` 및 `QML_IMPORT_MAJOR_VERSION`에 대한 참조를 사용합니다.
 
-4. Now, go back to the QML file and connect the signals to the slots defined in the `Bridge` class:
+4. 이제 QML 파일로 되돌아가서 `Bridge` 클래스에서 정의된 슬롯에 시그널을 연결합니다:
 
 ```qml
 Bridge {
@@ -1883,7 +1882,7 @@ Bridge {
 }
 ```
 
-Inside the `ApplicationWindow` we declare a component with the same name as the Python class, and provide an `id:`. This `id` will help you to get a reference to the element that was registered from Python.
+`ApplicationWindow` 내부에서 Python 클래스와 동일한 이름을 가진 컴포넌트를 선언하고 `id:`를 제공합니다. 이 `id`는 Python으로부터 등록된 요소에 대한 참조를 가져오는 데 도움을 줄 것입니다.
 
 ```qml
             RadioButton {
@@ -1899,9 +1898,9 @@ Inside the `ApplicationWindow` we declare a component with the same name as the 
             }
 ```
 
-The properties Italic, Bold, and Underline are mutually exclusive, this means only one can be active at any time. To achieve this each time we select one of these options, we check the three properties via the QML element property as you can see in the above snippet. Only one of the three will return True, while the other two will return False, that is how we make sure only one is being applied to the text.
+프로퍼티 Italic, Bold, Underline은 상호 배타적이므로 언제든지 하나만 활성화할 수 있습니다. 이것을 성취하려면 위의 짧막한 코드에서 볼 수 있듯이 옵션 중 하나를 선택할 때마다 QML 요소 프로퍼티를 통해 3개의 프로퍼티를 확인해야 합니다. 셋 중 하나만 True를 리턴하고 나머지 둘은 False를 리턴할 것입니다. 이렇게 하면 하나의 효과만 텍스트에 적용될 것입니다.
 
-5. Each slot verifies if the selected option contains the text associated to the property:
+5. 각 슬롯은 선택한 옵션이 프로퍼티와 관련된 텍스트를 포함하는지 여부를 검증합니다:
 
 ```python
     @Slot(str, result=bool)
@@ -1912,9 +1911,9 @@ The properties Italic, Bold, and Underline are mutually exclusive, this means on
             return False
 ```
 
-Returning True or False allows you to activate and deactivate the properties of the QML UI elements.
+True 또는 False를 리턴하는 것은 QML UI 요소의 프로퍼티를 활성화/비활성화할 수 있게 해줍니다.
 
-It is also possible to return other values that are not Boolean, like the slot in charge of returning the font size:
+글꼴 크기를 리턴하는 슬롯처럼, Boolean이 아닌 다른 값을 리턴하는 것도 가능합니다:
 
 ```python
     @Slot(float, result=int)
@@ -1925,15 +1924,15 @@ It is also possible to return other values that are not Boolean, like the slot i
         else:
 ```
 
-6. Now, for changing the look of our application, you have two options:
+6. 이제 애플리케이션의 외형을 변경하려면 다음 2개의 옵션을 선택할 수 있습니다:
 
-1) Use the command line: execute the python file adding the option, `--style`:
+1) 커맨드 라인을 사용하십시오: `--style` 옵션을 추가해서 Python 파일을 실행하십시오:
 
 ```
 python main.py --style material
 ```
 
-2) Use a `qtquickcontrols2.conf` file:
+2) `qtquickcontrols2.conf` 파일을 사용하십시오:
 
 ```
 [Controls]
@@ -1948,7 +1947,7 @@ Theme=Dark
 Accent=Red
 ```
 
-Then add it to your `.qrc` file:
+그리고 나서 이것을 `.qrc` 파일에 추가합니다:
 
 ```xml
 <!DOCTYPE RCC><RCC version="1.0">
@@ -1958,7 +1957,7 @@ Then add it to your `.qrc` file:
 </RCC>
 ```
 
-Generate the rc file running, `pyside6-rcc style.qrc -o style_rc.py` And finally import it from your `main.py` script.
+`pyside6-rcc style.qrc -o style_rc.py`를 실행하는 rc 파일을 생성하고 `main.py` 스크립트로부터 그것을 가져옵니다.
 
 ```python
 import sys
@@ -1972,9 +1971,9 @@ from PySide6.QtQuickControls2 import QQuickStyle
 import style_rc
 ```
 
-You can read more about this configuration file [here](https://doc.qt.io/qt-5/qtquickcontrols2-configuration.html).
+이 구성 파일에 대해서는 [여기](https://doc.qt.io/qt-5/qtquickcontrols2-configuration.html)에서 더 많이 알아볼 수 있습니다.
 
-The final look of your application will be:
+애플리케이션의 최종 외형은 다음과 같습니다:
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/74253d81-9f2a-4321-b171-35ad61192cad)
 
@@ -1982,9 +1981,253 @@ The final look of your application will be:
 
 다운로드 링크: [main.py](https://doc.qt.io/qtforpython-6/_downloads/63044c6135ff9f549e8ff800a8b2a856/main.py)
 
-... https://doc.qt.io/qtforpython-6/tutorials/qmlintegration/qmlintegration.html
-
 ### QML 애플리케이션 튜토리얼
+
+This tutorial provides a quick walk-through of a python application that loads a QML file. QML is a declarative language that lets you design UIs faster than a traditional language, such as C++. The QtQml and QtQuick modules provides the necessary infrastructure for QML-based UIs.
+
+In this tutorial, you’ll also learn how to provide data from Python as a QML initial property, which is then consumed by the ListView defined in the QML file.
+
+Before you begin, install the following prerequisites:
+
+* The [PySide6](https://pypi.org/project/PySide6/) Python packages.
+* Qt Creator v4.9 beta1 or later from [https://download.qt.io](https://download.qt.io/snapshots/qtcreator/).
+
+The following step-by-step instructions guide you through application development process using Qt Creator:
+
+1. Open Qt Creator and select File > New File or Project.. menu item to open following dialog:
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/693997c8-dbbf-4a9d-8ba4-54af83140928)
+
+2. Select Qt for Python - Empty from the list of application templates and select Choose.
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/19d51462-d840-43b2-9f19-fc3c3cbcaf00)
+
+3. Give a Name to your project, choose its location in the filesystem, and select Finish to create an empty `main.py` and `main.pyproject`.
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/fd8d19e8-e44c-4fa6-9e31-69f3c2a9f488)
+
+This should create a `main.py` and `main.pyproject` files for the project.
+
+4. Download
+
+[view.qml](https://doc.qt.io/qtforpython-6/_downloads/279a926d2c82fe0f3cd682910167ecfb/view.qml)
+
+and
+
+[logo.png](https://doc.qt.io/qtforpython-6/_downloads/913d54d1da47ccd2739779d9e1249d8d/logo.png)
+
+and move them to your project folder.
+
+5. Double-click on `main.pyproject` to open it in edit mode, and append `view.qml` and `logo.png` to the files list. This is how your project file should look after this change:
+
+```python
+{
+    "files": ["main.py", "view.qml", "logo.png"]
+}
+```
+
+6. Now that you have the necessary bits for the application, import the Python modules in your `main.py`, and download country data and format it:
+
+```python
+import sys
+import urllib.request
+import json
+from pathlib import Path
+
+from PySide6.QtQuick import QQuickView
+from PySide6.QtCore import QStringListModel, QUrl
+from PySide6.QtGui import QGuiApplication
+
+
+if __name__ == '__main__':
+
+    #get our data
+    url = "http://country.io/names.json"
+    response = urllib.request.urlopen(url)
+    data = json.loads(response.read().decode('utf-8'))
+
+    #Format and sort the data
+    data_list = list(data.values())
+    data_list.sort()
+```
+
+7. Now, set up the application window using [PySide6.QtGui.QGuiApplication](https://doc.qt.io/qtforpython-6/PySide6/QtGui/QGuiApplication.html#qguiapplication), which manages the application-wide settings.
+
+```python
+import sys
+import urllib.request
+import json
+from pathlib import Path
+
+from PySide6.QtQuick import QQuickView
+from PySide6.QtCore import QStringListModel, QUrl
+from PySide6.QtGui import QGuiApplication
+
+
+if __name__ == '__main__':
+
+    #get our data
+    url = "http://country.io/names.json"
+    response = urllib.request.urlopen(url)
+    data = json.loads(response.read().decode('utf-8'))
+
+    #Format and sort the data
+    data_list = list(data.values())
+    data_list.sort()
+
+    #Set up the application window
+    app = QGuiApplication(sys.argv)
+    view = QQuickView()
+    view.setResizeMode(QQuickView.SizeRootObjectToView)
+```
+
+Note: Setting the resize policy is important if you want the root item to resize itself to fit the window or vice-a-versa. Otherwise, the root item will retain its original size on resizing the window.
+
+8. You can now expose the `data_list` variable as a QML initial property, which will be consumed by the QML ListView item in `view.qml`.
+
+```python
+import sys
+import urllib.request
+import json
+from pathlib import Path
+
+from PySide6.QtQuick import QQuickView
+from PySide6.QtCore import QStringListModel, QUrl
+from PySide6.QtGui import QGuiApplication
+
+
+if __name__ == '__main__':
+
+    #get our data
+    url = "http://country.io/names.json"
+    response = urllib.request.urlopen(url)
+    data = json.loads(response.read().decode('utf-8'))
+
+    #Format and sort the data
+    data_list = list(data.values())
+    data_list.sort()
+
+    #Set up the application window
+    app = QGuiApplication(sys.argv)
+    view = QQuickView()
+    view.setResizeMode(QQuickView.SizeRootObjectToView)
+
+    #Expose the list to the Qml code
+    my_model = QStringListModel()
+    my_model.setStringList(data_list)
+    view.setInitialProperties({"myModel": my_model})
+```
+
+9. Load the `view.qml` to the `QQuickView` and call `show()` to display the application window.
+
+```python
+import sys
+import urllib.request
+import json
+from pathlib import Path
+
+from PySide6.QtQuick import QQuickView
+from PySide6.QtCore import QStringListModel, QUrl
+from PySide6.QtGui import QGuiApplication
+
+
+if __name__ == '__main__':
+
+    #get our data
+    url = "http://country.io/names.json"
+    response = urllib.request.urlopen(url)
+    data = json.loads(response.read().decode('utf-8'))
+
+    #Format and sort the data
+    data_list = list(data.values())
+    data_list.sort()
+
+    #Set up the application window
+    app = QGuiApplication(sys.argv)
+    view = QQuickView()
+    view.setResizeMode(QQuickView.SizeRootObjectToView)
+
+    #Expose the list to the Qml code
+    my_model = QStringListModel()
+    my_model.setStringList(data_list)
+    view.setInitialProperties({"myModel": my_model})
+
+    #Load the QML file
+    qml_file = Path(__file__).parent / "view.qml"
+    view.setSource(QUrl.fromLocalFile(qml_file.resolve()))
+
+    #Show the window
+    if view.status() == QQuickView.Error:
+        sys.exit(-1)
+    view.show()
+```
+
+10. Finally, execute the application to start the event loop and clean up.
+
+```python
+
+import sys
+import urllib.request
+import json
+from pathlib import Path
+
+from PySide6.QtQuick import QQuickView
+from PySide6.QtCore import QStringListModel, QUrl
+from PySide6.QtGui import QGuiApplication
+
+
+if __name__ == '__main__':
+
+    #get our data
+    url = "http://country.io/names.json"
+    response = urllib.request.urlopen(url)
+    data = json.loads(response.read().decode('utf-8'))
+
+    #Format and sort the data
+    data_list = list(data.values())
+    data_list.sort()
+
+    #Set up the application window
+    app = QGuiApplication(sys.argv)
+    view = QQuickView()
+    view.setResizeMode(QQuickView.SizeRootObjectToView)
+
+    #Expose the list to the Qml code
+    my_model = QStringListModel()
+    my_model.setStringList(data_list)
+    view.setInitialProperties({"myModel": my_model})
+
+    #Load the QML file
+    qml_file = Path(__file__).parent / "view.qml"
+    view.setSource(QUrl.fromLocalFile(qml_file.resolve()))
+
+    #Show the window
+    if view.status() == QQuickView.Error:
+        sys.exit(-1)
+    view.show()
+
+    #execute and cleanup
+    app.exec()
+    del view
+```
+
+11. Your application is ready to be run now. Select Projects mode to choose the Python version to run it.
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/d3a9a40f-c035-496c-bbd1-8770de2c9750)
+
+Run the application by using the CTRL+R keyboard shortcut to see if it looks like this:
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/24d3c325-2737-4baa-994e-41f5ca3ec324)
+
+You could also watch the following video tutorial for guidance to develop this application:
+
+[![Video Label](http://img.youtube.com/vi/JxfiUx60Mbg/0.jpg)](https://youtu.be/JxfiUx60Mbg)
+
+#### 관련 정보
+
+[QML Reference](https://doc.qt.io/qt-5/qmlreference.html)
+
+[Python-QML integration](https://doc.qt.io/qtforpython-6/tutorials/qmlintegration/qmlintegration.html)
 
 ... https://doc.qt.io/qtforpython-6/tutorials/qmlapp/qmlapplication.html
 
