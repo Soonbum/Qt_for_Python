@@ -2225,11 +2225,11 @@ if __name__ == '__main__':
 
 ### QML, SQL 및 PySide 통합 튜토리얼
 
-This tutorial is very similar to the [Qt Chat Tutorial](https://doc.qt.io/qt-6/qtquickcontrols-chattutorial-example.html) one but it focuses on explaining how to integrate a SQL database into a PySide6 application using QML for its UI.
+이 튜토리얼은 [Qt 채팅 튜토리얼](https://doc.qt.io/qt-6/qtquickcontrols-chattutorial-example.html)과 매우 비슷합니다. 하지만 UI에 QML을 사용하는 PySide6 애플리케이션에 SQL 데이터베이스를 통합하는 방법을 설명하는 데 중점을 두고 있습니다.
 
 #### sqlDialog.py
 
-We import the pertinent libraries to our program, define a global variable that hold the name of our table, and define the global function `createTable()` that creates a new table if it doesn’t already exist. The database contains a single line to mock the beginning of a conversation.
+프로그램에 적절한  라이브러리를 가져옵니다. 테이블 이름을 저장할 글로벌 변수를 정의하고, 존재하지 않을 경우 새로운 테이블을 생성하는 글로벌 함수 `createTable()`을 정의합니다. 이 데이터베이스에는 대화의 시작을 흉내내기 위한 1줄을 포함하고 있습니다.
 
 ```python
 import datetime
@@ -2263,8 +2263,8 @@ def createTable():
     ):
         logging.error("Failed to query database")
 
-    # This adds the first message from the Bot
-    # and further development is required to make it interactive.
+    # 이렇게 하면 Bot의 1번째 메시지가 추가됩니다.
+    # 대화형으로 만들려면 추가 개발이 필요합니다.
     query.exec_(
         """
         INSERT INTO Conversations VALUES(
@@ -2274,7 +2274,7 @@ def createTable():
     )
 ```
 
-The `SqlConversationModel` class offers the read-only data model required for the non-editable contacts list. It derives from the [QSqlQueryModel](https://doc.qt.io/qtforpython-6/PySide6/QtSql/QSqlQueryModel.html#qsqlquerymodel) class, which is the logical choice for this use case. Then, we proceed to create the table, set its name to the one defined previously with the [`setTable()`](https://doc.qt.io/qtforpython-6/PySide6/QtSql/QSqlTableModel.html#PySide6.QtSql.PySide6.QtSql.QSqlTableModel.setTable) method. We add the necessary attributes to the table, to have a program that reflects the idea of a chat application.
+`SqlConversationModel` 클래스는 편집-불가능한 연락처 리스트에 필요한 읽기-전용 데이터 모델을 제공합니다. It derives from the [QSqlQueryModel](https://doc.qt.io/qtforpython-6/PySide6/QtSql/QSqlQueryModel.html#qsqlquerymodel) class, which is the logical choice for this use case. Then, we proceed to create the table, set its name to the one defined previously with the [`setTable()`](https://doc.qt.io/qtforpython-6/PySide6/QtSql/QSqlTableModel.html#PySide6.QtSql.PySide6.QtSql.QSqlTableModel.setTable) method. We add the necessary attributes to the table, to have a program that reflects the idea of a chat application.
 
 ```python
 @QmlElement
