@@ -2595,13 +2595,13 @@ if __name__ == "__main__":
 
 ### 파일 시스템 탐색기 확장하기 예제
 
-This tutorial shows how to extend the [Filesystem Explorer Example](https://doc.qt.io/qtforpython-6/examples/example_quickcontrols_filesystemexplorer.html#filesystemexplorer-example) by adding a simple scheme manager. This feature will allow you to switch color schemes during the application’s runtime. The color schemes will be declared in JSON format and made available through a custom Python-QML plugin.
+이 튜토리얼은 간단한 스킴(Scheme) 관리자를 추가하여 [파일시스템 탐색기 예제](https://doc.qt.io/qtforpython-6/examples/example_quickcontrols_filesystemexplorer.html#filesystemexplorer-example)를 확장하는 방법을 보여줍니다. 이 기능을 사용하면 애플리케이션 런타임 중에 컬러 스킴을 전환할 수 있습니다. 컬러 스킴은 JSON 포맷으로 선언되고 커스텀 Python-QML 플러그인을 통해 이용할 수 있게 됩니다.
 
 ![image](https://doc.qt.io/qtforpython-6/_images/extendedexplorer.gif)
 
-#### Defining the color schemes
+#### 컬러 스킴 정의하기
 
-To define your color scheme, you can use the same color names as the original example, so you don’t have to rename every occurrence. The original colors are defined in the `Colors.qml` file as follows:
+컬러 스킴을 정의하기 위해 원래의 예제와 동일한 컬러 이름을 사용할 수 있습니다. 그래서 모든 경우에 대해 이름을 변경할 필요가 없습니다. 원래 컬러는 다음과 같이 `Colors.qml` 파일에 정의되어 있습니다:
 
 resources/Colors.qml
 ```qml
@@ -2623,7 +2623,7 @@ QtObject {
 }
 ```
 
-The `schemes.json` file holds the color schemes. To start implementing this, you can use the [Catppuccin](https://github.com/catppuccin/catppuccin) scheme.
+`schemes.json` 파일은 컬러 스킴을 보관하고 있습니다. 이것을 구현하기 위해 [Catppuccin](https://github.com/catppuccin/catppuccin) 스킴을 사용할 수 있습니다.
 
 schemes.json
 ```json
@@ -2645,17 +2645,17 @@ schemes.json
   },
 ```
 
-In addition to the “Catppuccin” color scheme, four other color schemes got implemented: Nordic, One Dark, Gruvbox, and Solarized. However, feel free to get creative and experiment with your schemes.
+"Catppuccin" 컬러 스킴 외에도, 4개의 컬러 스킴을 더 구현하였습니다: Nordic, One Dark, Gruvbox, Solarized. 하지만 자유롭게 창의력을 발휘하고 스킴을 가지고 실험해 보십시오.
 
-To define a new color scheme, copy the structure from above and provide your color values
+새로운 컬러 스킴을 정의하려면, 위의 구조를 복사하고 새로운 컬러 값을 제공하십시오.
 
-#### Implement the scheme manager
+#### 스킴 관리자 구현하기
 
-After defining the color schemes, you can implement the actual scheme manager. The manager will read the `schemes.json` file and provide QML bindings to switch between schemes during runtime.
+컬러 스킴을 정의한 후에 실제 스킴 관리자를 구현할 수 있습니다. 관리자는 `schemes.json` 파일을 읽고 런타임 도중에 스킴 간 전환을 위한 QML 바인딩을 제공할 것입니다.
 
-To implement the scheme manager, create a Python-QML plugin that exposes the `SchemeManager` object to QML. This object will have methods to load the color schemes from the `schemes.json` file and switch between them.
+스킴 관리자를 구현하기 위해, QML에 `SchemeManager` 객체를 노출시키는 Python-QML 플러그인을 생성하십시오. 이 객체는 `schemes.json` 파일로부터 컬러 스킴을 로드하고 스킴 간 전환을 하는 메서드를 갖게 될 것입니다.
 
-Create a new Python file called `schememanager.py` in your project directory. In this file, define the SchemeManager class:
+프로젝트 디렉토리 안에 `scheme_manager.py`라는 새로운 Python 파일을 생성하십시오. 이 파일에서 SchemeManager 클래스를 정의합니다:
 
 scheme_manager.py
 ```python
@@ -2668,7 +2668,7 @@ QML_IMPORT_MAJOR_VERSION = 1
 class SchemeManager(QObject):
 ```
 
-To integrate smoothly into the already existing code, attach the SchemeManager to the same QML module that’s already present with `QML_IMPORT_NAME = "FileSystemModule"`. Additionally, use the `@QmlNamedElement` decorator to smoothly transition to using the custom plugin instead of the `Colors.qml` file. With these changes, we can avoid editing all previous assignments like:
+이미 존재하는 코드에 자연스럽게 통합하려면, `QML_IMPORT_NAME = "FileSystemModule"`을 통해 이미 존재하는 동일한 QML 모듈에 SchemeManager를 부착하십시오. 또한 `Colors.qml` 파일 대신 `@QmlNamedElement` 데코레이터를 사용하여 커스텀 플러그인 사용으로 자연스럽게 전환할 수 있습니다. 이렇게 변경하면 다음과 같이 모든 이전 할당을 편집하는 것을 막을 수 있습니다:
 
 ```qml
 import FileSystemModule
@@ -2678,7 +2678,7 @@ Rectangle {
 }
 ```
 
-The constructor reads the `schemes.json` file once upon application start and then calls the `setTheme` member function.
+일단 애플리케이션이 시작되면 생성자는 `schemes.json` 파일을 읽고 `setTheme` 멤버 함수를 호출합니다.
 
 scheme_manager.py
 ```python
@@ -2691,11 +2691,11 @@ scheme_manager.py
         self.m_activeScheme = {}
 ```
 
-By adding the `SchemeManager` as a callable QML element named Colors to the FileSystemModule, the class is now accessible in the code without the need to import it each time or edit previous assignments. This, in turn, will streamline the workflow.
+FileSystemModule에 Colors라는 호출 가능한 QML 요소로 `SchemeManager`를 추가하면, 클래스를 매번 가져오거나 이전 할당을 편집할 필요 없이 코드에서 접근할 수 있습니다. 이렇게 하면 워크플로우가 간소화됩니다.
 
-After defining the schemes in the JSON format and making the `SchemeManager` class a callable element from QML under the name Colors, there are two remaining steps to fully integrate the new scheme manager in the example.
+JSON 포맷으로 스킴을 정의하고 `SchemeManager` 클래스를 Colors라는 이름으로 QML에서 호출 가능한 요소로 만든 후, 예제에서 새로운 스킴 매니저를 완전히 통합하는 2가지 단계가 남아 있습니다.
 
-The first step is to create a function in the `SchemeManager` class that loads a color scheme from the JSON file. The second step is to make the individual colors available in QML with the same name as used before with the syntax `Colors.<previousName>` as assignable properties.
+1번째 단계는 JSON 파일에서 컬러 스킴을 로드하는 `SchemeManager` 클래스에 함수를 생성하는 것입니다. 2번째 단계는 전에 할당 가능한 프로퍼티로 구문 `Colors.<previousName>`와 함께 사용했던 동일한 이름으로 QML에서 개별 컬러를 사용할 수 있도록 하는 것입니다.
 
 scheme_manager.py
 ```python
@@ -2707,9 +2707,9 @@ scheme_manager.py
             self.m_activeScheme[k] = QColor.fromString(v)
 ```
 
-The `setScheme` method is responsible for switching between color schemes. To make this method accessible in QML, use the `@Slot(str)` decorator and specify that it takes a string as its input parameter. In this method, we populate a dictionary with the color values from the JSON file.
+`setScheme` 메서드는 컬러 스킴 간 전환하는 역할을 합니다. QML에서 이 메서드에 접근할 수 있게 하려면, `@Slot(str)` 데코레이터를 사용하고 입력 파라미터로 문자열 하나를 취하도록 지정하십시오. 이 메서드에서는 JSON 파일로부터 컬러 값으로 딕셔너리를 채웁니다.
 
-Note: For simplicity reasons no other error checking is performed. You would probably want to validate the keys contained in the json.
+주의: 단순성 때문에 오류 검사는 수행하지 않습니다. JSON에 포함된 키의 유효성을 검사해야 할 것입니다.
 
 scheme_manager.py
 ```python
@@ -2718,15 +2718,15 @@ scheme_manager.py
         return self.m_activeScheme["background"]
 ```
 
-To make the color property assignable in QML, use the `@Property` decorator. We simply return the corresponding color value from the dictionary for each property. This process is repeated for all other colors that are used in the application. At this point the application should start with the colors provided by the active scheme in the constructor.
+QML에서 할당 가능한 컬러 프로퍼티를 만들려면 `@Property` 데코레이터를 사용하십시오. 각 프로퍼티에 대한 딕셔너리로부터 해당 컬러 값을 간단히 리턴합니다. 이 과정은 애플리케이션에서 사용하는 다른 모든 컬러에 대하여 반복됩니다. 이 시점에서 애플리케이션은 생성자의 활성 스킴이 제공하는 컬러로 시작해야 합니다.
 
-#### Add the scheme switching to QML
+#### QML에 스킴 전환하기 추가
 
-To visualize the current scheme and enable interactive scheme switching, start by adding a new entry to the `Sidebar.qml` file.
+현재 스킴을 시각화하고 상호작용하는 스킴 전환을 활성화하려면, `Sidebar.qml` 파일에 새로운 항목을 추가하십시오.
 
 FileSystemModule/qml/Sidebar.qml
 ```qml
-            // Shows the scheme switcher
+            // 스킴 전환자를 보여줌
             SidebarEntry {
                 icon.source: "../icons/leaf.svg"
                 checkable: true
@@ -2736,17 +2736,17 @@ FileSystemModule/qml/Sidebar.qml
         }
 ```
 
-To update the main content area of the application to display the `ColorScheme`, the logic that checks the active index from the Sidebar buttons needs to be modified. The necessary changes will be made to the Main.qml file:
+`ColorScheme`을 표시하기 위해 애플리케이션의 메인 컨텐츠 영역을 업데이트하려면, Sidebar 버튼으로부터 활성화된 인덱스를 확인하는 로직을 수정해야 합니다. 필수 변경사항은 `Main.qml` 파일로 만들어질 것입니다:
 
 FileSystemModule/Main.qml
 ```qml
-                // The ScrollView that contains the TextArea which shows the file's content.
+                // ScrollView는 파일 내용을 보여주는 TextArea를 포함하고 있음
                 StackLayout {
                     currentIndex: sidebar.currentTabIndex > 1 ? 1 : 0
 
                     SplitView.fillWidth: true
                     SplitView.fillHeight: true
-                    // TextArea is the first element inside the stack
+                    // TextArea는 스택 내부의 1번째 요소임
                     ScrollView {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
@@ -2764,7 +2764,7 @@ FileSystemModule/Main.qml
                             text: FileSystemModel.readFile(root.currentFilePath)
                         }
                     }
-                    // The ColorScheme is the second element in the stack
+                    // ColorScheme은 스택 내부의 2번째 요소임
                     ColorScheme {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
@@ -2772,7 +2772,7 @@ FileSystemModule/Main.qml
                 }
 ```
 
-In addition, change the behavior of the application so that there are two `StackLayouts`: one for the resizable navigation and one for the main content area where we display our color scheme switching functionality. These changes will also be made to the Main.qml file.
+그리고 애플리케이션의 동작을 변경하여 2개의 `StackLayouts`이 있게 합니다: 하나는 리사이즈 가능한 네비게이션이고, 다른 하나는 컬러 스킴 전환 기능을 표시하는 메인 컨텐츠 영역입니다. 이러한 변경사항 역시 `Main.qml` 파일로 만들어질 것입니다.
 
 FileSystemModule/Main.qml
 ```qml
@@ -2780,11 +2780,11 @@ FileSystemModule/Main.qml
                         currentIndex: sidebar.currentTabIndex > 1 ? 1 : sidebar.currentTabIndex
 ```
 
-To complete our implementation, the `ColorScheme.qml` file needs to be created. The implementation is straightforward and follows the same principles as in the original example. If anything is unclear, please refer to the documentation provided there. To display all colors and scheme names, use a `Repeater`. The model for the Repeater is provided by our `scheme_manager.pyfile` as a `QStringList`.
+구현을 완료하기 위해 `ColorScheme.qml` 파일을 만들어야 합니다. 구현은 간단하며 원래 예제의 동일한 원칙을 따릅니다. 불분명한 사항이 있다면 거기에 제공된 문서를 참조하십시오. 모든 컬러와 스킴 이름을 표시하려면 `Repeater`를 사용하십시오. Repeater의 모델은 `scheme_manager.pyfile`에 의해 `QStringList`로 제공됩니다.
 
 FileSystemModule/qml/ColorScheme.qml
 ```qml
-        // Display all used colors inside a row
+        // 한 행 안에 사용되는 모든 컬러를 표시함
         Row {
             anchors.centerIn: parent
             spacing: 10
@@ -2801,21 +2801,1114 @@ FileSystemModule/qml/ColorScheme.qml
         }
 ```
 
-When examining the code in more detail, you will notice that there are different ways to retrieve the models. The `getKeys()` method is defined as a Slot and therefore requires parentheses when called. On the other hand, the `currentColors` model is defined as a property and is therefore assigned as a property in QML. The reason for this is to receive notifications when the color scheme is switched so that the colors displayed in the application can be updated. The keys for the color schemes are loaded only once at application startup and do not rely on any notifications.
+코드를 좀 더 자세히 살펴보면, 모델을 가져오는 다양한 방법이 있다는 것을 알게 될 것입니다. `getKeys()` 메서드는 슬롯으로 정의되므로 호출할 때 괄호가 필요합니다. 반면, `currentColors` 모델은 프로퍼티로 정의되므로 QML에서 프로퍼티로서 할당됩니다. 이렇게 하는 이유는 컬러 스킴이 전환되었을 때 알림을 받아서 애플리케이션에 표시된 컬러를 업데이트하기 위한 것입니다. 컬러 스킴에 대한 키는 애플리케이션이 시작할 때 한 번만 로드되며 알림에 의존하지 않습니다.
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/9b8f2794-f88f-44ed-bf27-e2a5409e30b8)
 
 ### 데이터 시각화 도구 튜토리얼
 
-... https://doc.qt.io/qtforpython-6/tutorials/datavisualize/index.html
+In this tutorial, you’ll learn about the data visualization capabilities of Qt for Python. To start with, find some open data to visualize. For example, data about the magnitude of earthquakes during the last hour published on the US Geological Survey website. You could download the [All earthquakes](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.csv) open data in a CSV format for this tutorial.
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/d27b74de-6b26-4aad-8b82-95eb79380776)
+
+In the following chapters of this tutorial you’ll learn how to visualize data from a CSV in a line chart.
+
+You can download the sources from [here](https://code.qt.io/cgit/pyside/pyside-setup.git/tree/sources/pyside6/doc/tutorials/datavisualize).
+
+#### Chapter 1 - Reading data from a CSV
+
+There are several ways to read data from a CSV file. The following are the most common ways:
+
+* Native reading
+* the [CSV module](https://docs.python.org/3/library/csv.html)
+* the [numpy module](https://www.numpy.org/)
+* the [pandas module](https://pandas.pydata.org/)
+
+In this chapter, you will learn to use pandas to read and filter CSV data. In addition, you could pass the data file through a command-line option to your script.
+
+The following python script, `main.py`, demonstrates how to do it:
+
+```python
+
+import argparse
+import pandas as pd
+
+
+def read_data(fname):
+    return pd.read_csv(fname)
+
+
+if __name__ == "__main__":
+    options = argparse.ArgumentParser()
+    options.add_argument("-f", "--file", type=str, required=True)
+    args = options.parse_args()
+    data = read_data(args.file)
+    print(data)
+```
+
+The Python script uses the `argparse` module to accept and parse input from the command line. It then uses the input, which in this case is the filename, to read and print data to the prompt.
+
+Try running the script in the following way to check if you get desired output:
+
+```
+$python datavisualize1/main.py -f all_hour.csv
+                          time   latitude   longitude  depth    ...      magNst     status  locationSource  magSource
+0  2019-01-10T12:11:24.810Z  34.128166 -117.775497   4.46    ...         6.0  automatic              ci         ci
+1  2019-01-10T12:04:26.320Z  19.443333 -155.615997   0.72    ...         6.0  automatic              hv         hv
+2  2019-01-10T11:57:48.980Z  33.322500 -116.393167   4.84    ...        11.0  automatic              ci         ci
+3  2019-01-10T11:52:09.490Z  38.835667 -122.836670   1.28    ...         7.0  automatic              nc         nc
+4  2019-01-10T11:25:44.854Z  65.108200 -149.370100  20.60    ...         NaN  automatic              ak         ak
+5  2019-01-10T11:25:23.786Z  69.151800 -144.497700  10.40    ...         NaN   reviewed              ak         ak
+6  2019-01-10T11:16:11.761Z  61.331800 -150.070800  20.10    ...         NaN  automatic              ak         ak
+
+[7 rows x 22 columns]
+```
+
+#### Chapter 2 - Filtering data
+
+In the previous chapter, you learned how to read and print data that is a bit raw. Now, try to select a few columns and handle them properly.
+
+Start with these two columns: Time (time) and Magnitude (mag). After getting the information from these columns, filter and adapt the data. Try formatting the date to Qt types.
+
+There is not much to do for the Magnitude column, as it’s just a floating point number. You could take special care to check if the data is correct. This could be done by filtering the data that follows the condition, “magnitude > 0”, to avoid faulty data or unexpected behavior.
+
+The Date column provides data in UTC format (for example, 2018-12-11T21:14:44.682Z), so you could easily map it to a QDateTime object defining the structure of the string. Additionally, you can adapt the time based on the timezone you are in, using QTimeZone.
+
+The following script filters and formats the CSV data as described earlier:
+
+```python
+
+import argparse
+import pandas as pd
+
+from PySide6.QtCore import QDateTime, QTimeZone
+
+
+def transform_date(utc, timezone=None):
+    utc_fmt = "yyyy-MM-ddTHH:mm:ss.zzzZ"
+    new_date = QDateTime().fromString(utc, utc_fmt)
+    if timezone:
+        new_date.setTimeZone(timezone)
+    return new_date
+
+
+def read_data(fname):
+    # Read the CSV content
+    df = pd.read_csv(fname)
+
+    # Remove wrong magnitudes
+    df = df.drop(df[df.mag < 0].index)
+    magnitudes = df["mag"]
+
+    # My local timezone
+    timezone = QTimeZone(b"Europe/Berlin")
+
+    # Get timestamp transformed to our timezone
+    times = df["time"].apply(lambda x: transform_date(x, timezone))
+
+    return times, magnitudes
+
+
+if __name__ == "__main__":
+    options = argparse.ArgumentParser()
+    options.add_argument("-f", "--file", type=str, required=True)
+    args = options.parse_args()
+    data = read_data(args.file)
+    print(data)
+```
+
+Now that you have a tuple of QDateTime and float data, try improving the output further. That’s what you’ll learn in the following chapters.
+
+#### Chapter 3 - Create an empty QMainWindow
+
+You can now think of presenting your data in a UI. A QMainWindow provides a convenient structure for GUI applications, such as a menu bar and status bar. The following image shows the layout that QMainWindow offers out-of-the box:
+
+In this case, let your application inherit from QMainWindow, and add the following UI elements:
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/b3fdd2cc-d05b-42b4-8d73-cb46cf879973)
+
+* A “File” menu to open a File dialog.
+* An “Exit” menu close the window.
+* A status message on the status bar when the application starts.
+
+In addition, you can define a fixed size for the window or adjust it based on the resolution you currently have. In the following snippet, you will see how window size is defined based on available screen width (80%) and height (70%).
+
+Note: You can achieve a similar structure using other Qt elements like QMenuBar, QWidget, and QStatusBar. Refer the QMainWindow layout for guidance.
+
+```python
+from PySide6.QtCore import Slot
+from PySide6.QtGui import QAction, QKeySequence
+from PySide6.QtWidgets import QMainWindow
+
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.setWindowTitle("Eartquakes information")
+
+        # Menu
+        self.menu = self.menuBar()
+        self.file_menu = self.menu.addMenu("File")
+
+        # Exit QAction
+        exit_action = QAction("Exit", self)
+        exit_action.setShortcut(QKeySequence.Quit)
+        exit_action.triggered.connect(self.close)
+
+        self.file_menu.addAction(exit_action)
+
+        # Status Bar
+        self.status = self.statusBar()
+        self.status.showMessage("Data loaded and plotted")
+
+        # Window dimensions
+        geometry = self.screen().availableGeometry()
+        self.setFixedSize(geometry.width() * 0.8, geometry.height() * 0.7)
+```
+
+Try running the script to see what output you get with it.
+
+#### Chapter 4 - Add a QTableView
+
+Now that you have a QMainWindow, you can include a centralWidget to your interface. Usually, a QWidget is used to display data in most data-driven applications. Use a table view to display your data.
+
+The first step is to add a horizontal layout with just a QTableView. You can create a QTableView object and place it inside a QHBoxLayout. Once the QWidget is properly built, pass the object to the QMainWindow as its central widget.
+
+Remember that a QTableView needs a model to display information. In this case, you can use a QAbstractTableModel instance.
+
+Note
+
+You could also use the default item model that comes with a QTableWidget instead. QTableWidget is a convenience class that reduces your codebase considerably as you don’t need to implement a data model. However, it’s less flexible than a QTableView, as QTableWidget cannot be used with just any data. For more insight about Qt’s model-view framework, refer to the Model View Programming <https://doc.qt.io/qt-5/model-view-programming.html> documentation.
+
+Implementing the model for your QTableView, allows you to: - set the headers, - manipulate the formats of the cell values (remember we have UTC time and float numbers), - set style properties like text alignment, - and even set color properties for the cell or its content.
+
+To subclass the QAbstractTable, you must reimplement its virtual methods, rowCount(), columnCount(), and data(). This way, you can ensure that the data is handled properly. In addition, reimplement the headerData() method to provide the header information to the view.
+
+Here is a script that implements the CustomTableModel:
+
+```python
+
+from PySide6.QtCore import Qt, QAbstractTableModel, QModelIndex
+from PySide6.QtGui import QColor
+
+
+class CustomTableModel(QAbstractTableModel):
+    def __init__(self, data=None):
+        QAbstractTableModel.__init__(self)
+        self.load_data(data)
+
+    def load_data(self, data):
+        self.input_dates = data[0].values
+        self.input_magnitudes = data[1].values
+
+        self.column_count = 2
+        self.row_count = len(self.input_magnitudes)
+
+    def rowCount(self, parent=QModelIndex()):
+        return self.row_count
+
+    def columnCount(self, parent=QModelIndex()):
+        return self.column_count
+
+    def headerData(self, section, orientation, role):
+        if role != Qt.DisplayRole:
+            return None
+        if orientation == Qt.Horizontal:
+            return ("Date", "Magnitude")[section]
+        else:
+            return f"{section}"
+
+    def data(self, index, role=Qt.DisplayRole):
+        column = index.column()
+        row = index.row()
+
+        if role == Qt.DisplayRole:
+            if column == 0:
+                date = self.input_dates[row].toPython()
+                return str(date)[:-3]
+            elif column == 1:
+                magnitude = self.input_magnitudes[row]
+                return f"{magnitude:.2f}"
+        elif role == Qt.BackgroundRole:
+            return QColor(Qt.white)
+        elif role == Qt.TextAlignmentRole:
+            return Qt.AlignRight
+
+        return None
+```
+
+Now, create a QWidget that has a QTableView, and connect it to your CustomTableModel.
+
+```python
+
+from PySide6.QtWidgets import (QHBoxLayout, QHeaderView, QSizePolicy,
+                               QTableView, QWidget)
+
+from table_model import CustomTableModel
+
+
+class Widget(QWidget):
+    def __init__(self, data):
+        QWidget.__init__(self)
+
+        # Getting the Model
+        self.model = CustomTableModel(data)
+
+        # Creating a QTableView
+        self.table_view = QTableView()
+        self.table_view.setModel(self.model)
+
+        # QTableView Headers
+        self.horizontal_header = self.table_view.horizontalHeader()
+        self.vertical_header = self.table_view.verticalHeader()
+        self.horizontal_header.setSectionResizeMode(
+                               QHeaderView.ResizeToContents
+                               )
+        self.vertical_header.setSectionResizeMode(
+                             QHeaderView.ResizeToContents
+                             )
+        self.horizontal_header.setStretchLastSection(True)
+
+        # QWidget Layout
+        self.main_layout = QHBoxLayout()
+        size = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+
+        ## Left layout
+        size.setHorizontalStretch(1)
+        self.table_view.setSizePolicy(size)
+        self.main_layout.addWidget(self.table_view)
+
+        # Set the layout to the QWidget
+        self.setLayout(self.main_layout)
+```
+
+You also need minor changes to the `main_window.py` and `main.py` from chapter 3 to include the Widget inside the MainWindow.
+
+In the following snippets you’ll see those changes highlighted:
+
+```python
+
+from PySide6.QtCore import Slot
+from PySide6.QtGui import QAction, QKeySequence
+from PySide6.QtWidgets import QMainWindow
+
+
+class MainWindow(QMainWindow):
+    def __init__(self, widget):
+        QMainWindow.__init__(self)
+        self.setWindowTitle("Eartquakes information")
+        self.setCentralWidget(widget)
+        # Menu
+        self.menu = self.menuBar()
+        self.file_menu = self.menu.addMenu("File")
+
+        ## Exit QAction
+        exit_action = QAction("Exit", self)
+        exit_action.setShortcut(QKeySequence.Quit)
+        exit_action.triggered.connect(self.close)
+
+        self.file_menu.addAction(exit_action)
+
+        # Status Bar
+        self.status = self.statusBar()
+        self.status.showMessage("Data loaded and plotted")
+
+        # Window dimensions
+        geometry = self.screen().availableGeometry()
+        self.setFixedSize(geometry.width() * 0.8, geometry.height() * 0.7)
+```
+
+```python
+
+import sys
+import argparse
+import pandas as pd
+
+from PySide6.QtCore import QDateTime, QTimeZone
+from PySide6.QtWidgets import QApplication
+from main_window import MainWindow
+from main_widget import Widget
+
+
+def transform_date(utc, timezone=None):
+    utc_fmt = "yyyy-MM-ddTHH:mm:ss.zzzZ"
+    new_date = QDateTime().fromString(utc, utc_fmt)
+    if timezone:
+        new_date.setTimeZone(timezone)
+    return new_date
+
+
+def read_data(fname):
+    # Read the CSV content
+    df = pd.read_csv(fname)
+
+    # Remove wrong magnitudes
+    df = df.drop(df[df.mag < 0].index)
+    magnitudes = df["mag"]
+
+    # My local timezone
+    timezone = QTimeZone(b"Europe/Berlin")
+
+    # Get timestamp transformed to our timezone
+    times = df["time"].apply(lambda x: transform_date(x, timezone))
+
+    return times, magnitudes
+
+
+if __name__ == "__main__":
+    options = argparse.ArgumentParser()
+    options.add_argument("-f", "--file", type=str, required=True)
+    args = options.parse_args()
+    data = read_data(args.file)
+
+    # Qt Application
+    app = QApplication(sys.argv)
+
+    widget = Widget(data)
+    window = MainWindow(widget)
+    window.show()
+
+    sys.exit(app.exec())
+```
+
+#### Chapter 5 - Add a chart view
+
+A table is nice to present data, but a chart is even better. For this, you need the QtCharts module that provides many types of plots and options to graphically represent data.
+
+The placeholder for a plot is a QChartView, and inside that Widget you can place a QChart. As a first step, try including only this without any data to plot.
+
+Make the following highlighted changes to `main_widget.py` from the previous chapter to add a QChartView:
+
+```python
+
+from PySide6.QtCore import QDateTime, Qt
+from PySide6.QtGui import QPainter
+from PySide6.QtWidgets import (QWidget, QHeaderView, QHBoxLayout, QTableView,
+                               QSizePolicy)
+from PySide6.QtCharts import QChart, QChartView, QLineSeries, QDateTimeAxis, QValueAxis
+
+from table_model import CustomTableModel
+
+
+class Widget(QWidget):
+    def __init__(self, data):
+        QWidget.__init__(self)
+
+        # Getting the Model
+        self.model = CustomTableModel(data)
+
+        # Creating a QTableView
+        self.table_view = QTableView()
+        self.table_view.setModel(self.model)
+
+        # QTableView Headers
+        self.horizontal_header = self.table_view.horizontalHeader()
+        self.vertical_header = self.table_view.verticalHeader()
+        self.horizontal_header.setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.vertical_header.setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.horizontal_header.setStretchLastSection(True)
+
+        # Creating QChart
+        self.chart = QChart()
+        self.chart.setAnimationOptions(QChart.AllAnimations)
+
+        # Creating QChartView
+        self.chart_view = QChartView(self.chart)
+        self.chart_view.setRenderHint(QPainter.Antialiasing)
+
+        # QWidget Layout
+        self.main_layout = QHBoxLayout()
+        size = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+
+        ## Left layout
+        size.setHorizontalStretch(1)
+        self.table_view.setSizePolicy(size)
+        self.main_layout.addWidget(self.table_view)
+
+        ## Right Layout
+        size.setHorizontalStretch(4)
+        self.chart_view.setSizePolicy(size)
+        self.main_layout.addWidget(self.chart_view)
+
+        # Set the layout to the QWidget
+        self.setLayout(self.main_layout)
+```
+
+#### Chapter 6 - Plot the data in the ChartView
+
+The last step of this tutorial is to plot the CSV data inside our QChart. For this, you need to go over our data and include the data on a QLineSeries.
+
+After adding the data to the series, you can modify the axis to properly display the QDateTime on the X-axis, and the magnitude values on the Y-axis.
+
+Here is the updated `main_widget.py` that includes an additional function to plot data using a QLineSeries:
+
+```python
+
+from PySide6.QtCore import QDateTime, Qt
+from PySide6.QtGui import QPainter
+from PySide6.QtWidgets import (QWidget, QHeaderView, QHBoxLayout, QTableView,
+                               QSizePolicy)
+from PySide6.QtCharts import QChart, QChartView, QLineSeries, QDateTimeAxis, QValueAxis
+
+from table_model import CustomTableModel
+
+
+class Widget(QWidget):
+    def __init__(self, data):
+        QWidget.__init__(self)
+
+        # Getting the Model
+        self.model = CustomTableModel(data)
+
+        # Creating a QTableView
+        self.table_view = QTableView()
+        self.table_view.setModel(self.model)
+
+        # QTableView Headers
+        resize = QHeaderView.ResizeToContents
+        self.horizontal_header = self.table_view.horizontalHeader()
+        self.vertical_header = self.table_view.verticalHeader()
+        self.horizontal_header.setSectionResizeMode(resize)
+        self.vertical_header.setSectionResizeMode(resize)
+        self.horizontal_header.setStretchLastSection(True)
+
+        # Creating QChart
+        self.chart = QChart()
+        self.chart.setAnimationOptions(QChart.AllAnimations)
+        self.add_series("Magnitude (Column 1)", [0, 1])
+
+        # Creating QChartView
+        self.chart_view = QChartView(self.chart)
+        self.chart_view.setRenderHint(QPainter.Antialiasing)
+
+        # QWidget Layout
+        self.main_layout = QHBoxLayout()
+        size = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+
+        # Left layout
+        size.setHorizontalStretch(1)
+        self.table_view.setSizePolicy(size)
+        self.main_layout.addWidget(self.table_view)
+
+        # Right Layout
+        size.setHorizontalStretch(4)
+        self.chart_view.setSizePolicy(size)
+        self.main_layout.addWidget(self.chart_view)
+
+        # Set the layout to the QWidget
+        self.setLayout(self.main_layout)
+
+    def add_series(self, name, columns):
+        # Create QLineSeries
+        self.series = QLineSeries()
+        self.series.setName(name)
+
+        # Filling QLineSeries
+        for i in range(self.model.rowCount()):
+            # Getting the data
+            t = self.model.index(i, 0).data()
+            date_fmt = "yyyy-MM-dd HH:mm:ss.zzz"
+
+            x = QDateTime().fromString(t, date_fmt).toSecsSinceEpoch()
+            y = float(self.model.index(i, 1).data())
+
+            if x > 0 and y > 0:
+                self.series.append(x, y)
+
+        self.chart.addSeries(self.series)
+
+        # Setting X-axis
+        self.axis_x = QDateTimeAxis()
+        self.axis_x.setTickCount(10)
+        self.axis_x.setFormat("dd.MM (h:mm)")
+        self.axis_x.setTitleText("Date")
+        self.chart.addAxis(self.axis_x, Qt.AlignBottom)
+        self.series.attachAxis(self.axis_x)
+        # Setting Y-axis
+        self.axis_y = QValueAxis()
+        self.axis_y.setTickCount(10)
+        self.axis_y.setLabelFormat("%.2f")
+        self.axis_y.setTitleText("Magnitude")
+        self.chart.addAxis(self.axis_y, Qt.AlignLeft)
+        self.series.attachAxis(self.axis_y)
+
+        # Getting the color from the QChart to use it on the QTableView
+        color_name = self.series.pen().color().name()
+        self.model.color = f"{color_name}"
+```
+
+Now, run the application to visualize the earthquake magnitudes data at different times.
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/c85ccff9-4c32-49bc-b935-842ef4a1b99b)
+
+Try modifying the sources to get different output. For example, you could try to plot more data from the CSV.
 
 ### 경비 계산 도구 튜토리얼
 
-... https://doc.qt.io/qtforpython-6/tutorials/expenses/expenses.html
+In this tutorial you will learn the following concepts:
+
+* creating user interfaces programatically,
+* layouts and widgets,
+* overloading Qt classes,
+* connecting signal and slots,
+* interacting with QWidgets,
+* and building your own application.
+
+The requirements:
+
+* A simple window for the application ([QMainWindow](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QMainWindow.html)).
+* A table to keep track of the expenses ([QTableWidget](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QTableWidget.html)).
+* Two input fields to add expense information ([QLineEdit](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QLineEdit.html)).
+* Buttons to add information to the table, plot data, clear table, and exit the application ([QPushButton](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QPushButton.html)).
+* A verification step to avoid invalid data entry.
+* A chart to visualize the expense data ([QChart](https://doc.qt.io/qtforpython/PySide6/QtCharts/QChart.html)) that will be embedded in a chart view ([QChartView](https://doc.qt.io/qtforpython/PySide6/QtCharts/QChartView.html)).
+
+#### Empty window
+
+The base structure for a QApplication is located inside the if __name__ == “__main__”: code block.
+
+```python
+  if __name__ == "__main__":
+      app = QApplication([])
+      # ...
+      sys.exit(app.exec())
+```
+
+Now, to start the development, create an empty window called MainWindow. You could do that by defining a class that inherits from QMainWindow.
+
+```python
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Tutorial")
+
+if __name__ == "__main__":
+    # Qt Application
+    app = QApplication(sys.argv)
+
+    window = MainWindow()
+    window.resize(800, 600)
+    window.show()
+
+    # Execute application
+    sys.exit(app.exec())
+```
+
+Now that our class is defined, create an instance of it and call show().
+
+```python
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Tutorial")
+
+if __name__ == "__main__":
+    # Qt Application
+    app = QApplication(sys.argv)
+
+    window = MainWindow()
+    window.resize(800, 600)
+    window.show()
+
+    # Execute application
+    sys.exit(app.exec())
+```
+
+#### Menu bar
+
+Using a QMainWindow gives some features for free, among them a menu bar. To use it, you need to call the method menuBar() and populate it inside the MainWindow class.
+
+```python
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Tutorial")
+
+        # Menu
+        self.menu = self.menuBar()
+        self.file_menu = self.menu.addMenu("File")
+
+        # Exit QAction
+        exit_action = self.file_menu.addAction("Exit", self.close)
+        exit_action.setShortcut("Ctrl+Q")
+```
+
+Notice that the code snippet adds a File menu with the Exit option only.
+
+The Exit option must be connected to a slot that triggers the application to exit. We pass `QWidget.close()` here. After the last window has been closed, the application exits.
+
+#### Empty widget and data
+
+The QMainWindow enables us to set a central widget that will be displayed when showing the window ([read more](https://doc.qt.io/qt-5/qmainwindow.html#details)). This central widget could be another class derived from QWidget.
+
+Additionally, you will define example data to visualize later.
+
+```python
+class Widget(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        # Example data
+        self._data = {"Water": 24.5, "Electricity": 55.1, "Rent": 850.0,
+                      "Supermarket": 230.4, "Internet": 29.99, "Bars": 21.85,
+                      "Public transportation": 60.0, "Coffee": 22.45, "Restaurants": 120}
+```
+
+With the Widget class in place, modify MainWindow’s initialization code
+
+```python
+    # QWidget
+    widget = Widget()
+    # QMainWindow using QWidget as central widget
+    window = MainWindow(widget)
+```
+
+#### Window layout
+
+Now that the main empty window is in place, you need to start adding widgets to achieve the main goal of creating an expenses application.
+
+After declaring the example data, you can visualize it on a simple QTableWidget. To do so, you will add this procedure to the Widget constructor.
+
+Warning: Only for the example purpose a QTableWidget will be used, but for more performance-critical applications the combination of a model and a QTableView is encouraged.
+
+```python
+    def __init__(self):
+        super().__init__()
+        self.items = 0
+
+        # Example data
+        self._data = {"Water": 24.5, "Electricity": 55.1, "Rent": 850.0,
+                      "Supermarket": 230.4, "Internet": 29.99, "Bars": 21.85,
+                      "Public transportation": 60.0, "Coffee": 22.45, "Restaurants": 120}
+
+        # Left
+        self.table = QTableWidget()
+        self.table.setColumnCount(2)
+        self.table.setHorizontalHeaderLabels(["Description", "Price"])
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+        # QWidget Layout
+        self.layout = QHBoxLayout(self)
+        self.layout.addWidget(self.table)
+
+        # Fill example data
+        self.fill_table()
+```
+
+As you can see, the code also includes a QHBoxLayout that provides the container to place widgets horizontally.
+
+Additionally, the QTableWidget allows for customizing it, like adding the labels for the two columns that will be used, and to stretch the content to use the whole Widget space.
+
+The last line of code refers to filling the table*, and the code to perform that task is displayed below.
+
+```python
+    def fill_table(self, data=None):
+        data = self._data if not data else data
+        for desc, price in data.items():
+            self.table.insertRow(self.items)
+            self.table.setItem(self.items, 0, QTableWidgetItem(desc))
+            self.table.setItem(self.items, 1, QTableWidgetItem(str(price)))
+            self.items += 1
+```
+
+Having this process on a separate method is a good practice to leave the constructor more readable, and to split the main functions of the class in independent processes.
+
+#### Right side layout
+
+Because the data that is being used is just an example, you are required to include a mechanism to input items to the table, and extra buttons to clear the table’s content, and also quit the application.
+
+For input lines along with descriptive labels, you will use a QFormLayout. Then, you will nest the form layout into a QVBoxLayout along with the buttons.
+
+```python
+        # Right
+        self.description = QLineEdit()
+        self.description.setClearButtonEnabled(True)
+        self.price = QLineEdit()
+        self.price.setClearButtonEnabled(True)
+
+        self.add = QPushButton("Add")
+        self.clear = QPushButton("Clear")
+
+        form_layout = QFormLayout()
+        form_layout.addRow("Description", self.description)
+        form_layout.addRow("Price", self.price)
+        self.right = QVBoxLayout()
+        self.right.addLayout(form_layout)
+        self.right.addWidget(self.add)
+        self.right.addStretch()
+        self.right.addWidget(self.clear)
+```
+
+Leaving the table on the left side and these newly included widgets to the right side will be just a matter to add a layout to our main QHBoxLayout as you saw in the previous example:
+
+```python
+        # QWidget Layout
+        self.layout = QHBoxLayout(self)
+        self.layout.addWidget(self.table)
+        self.layout.addLayout(self.right)
+```
+
+The next step will be connecting those new buttons to slots.
+
+#### Adding elements
+
+Each QPushButton have a signal called clicked, that is emitted when you click on the button. This will be more than enough for this example, but you can see other signals in the [official documentation](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QAbstractButton.html#signals).
+
+```python
+        # Signals and Slots
+        self.add.clicked.connect(self.add_element)
+        self.clear.clicked.connect(self.clear_table)
+```
+
+As you can see on the previous lines, we are connecting each clicked signal to different slots. In this example slots are normal class methods in charge of perform a determined task associated with our buttons. It is really important to decorate each method declaration with a @Slot(), that way, PySide6 knows internally how to register them into Qt and they will be invokable from Signals of QObjects when connected.
+
+```python
+    @Slot()
+    def add_element(self):
+        des = self.description.text()
+        price = self.price.text()
+
+        self.table.insertRow(self.items)
+        self.table.setItem(self.items, 0, QTableWidgetItem(des))
+        self.table.setItem(self.items, 1, QTableWidgetItem(price))
+
+        self.description.clear()
+        self.price.clear()
+
+        self.items += 1
+
+    def fill_table(self, data=None):
+        data = self._data if not data else data
+        for desc, price in data.items():
+            self.table.insertRow(self.items)
+            self.table.setItem(self.items, 0, QTableWidgetItem(desc))
+            self.table.setItem(self.items, 1, QTableWidgetItem(str(price)))
+            self.items += 1
+
+    @Slot()
+    def clear_table(self):
+        self.table.setRowCount(0)
+        self.items = 0
+```
+
+Since these slots are methods, we can access the class variables, like our QTableWidget to interact with it.
+
+The mechanism to add elements into the table is described as the following:
+
+* get the description and price from the fields,
+* insert a new empty row to the table,
+* set the values for the empty row in each column,
+* clear the input text fields,
+* include the global count of table rows.
+
+To exit the application you can use the quit() method of the unique QApplication instance, and to clear the content of the table you can just set the table row count, and the internal count to zero.
+
+#### Verification step
+
+Adding information to the table needs to be a critical action that require a verification step to avoid adding invalid information, for example, empty information.
+
+You can use a signal from QLineEdit called textChanged which will be emitted every time something inside changes, i.e.: each key stroke.
+
+You can connect two different object’s signal to the same slot, and this will be the case for your current application:
+
+```python
+        self.description.textChanged.connect(self.check_disable)
+        self.price.textChanged.connect(self.check_disable)
+```
+
+The content of the check_disable slot will be really simple:
+
+```python
+    @Slot()
+    def check_disable(self, s):
+        enabled = bool(self.description.text() and self.price.text())
+        self.add.setEnabled(enabled)
+```
+
+You have two options, write a verification based on the current value of the string you retrieve, or manually get the whole content of both QLineEdit. The second is preferred in this case, so you can verify if the two inputs are not empty to enable the button Add.
+
+Note: Qt also provides a special class called [QValidator](https://doc.qt.io/qtforpython/PySide6/QtGui/QValidator.html?highlight=qvalidator) that you can use to validate any input.
+
+#### Empty chart view
+
+New items can be added to the table, and the visualization is so far OK, but you can accomplish more by representing the data graphically.
+
+First you will include an empty QChartView placeholder into the right side of your application.
+
+```python
+        # Chart
+        self.chart_view = QChartView()
+        self.chart_view.setRenderHint(QPainter.Antialiasing)
+```
+
+Additionally the order of how you include widgets to the right QVBoxLayout will also change.
+
+```python
+        form_layout = QFormLayout()
+        form_layout.addRow("Description", self.description)
+        form_layout.addRow("Price", self.price)
+        self.right = QVBoxLayout()
+        self.right.addLayout(form_layout)
+        self.right.addWidget(self.add)
+        self.right.addWidget(self.plot)
+        self.right.addWidget(self.chart_view)
+        self.right.addWidget(self.clear)
+```
+
+Notice that before we had a line with self.right.addStretch() to fill up the vertical space between the Add and the Clear buttons, but now, with the QChartView it will not be necessary.
+
+Also, you need include a Plot button if you want to do it on-demand.
+
+#### Full application
+
+For the final step, you will need to connect the Plot button to a slot that creates a chart and includes it into your QChartView.
+
+```python
+        # Signals and Slots
+        self.add.clicked.connect(self.add_element)
+        self.plot.clicked.connect(self.plot_data)
+        self.clear.clicked.connect(self.clear_table)
+        self.description.textChanged.connect(self.check_disable)
+        self.price.textChanged.connect(self.check_disable)
+```
+
+That is nothing new, since you already did it for the other buttons, but now take a look at how to create a chart and include it into your QChartView.
+
+```python
+    @Slot()
+    def plot_data(self):
+        # Get table information
+        series = QPieSeries()
+        for i in range(self.table.rowCount()):
+            text = self.table.item(i, 0).text()
+            number = float(self.table.item(i, 1).text())
+            series.append(text, number)
+
+        chart = QChart()
+        chart.addSeries(series)
+        chart.legend().setAlignment(Qt.AlignLeft)
+        self.chart_view.setChart(chart)
+```
+
+The following steps show how to fill a QPieSeries:
+
+* create a QPieSeries,
+* iterate over the table row IDs,
+* get the items at the i position,
+* add those values to the series.
+
+Once the series has been populated with our data, you create a new QChart, add the series on it, and optionally set an alignment for the legend.
+
+The final line self.chart_view.setChart(chart) is in charge of bringing your newly created chart to the QChartView.
+
+The application will look like this:
+
+![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/645a2bc4-36b8-4fd9-abed-048b642eb127)
+
+And now you can see the whole code:
+
+```python
+# Copyright (C) 2022 The Qt Company Ltd.
+# SPDX-License-Identifier: LicenseRef-Qt-Commercial
+
+import sys
+from PySide6.QtCore import Qt, Slot
+from PySide6.QtGui import QPainter
+from PySide6.QtWidgets import (QApplication, QFormLayout, QHeaderView,
+                               QHBoxLayout, QLineEdit, QMainWindow,
+                               QPushButton, QTableWidget, QTableWidgetItem,
+                               QVBoxLayout, QWidget)
+from PySide6.QtCharts import QChartView, QPieSeries, QChart
+
+
+class Widget(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.items = 0
+
+        # Example data
+        self._data = {"Water": 24.5, "Electricity": 55.1, "Rent": 850.0,
+                      "Supermarket": 230.4, "Internet": 29.99, "Bars": 21.85,
+                      "Public transportation": 60.0, "Coffee": 22.45, "Restaurants": 120}
+
+        # Left
+        self.table = QTableWidget()
+        self.table.setColumnCount(2)
+        self.table.setHorizontalHeaderLabels(["Description", "Price"])
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+        # Chart
+        self.chart_view = QChartView()
+        self.chart_view.setRenderHint(QPainter.Antialiasing)
+
+        # Right
+        self.description = QLineEdit()
+        self.description.setClearButtonEnabled(True)
+        self.price = QLineEdit()
+        self.price.setClearButtonEnabled(True)
+
+        self.add = QPushButton("Add")
+        self.clear = QPushButton("Clear")
+        self.plot = QPushButton("Plot")
+
+        # Disabling 'Add' button
+        self.add.setEnabled(False)
+
+        form_layout = QFormLayout()
+        form_layout.addRow("Description", self.description)
+        form_layout.addRow("Price", self.price)
+        self.right = QVBoxLayout()
+        self.right.addLayout(form_layout)
+        self.right.addWidget(self.add)
+        self.right.addWidget(self.plot)
+        self.right.addWidget(self.chart_view)
+        self.right.addWidget(self.clear)
+
+        # QWidget Layout
+        self.layout = QHBoxLayout(self)
+        self.layout.addWidget(self.table)
+        self.layout.addLayout(self.right)
+
+        # Signals and Slots
+        self.add.clicked.connect(self.add_element)
+        self.plot.clicked.connect(self.plot_data)
+        self.clear.clicked.connect(self.clear_table)
+        self.description.textChanged.connect(self.check_disable)
+        self.price.textChanged.connect(self.check_disable)
+
+        # Fill example data
+        self.fill_table()
+
+    @Slot()
+    def add_element(self):
+        des = self.description.text()
+        price = float(self.price.text())
+
+        self.table.insertRow(self.items)
+        description_item = QTableWidgetItem(des)
+        price_item = QTableWidgetItem(f"{price:.2f}")
+        price_item.setTextAlignment(Qt.AlignRight)
+
+        self.table.setItem(self.items, 0, description_item)
+        self.table.setItem(self.items, 1, price_item)
+
+        self.description.clear()
+        self.price.clear()
+
+        self.items += 1
+
+    @Slot()
+    def check_disable(self, s):
+        enabled = bool(self.description.text() and self.price.text())
+        self.add.setEnabled(enabled)
+
+    @Slot()
+    def plot_data(self):
+        # Get table information
+        series = QPieSeries()
+        for i in range(self.table.rowCount()):
+            text = self.table.item(i, 0).text()
+            number = float(self.table.item(i, 1).text())
+            series.append(text, number)
+
+        chart = QChart()
+        chart.addSeries(series)
+        chart.legend().setAlignment(Qt.AlignLeft)
+        self.chart_view.setChart(chart)
+
+    def fill_table(self, data=None):
+        data = self._data if not data else data
+        for desc, price in data.items():
+            description_item = QTableWidgetItem(desc)
+            price_item = QTableWidgetItem(f"{price:.2f}")
+            price_item.setTextAlignment(Qt.AlignRight)
+            self.table.insertRow(self.items)
+            self.table.setItem(self.items, 0, description_item)
+            self.table.setItem(self.items, 1, price_item)
+            self.items += 1
+
+    @Slot()
+    def clear_table(self):
+        self.table.setRowCount(0)
+        self.items = 0
+
+
+class MainWindow(QMainWindow):
+    def __init__(self, widget):
+        super().__init__()
+        self.setWindowTitle("Tutorial")
+
+        # Menu
+        self.menu = self.menuBar()
+        self.file_menu = self.menu.addMenu("File")
+
+        # Exit QAction
+        exit_action = self.file_menu.addAction("Exit", self.close)
+        exit_action.setShortcut("Ctrl+Q")
+
+        self.setCentralWidget(widget)
+
+
+if __name__ == "__main__":
+    # Qt Application
+    app = QApplication(sys.argv)
+    # QWidget
+    widget = Widget()
+    # QMainWindow using QWidget as central widget
+    window = MainWindow(widget)
+    window.resize(800, 600)
+    window.show()
+
+    # Execute application
+    sys.exit(app.exec())
+```
 
 ### Qt 개요
 
-... https://doc.qt.io/qtforpython-6/overviews/overviews-main.html
+Qt development topics
+
+Qt features a wide range of different technologies. The following topics are key areas of functionality and can be used as a starting point for learning how to to get the most of Qt.
+
+* [Development Tools](https://doc.qt.io/qtforpython-6/overviews/topics-app-development.html#development-tools)
+* [User Interfaces](https://doc.qt.io/qtforpython-6/overviews/topics-ui.html#user-interfaces)
+* Core Internals
+* [Data Input Output](https://doc.qt.io/qtforpython-6/overviews/topics-data-io.html#data-input-output)
+* Networking and Connectivity
+* Graphics
+* Mobile Development
+* [QML Applications](https://doc.qt.io/qtforpython-6/overviews/qmlapplications.html#qml-applications)
+* Platform Integration
+* Scripting
+* [Internationalization with Qt](https://doc.qt.io/qt-6/internationalization.html)
+* Testing and Debugging
+
+#### Best Practices
+
+These pages give guidance on how to use Qt technologies best to create applications that excel in usability and software design.
+
+| 기능 | 설명 |
+| === | === |
+| Accessibility | How to make your applications accessible to those with disabilities. |
+| Desktop Integration | Integrating with the user’s desktop environment. |
+| Setting the Application Icon | How to set your application’s icon. |
+| Exception Safety | A guide to exception safety in Qt. |
+| How to Create Qt Plugins | A guide to creating plugins to extend Qt’s applications and functionalities. |
+| Restoring a Window’s Geometry | How to save &amp; restore window geometry. |
+| Scalability | How to develop applications that scale well on devices with different screen configurations and UI conventions. |
+| Session Management | How to do session management with Qt. |
+| Creating Shared Libraries | How to create shared libraries. |
+| Calling-Qt-Functions-From-Unix-Signal-Handlers | You can’t. But don’t despair, there is a way… |
+| Creating Custom Qt Types | How to create and register new types with Qt. |
+| Timers | How to use Qt timers in your application. |
+| Using Qt D-Bus Adaptors | How to create and use DBus adaptors in Qt. |
+| Creating and Using Components for Qt Designer | How to create and use custom widget plugins. |
+| Coordinate System | Information about the coordinate system used by the paint system. |
+| Rich Text Processing | An overview of Qt’s rich text processing, editing and display features. |
+| Best Practices for QML and Qt Quick | Lists best practices for working with QML and Qt Quick. |
+| Qt Test Tutorial | A short introduction to testing with Qt Test. |
+
+#### Reference
+
+Also see All Overviews for lists of overview articles, C++ modules, and QML modules on one page.
 
 ### C++ 애플리케이션을 Python으로 포팅하기
 
