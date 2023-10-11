@@ -2261,7 +2261,7 @@ def createTable():
         )
         """
     ):
-        logging.error("Failed to query database")
+        logging.error("데이터베이스에 쿼리하는 것이 실패함.")
 
     # 이렇게 하면 Bot의 1번째 메시지가 추가됩니다.
     # 대화형으로 만들려면 추가 개발이 필요합니다.
@@ -2274,7 +2274,7 @@ def createTable():
     )
 ```
 
-`SqlConversationModel` 클래스는 편집-불가능한 연락처 리스트에 필요한 읽기-전용 데이터 모델을 제공합니다. It derives from the [QSqlQueryModel](https://doc.qt.io/qtforpython-6/PySide6/QtSql/QSqlQueryModel.html#qsqlquerymodel) class, which is the logical choice for this use case. Then, we proceed to create the table, set its name to the one defined previously with the [`setTable()`](https://doc.qt.io/qtforpython-6/PySide6/QtSql/QSqlTableModel.html#PySide6.QtSql.PySide6.QtSql.QSqlTableModel.setTable) method. We add the necessary attributes to the table, to have a program that reflects the idea of a chat application.
+`SqlConversationModel` 클래스는 편집-불가능한 연락처 리스트에 필요한 읽기-전용 데이터 모델을 제공합니다. 이것은 이러한 사용자 사례에 대한 논리적 선택인 [QSqlQueryModel](https://doc.qt.io/qtforpython-6/PySide6/QtSql/QSqlQueryModel.html#qsqlquerymodel) 클래스에서 파생됩니다. 그리고 나서 테이블 생성을 진행합니다. [`setTable()`](https://doc.qt.io/qtforpython-6/PySide6/QtSql/QSqlTableModel.html#PySide6.QtSql.PySide6.QtSql.QSqlTableModel.setTable) 메서드로 예전에 정의한 이름을 설정합니다. 채팅 애플리케이션의 개념을 반영하는 프로그램을 갖추기 위해 테이블에 필수 애트리뷰트를 추가합니다.
 
 ```python
 @QmlElement
@@ -2289,10 +2289,10 @@ class SqlConversationModel(QSqlTableModel):
         self.recipient = ""
 
         self.select()
-        logging.debug("Table was loaded successfully.")
+        logging.debug("테이블이 성공적으로 로드됨.")
 ```
 
-In `setRecipient()`, you set a filter over the returned results from the database, and emit a signal every time the recipient of the message changes.
+`setRecipient()`에서는 데이터베이스로부터 리턴된 결과에 필터를 설정하고, 메시지의 수신자가 변경될 때마다 시그널을 방출합니다.
 
 ```python
     def setRecipient(self, recipient):
@@ -2307,7 +2307,7 @@ In `setRecipient()`, you set a filter over the returned results from the databas
         self.select()
 ```
 
-The `data()` function falls back to `QSqlTableModel`’s implementation if the role is not a custom user role. If you get a user role, we can subtract `UserRole()` from it to get the index of that field, and then use that index to find the value to be returned.
+`data()` 함수는 역할이 커스텀 사용자 역할이 아닐 경우 `QSqlTableModel`의 구현으로 되돌아갑니다. 만약 사용자 역할을 획득하면, 해당 필드의 인덱스를 얻기 위해 거기서 `UserRole()`을 뺄 수 있습니다. 그리고 나서 리턴된 값을 찾기 위해 그 인덱스를 사용합니다.
 
 ```python
     def data(self, index, role):
@@ -2320,12 +2320,11 @@ The `data()` function falls back to `QSqlTableModel`’s implementation if the r
         return sql_record.value(role - Qt.UserRole)
 ```
 
-In `roleNames()`, we return a Python dictionary with our custom role and role names as key-values pairs, so we can use these roles in QML. Alternatively, it can be useful to declare an Enum to hold all of the role values. Note that `names` has to be a hash to be used as a dictionary key, and that’s why we’re using the `hash` function.
+`roleNames()`에서는 키-값 쌍 형태의 커스텀 역할과 역할 이름을 Python 딕셔너리로 리턴합니다. 그래서 이 역할을 QML에서 사용할 수 있습니다. 또는 모든 역할 값을 저장하기 위해 Enum을 선언하는 것이 유용할 수 있습니다. 여기서 `names`는 해시(hash)가 되어야 딕셔너리 키로 사용할 수 있기 때문에 `hash` 함수를 사용한다는 것을 주의하십시오.
 
 ```python
     def roleNames(self):
-        """Converts dict to hash because that's the result expected
-        by QSqlTableModel"""
+        """QSqlTableModel이 예상한 결과이므로 dict를 hash로 변환함"""
         names = {}
         author = "author".encode()
         recipient = "recipient".encode()
@@ -2340,11 +2339,11 @@ In `roleNames()`, we return a Python dictionary with our custom role and role na
         return names
 ```
 
-The `send_message()` function uses the given recipient and message to insert a new record into the database. Using `OnManualSubmit()` requires you to also call `submitAll()`, since all the changes will be cached in the model until you do so.
+`send_message()` 함수는 데이터베이스에 새로운 레코드를 삽입하기 위해 주어진 수신자와 메시지를 사용합니다. `OnManualSubmit()` 함수를 사용하려면 `submitAll()` 함수도 호출해야 합니다. 왜냐하면 함수를 호출하기 전까지 모든 변경사항이 모델 안에 캐시되기 때문입니다.
 
 ```python
-    # This is a workaround because PySide doesn't provide Q_INVOKABLE
-    # So we declare this as a Slot to be able to call it  from QML
+    # 이것은 PySide가 Q_INVOKABLE을 제공하지 않기 때문에 사용하는 차선책입니다.
+    # 그래서 이것을 QML로부터 호출할 수 있는 슬롯으로 선언합니다.
     @Slot(str, str, str)
     def send_message(self, recipient, message, author):
         timestamp = datetime.datetime.now()
@@ -2355,10 +2354,10 @@ The `send_message()` function uses the given recipient and message to insert a n
         new_record.setValue("timestamp", str(timestamp))
         new_record.setValue("message", message)
 
-        logging.debug(f'Message: "{message}" \n Received by: "{recipient}"')
+        logging.debug(f'메시지: "{message}" \n 수신자: "{recipient}"')
 
         if not self.insertRecord(self.rowCount(), new_record):
-            logging.error("Failed to send message: {self.lastError().text()}")
+            logging.error("메시지 송신 실패: {self.lastError().text()}")
             return
 
         self.submitAll()
@@ -2367,7 +2366,7 @@ The `send_message()` function uses the given recipient and message to insert a n
 
 #### chat.qml
 
-Let’s look at the `chat.qml` file.
+`chat.qml` 파일을 봅시다.
 
 ```python
 import QtQuick
@@ -2375,11 +2374,11 @@ import QtQuick.Layouts
 import QtQuick.Controls
 ```
 
-First, import the Qt Quick module. This gives us access to graphical primitives such as Item, Rectangle, Text, and so on. For a full list of types, see the [Qt Quick QML Types](https://doc.qt.io/qt-5/qtquick-qmlmodule.html) documentation. We then add QtQuick.Layouts import, which we’ll cover shortly.
+먼저, Qt Quick 모듈을 가져옵니다. 이 모듈을 사용하면 Item, Rectangle, Text 등과 같은 그래픽 프리미티브에 접근할 수 있습니다. 모든 타입 목록을 보려면 [Qt Quick QML 타입](https://doc.qt.io/qt-5/qtquick-qmlmodule.html) 문서를 보십시오. 그리고 나서 간략하게 언급했던 QtQuick.Layouts import 구문을 추가합니다.
 
-Next, import the Qt Quick Controls module. Among other things, this provides access to `ApplicationWindow`, which replaces the existing root type, Window:
+다음에는 Qt Quick Controls 모듈을 가져옵니다. 다른 것과 달리, 이것은 기존 루트 타입인 Window를 대체하는 `ApplicationWindow`에 대한 접근을 제공합니다:
 
-Let’s step through the `chat.qml` file.
+`chat.qml` 파일을 살펴보겠습니다.
 
 ```qml
 ApplicationWindow {
@@ -2390,11 +2389,11 @@ ApplicationWindow {
     visible: true
 ```
 
-`ApplicationWindow` is a Window with some added convenience for creating a header and a footer. It also provides the foundation for popups and supports some basic styling, such as the background color.
+`ApplicationWindow`는 헤더와 푸터를 만들기 위한 편의성을 일부 가미한 Window입니다. 이것은 또한 팝업에 대한 기초를 제공하고 배경색 같은 기본 스타일링을 지원합니다.
 
-There are three properties that are almost always set when using ApplicationWindow: `width`, `height`, and `visible`. Once we’ve set these, we have a properly sized, empty window ready to be filled with content.
+`ApplicationWindow`를 사용할 때 거의 항상 설정하는 3가지 프로퍼티가 있습니다: `width`, `height`, `visible`. 일단 이 프로퍼티들을 설정하면 적절한 크기의 빈 창이 컨텐츠로 채워질 준비가 됩니다.
 
-Because we are exposing the `SqlConversationModel` class to QML, we will declare a component to access it:
+`SqlConversationModel` 클래스를 QML에 노출시킬 것이기 때문에, 거기에 접근할 컴포넌트를 선언할 것입니다:
 
 ```qml
     SqlConversationModel {
@@ -2402,10 +2401,10 @@ Because we are exposing the `SqlConversationModel` class to QML, we will declare
     }
 ```
 
-There are two ways of laying out items in QML: [Item Positioners](https://doc.qt.io/qt-5/qtquick-positioning-layouts.html) and [Qt Quick Layouts](https://doc.qt.io/qt-5/qtquicklayouts-index.html).
+QML에 항목을 배치하는 2가지 방법이 있습니다: [Item Positioners](https://doc.qt.io/qt-5/qtquick-positioning-layouts.html)와 [Qt Quick Layouts](https://doc.qt.io/qt-5/qtquicklayouts-index.html).
 
-* Item positioners ([Row](https://doc.qt.io/qt-5/qml-qtquick-row.html), [Column](https://doc.qt.io/qt-5/qml-qtquick-column.html), and so on) are useful for situations where the size of items is known or fixed, and all that is required is to neatly position them in a certain formation.
-* The layouts in Qt Quick Layouts can both position and resize items, making them well suited for resizable user interfaces. Below, we use [ColumnLayout](https://doc.qt.io/qt-5/qml-qtquick-layouts-columnlayout.html) to vertically lay out a [ListView](https://doc.qt.io/qt-5/qml-qtquick-listview.html) and a [Pane](https://doc.qt.io/qt-5/qml-qtquick-controls2-pane.html).
+* Item Positioner([Row](https://doc.qt.io/qt-5/qml-qtquick-row.html), [Column](https://doc.qt.io/qt-5/qml-qtquick-column.html) 등)는 항목의 크기가 알려져 있거나 고정되어 있고, 일정한 형태로 항목들을 깔끔하게 배치해야 할 경우에 유용합니다.
+* Qt Quick Layouts의 레이아웃은 항목을 배치하고 리사이즈할 수 있으므로 크기를 조정할 수 있는 사용자 인터페이스에 적합합니다. 아래의 경우 [ListView](https://doc.qt.io/qt-5/qml-qtquick-listview.html)와 [Pane](https://doc.qt.io/qt-5/qml-qtquick-controls2-pane.html)을 수직으로 배치하기 위해 [ColumnLayout](https://doc.qt.io/qt-5/qml-qtquick-layouts-columnlayout.html)을 사용합니다.
 
 ```qml
     ColumnLayout {
@@ -2420,8 +2419,9 @@ There are two ways of laying out items in QML: [Item Positioners](https://doc.qt
             Layout.fillWidth: true
 ```
 
-Pane is basically a rectangle whose color comes from the application’s style. It’s similar to [Frame](https://doc.qt.io/qt-5/qml-qtquick-controls2-frame.html), but it has no stroke around its border.
+`Pane`은 기본적으로 Rectangle이며 애플리케이션 스타일의 색상을 이용합니다. [Frame](https://doc.qt.io/qt-5/qml-qtquick-controls2-frame.html)과 비슷하지만 창 외곽선이 없습니다.
 
+레이아웃의 직계 자식인 항목은 ...
 Items that are direct children of a layout have various [attached properties](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html) available to them. We use [Layout.fillWidth](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html#fillWidth-attached-prop) and [Layout.fillHeight](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html#fillHeight-attached-prop) on the [ListView](https://doc.qt.io/qt-5/qml-qtquick-listview.html) to ensure that it takes as much space within the [ColumnLayout](https://doc.qt.io/qt-5/qml-qtquick-layouts-columnlayout.html) as it can, and the same is done for the Pane. As [ColumnLayout](https://doc.qt.io/qt-5/qml-qtquick-layouts-columnlayout.html) is a vertical layout, there aren’t any items to the left or right of each child, so this results in each item consuming the entire width of the layout.
 
 On the other hand, the [Layout.fillHeight](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html#fillHeight-attached-prop) statement in the [ListView](https://doc.qt.io/qt-5/qml-qtquick-listview.html) enables it to occupy the remaining space that is left after accommodating the Pane.
