@@ -2807,7 +2807,7 @@ FileSystemModule/qml/ColorScheme.qml
 
 ### 데이터 시각화 도구 튜토리얼
 
-In this tutorial, you’ll learn about the data visualization capabilities of Qt for Python. To start with, find some open data to visualize. For example, data about the magnitude of earthquakes during the last hour published on the US Geological Survey website. You could download the [All earthquakes](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.csv) open data in a CSV format for this tutorial.
+이 튜토리얼에서는 Qt for Python의 데이터 시각화 기능에 대해 배울 것입니다. 우선 시각화할 오픈 데이터를 찾습니다. 예를 들면, US Geological Survey 웹사이트에 발표된 최근 1시간 동안 발생한 지진 규모에 대한 데이터가 있습니다. You could download the [All earthquakes](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.csv) open data in a CSV format for this tutorial.
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/d27b74de-6b26-4aad-8b82-95eb79380776)
 
