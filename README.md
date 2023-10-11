@@ -2421,12 +2421,11 @@ QML에 항목을 배치하는 2가지 방법이 있습니다: [Item Positioners]
 
 `Pane`은 기본적으로 Rectangle이며 애플리케이션 스타일의 색상을 이용합니다. [Frame](https://doc.qt.io/qt-5/qml-qtquick-controls2-frame.html)과 비슷하지만 창 외곽선이 없습니다.
 
-레이아웃의 직계 자식인 항목은 ...
-Items that are direct children of a layout have various [attached properties](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html) available to them. We use [Layout.fillWidth](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html#fillWidth-attached-prop) and [Layout.fillHeight](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html#fillHeight-attached-prop) on the [ListView](https://doc.qt.io/qt-5/qml-qtquick-listview.html) to ensure that it takes as much space within the [ColumnLayout](https://doc.qt.io/qt-5/qml-qtquick-layouts-columnlayout.html) as it can, and the same is done for the Pane. As [ColumnLayout](https://doc.qt.io/qt-5/qml-qtquick-layouts-columnlayout.html) is a vertical layout, there aren’t any items to the left or right of each child, so this results in each item consuming the entire width of the layout.
+레이아웃의 직계 자식인 항목은 이용할 수 있는 다양한 [부착 프로퍼티](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html)를 갖고 있습니다. [ListView](https://doc.qt.io/qt-5/qml-qtquick-listview.html)에서 [Layout.fillWidth](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html#fillWidth-attached-prop)와 [Layout.fillHeight](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html#fillHeight-attached-prop)를 사용하여 [ColumnLayout](https://doc.qt.io/qt-5/qml-qtquick-layouts-columnlayout.html) 내부에서 가능한 많은 공간을 사용할 수 있도록 해주고 `Pane`에서도 동일하게 수행됩니다. [ColumnLayout](https://doc.qt.io/qt-5/qml-qtquick-layouts-columnlayout.html)은 수직 레이아웃이므로, 각 자식 항목의 왼쪽 또는 오른쪽에 다른 항목이 없으므로 각 항목은 레이아웃의 전체 너비를 차지합니다.
 
-On the other hand, the [Layout.fillHeight](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html#fillHeight-attached-prop) statement in the [ListView](https://doc.qt.io/qt-5/qml-qtquick-listview.html) enables it to occupy the remaining space that is left after accommodating the Pane.
+한편, [ListView](https://doc.qt.io/qt-5/qml-qtquick-listview.html)의 [Layout.fillHeight](https://doc.qt.io/qt-5/qml-qtquick-layouts-layout.html#fillHeight-attached-prop) 구문을 사용하면 `Pane`을 수용한 후에 남은 공간을 차지하게 할 수 있습니다.
 
-Let’s look at the `Listview` in detail:
+`ListView`를 좀 더 자세히 봅시다:
 
 ```qml
         ListView {
@@ -2479,18 +2478,18 @@ Let’s look at the `Listview` in detail:
         }
 ```
 
-After filling the `width` and `height` of its parent, we also set some margins on the view.
+부모 항목의 `width`와 `height`를 채운 후에, 뷰의 여백 일부도 설정합니다.
 
-Next, we set [displayMarginBeginning](https://doc.qt.io/qt-5/qml-qtquick-listview.html#displayMarginBeginning-prop) and [displayMarginEnd](https://doc.qt.io/qt-5/qml-qtquick-listview.html#displayMarginEnd-prop). These properties ensure that the delegates outside the view don’t disappear when you scroll at the edges of the view. To get a better understanding, consider commenting out the properties and then rerun your code. Now watch what happens when you scroll the view.
+다음에는 [displayMarginBeginning](https://doc.qt.io/qt-5/qml-qtquick-listview.html#displayMarginBeginning-prop)과 [displayMarginEnd](https://doc.qt.io/qt-5/qml-qtquick-listview.html#displayMarginEnd-prop)를 설정합니다. 이러한 프로퍼티를 사용하면 뷰 가장자리에서 스크롤할 때 뷰 외부의 위임자가 사라지지 않습니다. 더 잘 이해하기 위해서는 프로퍼티를 주석화 했다가 코드를 다시 실행하는 것을 고려해 보십시오. 이제 뷰를 스크롤할 때 어떤 일이 일어나는지 보십시오.
 
-We then flip the vertical direction of the view, so that first items are at the bottom.
+그 다음에는 뷰의 세로 방향을 뒤집어 보십시오. 그러면 1번째 항목이 밑에 있습니다.
 
-Additionally, messages sent by the contact should be distinguished from those sent by a contact. For now, when a message is sent by you, we set a `sentByMe` property, to alternate between different contacts. Using this property, we distinguish between different contacts in two ways:
+또한 연락처가 보낸 메시지는 연락처가 보낸 메시지와 구별되어야 합니다. 우선, 당신이 메시지를 보내면 다른 연락처 간에 번갈아 가며 `sentByMe` 프로퍼티를 설정합니다. 이 프로퍼티를 사용하여 다음 2가지 방식으로 서로 다른 연락처를 구별합니다:
 
-* Messages sent by the contact are aligned to the right side of the screen by setting `anchors.right` to `parent.right`.
-* We change the color of the rectangle depending on the contact. Since we don’t want to display dark text on a dark background, and vice versa, we also set the text color depending on who the contact is.
+* `anchors.right`를 `parent.right`로 설정하여 연락처가 보낸 메시지를 화면의 오른쪽에 정렬합니다.
+* 연락처에 따라 직사각형의 색상을 변경합니다. 어두운 배경에 어두운 글자를 표시하고 싶지 않기 때문에 연락처에서 누구를 선택했느냐에 따라 글자 섹상을 설정합니다.
 
-At the bottom of the screen, we place a [TextArea](https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html) item to allow multi-line text input, and a button to send the message. We use Pane to cover the area under these two items:
+화면 아래쪽에 멀티-라인 텍스트 입력을 허용하기 위해 [TextArea](https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html)를 배치하고, 메시지를 보낼 수 있도록 버튼을 배치합니다. `Pane`을 사용하여 다음 2개 항목아래의 영역을 다룹니다:
 
 ```qml
         Pane {
@@ -2503,13 +2502,13 @@ At the bottom of the screen, we place a [TextArea](https://doc.qt.io/qt-5/qml-qt
                 TextArea {
                     id: messageField
                     Layout.fillWidth: true
-                    placeholderText: qsTr("Compose message")
+                    placeholderText: qsTr("메시지 작성")
                     wrapMode: TextArea.Wrap
                 }
 
                 Button {
                     id: sendButton
-                    text: qsTr("Send")
+                    text: qsTr("보내기")
                     enabled: messageField.length > 0
                     onClicked: {
                         listView.model.send_message("machine", messageField.text, "Me");
@@ -2520,13 +2519,13 @@ At the bottom of the screen, we place a [TextArea](https://doc.qt.io/qt-5/qml-qt
         }
 ```
 
-The [TextArea](https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html) should fill the available width of the screen. We assign some placeholder text to provide a visual cue to the contact as to where they should begin typing. The text within the input area is wrapped to ensure that it does not go outside of the screen.
+[TextArea](https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html)는 화면의 이용 가능한 너비를 채워야 합니다. 사용자가 어디서 타이핑을 시작해야 하는지 시각적 단서를 제공하기 위해 placeholder 텍스트를 할당합니다. 입력 영역 내부 텍스트는 화면 밖으로 나가지 않도록 감싸야 합니다.
 
-Lastly, we have a button that allows us to call the `send_message` method we defined on `sqlDialog.py`, since we’re just having a mock up example here and there is only one possible recipient and one possible sender for this conversation we’re just using strings here.
+마지막으로 `sqlDialog.py`에서 정의한 `send_message` 메서드를 호출할 수 있는 버튼을 가지고 있습니다. 여기에는 모형 예제만 있고 이 대화에는 하나의 수신자와 하나의 송신자만 있으므로 여기서는 문자열만 사용할 것입니다.
 
 #### main.py
 
-We use `logging` instead of Python’s `print()`, because it provides a better way to control the messages levels that our application will generate (errors, warnings, and information messages).
+Python의 `print()` 대신 `logging`을 사용하는 이유는 애플리케이션이 생성할 (오류, 경고, 정보) 메시지의 수준을 더 잘 제어할 수 있는 방법을 제공하기 때문입니다.
 
 ```python
 import sys
@@ -2537,14 +2536,14 @@ from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtSql import QSqlDatabase
 
-# We import the file just to trigger the QmlElement type registration.
+# QmlElement 타입 등록을 트리거하기 위해 이 파일을 가져옵니다.
 import sqlDialog
 
 logging.basicConfig(filename="chat.log", level=logging.DEBUG)
 logger = logging.getLogger("logger")
 ```
 
-`connectToDatabase()` creates a connection with the SQLite database, creating the actual file if it doesn’t already exist.
+`connectToDatabase()` 함수는 SQLite 데이터베이스에 대한 접속을 생성합니다. 만약 실제 파일이 존재하지 않으면 그것을 생성합니다.
 
 ```python
 def connectToDatabase():
@@ -2552,32 +2551,31 @@ def connectToDatabase():
     if not database.isValid():
         database = QSqlDatabase.addDatabase("QSQLITE")
         if not database.isValid():
-            logger.error("Cannot add database")
+            logger.error("데이터베이스를 추가할 수 없음")
 
     write_dir = QDir("")
     if not write_dir.mkpath("."):
-        logger.error("Failed to create writable directory")
+        logger.error("쓰기 가능한 디렉토리 생성에 실패함")
 
-    # Ensure that we have a writable location on all devices.
+    # 모든 장치에서 쓰기 가능한 위치가 있는지 확인합니다.
     abs_path = write_dir.absolutePath()
     filename = f"{abs_path}/chat-database.sqlite3"
 
-    # When using the SQLite driver, open() will create the SQLite
-    # database if it doesn't exist.
+    # SQLite 드라이버를 사용할 때, open() 함수는 SQLite 데이터베이스가 존재하지 않으면 그것을 생성할 것입니다.
     database.setDatabaseName(filename)
     if not database.open():
-        logger.error("Cannot open database")
+        logger.error("데이터베이스를 열 수 없음")
         QFile.remove(filename)
 ```
 
-A few interesting things happen in the `main` function:
+`main` 함수에서 몇 가지 흥미로운 일들이 벌어집니다:
 
-* Declaring a [QGuiApplication](https://doc.qt.io/qtforpython-6/PySide6/QtGui/QGuiApplication.html#qguiapplication). You should use a [QGuiApplication](https://doc.qt.io/qtforpython-6/PySide6/QtGui/QGuiApplication.html#qguiapplication) instead of [QApplication](https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QApplication.html#qapplication) because we’re not using the QtWidgets module.
-* Connecting to the database,
-* Declaring a [QQmlApplicationEngine](https://doc.qt.io/qtforpython-6/PySide6/QtQml/QQmlApplicationEngine.html#qqmlapplicationengine). This allows you to access the QML Elements to connect Python and QML from the conversation model we built on `sqlDialog.py`.
-* Loading the `.qml` file that defines the UI.
+* [QApplication](https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QApplication.html#qapplication) 대신 [QGuiApplication](https://doc.qt.io/qtforpython-6/PySide6/QtGui/QGuiApplication.html#qguiapplication)을 사용해야 합니다. 왜냐하면 QtWidgets 모듈을 사용하지 않기 때문입니다.
+* 데이터베이스에 연결합니다.
+* [QQmlApplicationEngine](https://doc.qt.io/qtforpython-6/PySide6/QtQml/QQmlApplicationEngine.html#qqmlapplicationengine)을 선언합니다. 이를 통해 `sqlDialog.py`에서 구축한 대화 모델로부터 QML 요소에 접근하여 Python과 QML을 연결할 수 있습니다.
+* UI를 정의하는 `.qml` 파일을 로드합니다.
 
-Finally, the Qt application runs, and your program starts.
+마지막으로 Qt 애플리케이션을 실행하면 프로그램이 시작합니다.
 
 ```python
 if __name__ == "__main__":
