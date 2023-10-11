@@ -3886,7 +3886,7 @@ Qt features a wide range of different technologies. The following topics are key
 These pages give guidance on how to use Qt technologies best to create applications that excel in usability and software design.
 
 | 기능 | 설명 |
-| === | === |
+| --- | --- |
 | Accessibility | How to make your applications accessible to those with disabilities. |
 | Desktop Integration | Integrating with the user’s desktop environment. |
 | Setting the Application Icon | How to set your application’s icon. |
