@@ -3837,64 +3837,68 @@ if __name__ == "__main__":
 
 ### Qt 개요
 
-Qt development topics
+Qt 개발 주제
 
-Qt features a wide range of different technologies. The following topics are key areas of functionality and can be used as a starting point for learning how to to get the most of Qt.
+Qt는 넓은 분야의 여러 기술을 가지고 있습니다. 다음 주제들은 기능의 핵심 영역이며 Qt를 최대한 활용하는 방법을 배우는 출발점이 될 수 있습니다.
 
-* [Development Tools](https://doc.qt.io/qtforpython-6/overviews/topics-app-development.html#development-tools)
-* [User Interfaces](https://doc.qt.io/qtforpython-6/overviews/topics-ui.html#user-interfaces)
-* Core Internals
-* [Data Input Output](https://doc.qt.io/qtforpython-6/overviews/topics-data-io.html#data-input-output)
-* Networking and Connectivity
-* Graphics
-* Mobile Development
-* [QML Applications](https://doc.qt.io/qtforpython-6/overviews/qmlapplications.html#qml-applications)
-* Platform Integration
-* Scripting
-* [Internationalization with Qt](https://doc.qt.io/qt-6/internationalization.html)
-* Testing and Debugging
+* [개발 도구](https://doc.qt.io/qtforpython-6/overviews/topics-app-development.html#development-tools)
+* [사용자 인터페이스](https://doc.qt.io/qtforpython-6/overviews/topics-ui.html#user-interfaces)
+* 코어 내부
+* [데이터 입출력](https://doc.qt.io/qtforpython-6/overviews/topics-data-io.html#data-input-output)
+* 네트워크와 연결
+* 그래픽
+* 모바일 개발
+* [QML 애플리케이션](https://doc.qt.io/qtforpython-6/overviews/qmlapplications.html#qml-applications)
+* 플랫폼 통합
+* 스크립팅
+* [Qt로 국제화](https://doc.qt.io/qt-6/internationalization.html)
+* 테스트와 디버깅
 
-#### Best Practices
+#### 모범 사례
 
-These pages give guidance on how to use Qt technologies best to create applications that excel in usability and software design.
+이 페이지는 사용성과 소프트웨어 설계에 탁월한 애플리케이션을 만들기 위해 Qt 기술을 최상으로 사용하는 방법에 대한 지침을 제공합니다.
 
 | 기능 | 설명 |
 | --- | --- |
-| Accessibility | How to make your applications accessible to those with disabilities. |
-| Desktop Integration | Integrating with the user’s desktop environment. |
-| Setting the Application Icon | How to set your application’s icon. |
-| Exception Safety | A guide to exception safety in Qt. |
-| How to Create Qt Plugins | A guide to creating plugins to extend Qt’s applications and functionalities. |
-| Restoring a Window’s Geometry | How to save &amp; restore window geometry. |
-| Scalability | How to develop applications that scale well on devices with different screen configurations and UI conventions. |
-| Session Management | How to do session management with Qt. |
-| Creating Shared Libraries | How to create shared libraries. |
-| Calling-Qt-Functions-From-Unix-Signal-Handlers | You can’t. But don’t despair, there is a way… |
-| Creating Custom Qt Types | How to create and register new types with Qt. |
-| Timers | How to use Qt timers in your application. |
-| Using Qt D-Bus Adaptors | How to create and use DBus adaptors in Qt. |
-| Creating and Using Components for Qt Designer | How to create and use custom widget plugins. |
-| Coordinate System | Information about the coordinate system used by the paint system. |
-| Rich Text Processing | An overview of Qt’s rich text processing, editing and display features. |
-| Best Practices for QML and Qt Quick | Lists best practices for working with QML and Qt Quick. |
-| Qt Test Tutorial | A short introduction to testing with Qt Test. |
-
-#### Reference
-
-Also see All Overviews for lists of overview articles, C++ modules, and QML modules on one page.
+| 접근성 | 장애를 가진 사람들이 애플리케이션에 접근할 수 있게 하는 방법. |
+| 데스크탑 통합 | 사용자 데스크탑 환경과 통합하는 방법. |
+| 애플리케이션 아이콘 설정하기 | 애플리케이션 아이콘을 설정하는 방법. |
+| 예외 안전 | Qt에서 예외 안전에 대한 가이드. |
+| Qt 플러그인 만드는 법 | Qt의 애플리케이션과 기능을 확장하기 위한 플러그인을 생성하기 위한 가이드. |
+| Window의 Geometry 복원하기 | 창 기하 정보를 저장 &amp; 복원하는 방법. |
+| 확장성 | 다양한 화면 구성 및 UI 컨벤션을 가진 디바이스에서 잘 확장되는 애플리케이션을 개발하는 방법. |
+| 세션 관리 | Qt에서 세션 관리를 하는 방법. |
+| 공유 라이브러리 생성하기 | 공유 라이브러리를 생성하는 방법. |
+| Calling-Qt-Functions-From-Unix-Signal-Handlers | 할 수 없습니다. 그러나 절망하지 마십시오. 방법이 있을 것입니다... |
+| 커스텀 Qt 타입 생성하기 | Qt로 새로운 타입 생성하고 등록하는 방법. |
+| 타이머 | 애플리케이션에서 Qt 타이머를 사용하는 방법. |
+| Qt D-Bus 어댑터 사용하기 | Qt에서 DBus 어댑터를 생성하고 사용하는 방법. |
+| Qt Designer를 위한 컴포넌트 생성하기 및 사용하기 | 커스텀 위젯 플러그인을 생성하고 사용하는 방법. |
+| 좌표 시스템 | 페인트 시스템에서 사용하는 좌표 시스템에 대한 정보. |
+| Rich Text 처리하기 | Qt의 Rich Text 처리, 편집, 표시 기능에 대한 개요. |
+| QML 및 Qt Quick에 대한 모범 사례 | QML 및 Qt Quick으로 작업하는 모범 사례를 목록으로 보여줌. |
+| Qt 테스트 튜토리얼 | Qt Test로 테스트하는 간략한 소개. |
 
 ### C++ 애플리케이션을 Python으로 포팅하기
 
-... https://doc.qt.io/qtforpython-6/tutorials/portingguide/index.html
+[링크](https://doc.qt.io/qtforpython-6/tutorials/portingguide/index.html)
 
 ### PySide6 애플리케이션의 C++ 확장 디버그하는 방법
 
-... https://doc.qt.io/qtforpython-6/tutorials/debugging/mixed_debugging.html
+[링크](https://doc.qt.io/qtforpython-6/tutorials/debugging/mixed_debugging.html)
 
 ## 예제
 
+[링크](https://doc.qt.io/qtforpython-6/examples/index.html)
+
 ## 비디오
+
+[링크](https://doc.qt.io/qtforpython-6/videos.html)
 
 ## 배포
 
+[링크](https://doc.qt.io/qtforpython-6/deployment/index.html)
+
 ## 고려사항
+
+[링크](https://doc.qt.io/qtforpython-6/considerations.html)
