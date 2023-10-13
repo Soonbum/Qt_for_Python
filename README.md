@@ -3393,7 +3393,7 @@ if __name__ == "__main__":
 
 #### 메뉴 바
 
-Using a QMainWindow gives some features for free, among them a menu bar. To use it, you need to call the method menuBar() and populate it inside the MainWindow class.
+QMainWindow을 이용하면 몇 가지 기능이 무료로 제공되며 그 중에는 메뉴 바도 있습니다. 메뉴 바를 사용하려면 메서드 menuBar()를 호출하고 MainWindow 클래스 내부를 채워야 합니다.
 
 ```python
     def __init__(self):
@@ -3409,15 +3409,15 @@ Using a QMainWindow gives some features for free, among them a menu bar. To use 
         exit_action.setShortcut("Ctrl+Q")
 ```
 
-Notice that the code snippet adds a File menu with the Exit option only.
+이 코드에는 Exit 옵션을 가지고 있는 File 메뉴만 추가했음을 명심하십시오.
 
-The Exit option must be connected to a slot that triggers the application to exit. We pass `QWidget.close()` here. After the last window has been closed, the application exits.
+Exit 옵션은 애플리케이션을의 종료를 트리거하는 슬롯과 연결되어야 합니다. 여기에 `QWidget.close()`를 전달하십시오. 마지막 창을 닫은 후에 애플리케이션이 종료됩니다.
 
-#### Empty widget and data
+#### 비어 있는 위젯과 데이터
 
-The QMainWindow enables us to set a central widget that will be displayed when showing the window ([read more](https://doc.qt.io/qt-5/qmainwindow.html#details)). This central widget could be another class derived from QWidget.
+QMainWindow를 사용하면 창을 보여줄 때 표시될 중앙 위젯을 설정할 수 있습니다. ([참조](https://doc.qt.io/qt-5/qmainwindow.html#details)) 중앙 위젯은 QWidget로부터 파생된 또 다른 클래스가 될 수 있습니다.
 
-Additionally, you will define example data to visualize later.
+또한 나중에 시각화하기 위해 예제 데이터를 정의해야 합니다.
 
 ```python
 class Widget(QWidget):
@@ -3430,52 +3430,52 @@ class Widget(QWidget):
                       "Public transportation": 60.0, "Coffee": 22.45, "Restaurants": 120}
 ```
 
-With the Widget class in place, modify MainWindow’s initialization code
+Widget 클래스가 있는 상태에서, MainWindow의 초기화 코드를 수정하십시오.
 
 ```python
     # QWidget
     widget = Widget()
-    # QMainWindow using QWidget as central widget
+    # QWidget을 중앙 위젯으로 사용하는 QMainWindow
     window = MainWindow(widget)
 ```
 
-#### Window layout
+#### 창 레이아웃
 
-Now that the main empty window is in place, you need to start adding widgets to achieve the main goal of creating an expenses application.
+이제 비어 있는 메인 창이 배치됩니다. 경비 계산 애플리케이션 만들기의 주요 목표를 이루기 위해 위젯들을 추가해야 합니다.
 
-After declaring the example data, you can visualize it on a simple QTableWidget. To do so, you will add this procedure to the Widget constructor.
+예제 데이터를 선언한 후에, 간단한 QTableWidget에 그것을 시각화할 수 있습니다. 그러기 위해서는 Widget 생성자에 이 프로시저를 추가해야 합니다.
 
-Warning: Only for the example purpose a QTableWidget will be used, but for more performance-critical applications the combination of a model and a QTableView is encouraged.
+경고: 오직 예제 목적으로 QTableWidget을 사용할 것입니다. 그러나 성능-중시 애플리케이션의 경우라면 모델과 QTableView를 함께 사용하는 것을 권장합니다.
 
 ```python
     def __init__(self):
         super().__init__()
         self.items = 0
 
-        # Example data
+        # 예제 데이터
         self._data = {"Water": 24.5, "Electricity": 55.1, "Rent": 850.0,
                       "Supermarket": 230.4, "Internet": 29.99, "Bars": 21.85,
                       "Public transportation": 60.0, "Coffee": 22.45, "Restaurants": 120}
 
-        # Left
+        # 왼쪽
         self.table = QTableWidget()
         self.table.setColumnCount(2)
         self.table.setHorizontalHeaderLabels(["Description", "Price"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-        # QWidget Layout
+        # QWidget 레이아웃
         self.layout = QHBoxLayout(self)
         self.layout.addWidget(self.table)
 
-        # Fill example data
+        # 예제 데이터 채우기
         self.fill_table()
 ```
 
-As you can see, the code also includes a QHBoxLayout that provides the container to place widgets horizontally.
+보시다시피 위젯을 수평으로 배치하기 위한 컨테이너를 제공하는 QHBoxLayout도 포함하고 있습니다.
 
-Additionally, the QTableWidget allows for customizing it, like adding the labels for the two columns that will be used, and to stretch the content to use the whole Widget space.
+또한 QTableWidget은 커스터마이징이 가능합니다. 가령 사용하게 될 2개의 열에 대한 라벨을 추가한다든가, 전체 Widget 공간을 사용하기 위해 컨텐츠를 늘린다든가.
 
-The last line of code refers to filling the table*, and the code to perform that task is displayed below.
+코드 마지막 줄은 table*을 채우는 것을 의미합니다. 그리고 해당 작업을 수행하는 코드는 아래에 나와 있습니다.
 
 ```python
     def fill_table(self, data=None):
@@ -3487,16 +3487,16 @@ The last line of code refers to filling the table*, and the code to perform that
             self.items += 1
 ```
 
-Having this process on a separate method is a good practice to leave the constructor more readable, and to split the main functions of the class in independent processes.
+이 과정을 별도의 방법으로 수행하는 것이 생성자를 보다 쉽게 읽을 수 있도록 하고, 클래스의 주요 함수를 독립적인 프로세스로 분할하는 좋은 방법입니다.
 
-#### Right side layout
+#### 오른쪽 레이아웃
 
-Because the data that is being used is just an example, you are required to include a mechanism to input items to the table, and extra buttons to clear the table’s content, and also quit the application.
+사용할 데이터가 그저 예제에 불과하기 때문에 테이블에 항목을 입력하기 위한 메커니즘을 추가하고, 테이블의 컨텐츠를 지우고, 애플리케이션을 종료할 수 있는 버튼도 추가해야 합니다.
 
-For input lines along with descriptive labels, you will use a QFormLayout. Then, you will nest the form layout into a QVBoxLayout along with the buttons.
+라벨과 함께 입력 라인을 넣고자 할 때 QFormLayout을 사용하십시오. 그러면 폼 레이아웃이 버튼과 함께 QVBoxLayout으로 끼워넣어집니다.
 
 ```python
-        # Right
+        # 오른쪽
         self.description = QLineEdit()
         self.description.setClearButtonEnabled(True)
         self.price = QLineEdit()
@@ -3515,28 +3515,27 @@ For input lines along with descriptive labels, you will use a QFormLayout. Then,
         self.right.addWidget(self.clear)
 ```
 
-Leaving the table on the left side and these newly included widgets to the right side will be just a matter to add a layout to our main QHBoxLayout as you saw in the previous example:
+왼쪽에 테이블을 배치하고 오른쪽에 새로 포함된 위젯을 두는 것은 앞의 예제에서 본 것처럼 메인 QHBoxLayout에 그저 레이아웃을 추가하는 일입니다:
 
 ```python
-        # QWidget Layout
+        # QWidget 레이아웃
         self.layout = QHBoxLayout(self)
         self.layout.addWidget(self.table)
         self.layout.addLayout(self.right)
 ```
 
-The next step will be connecting those new buttons to slots.
+다음 단계는 새로운 버튼과 슬롯을 연결하는 것입니다.
 
-#### Adding elements
+#### 요소 추가하기
 
-Each QPushButton have a signal called clicked, that is emitted when you click on the button. This will be more than enough for this example, but you can see other signals in the [official documentation](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QAbstractButton.html#signals).
-
+각각의 QPushButton은 clicked라는 시그널을 가지고 있습니다. 이 시그널은 버튼을 클릭했을 때 방출됩니다. 이 예제는 이 정도면 충분하지만 [공식 문서](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QAbstractButton.html#signals)에서 다른 시그널도 보실 수 있습니다.
 ```python
-        # Signals and Slots
+        # 시그널과 슬롯
         self.add.clicked.connect(self.add_element)
         self.clear.clicked.connect(self.clear_table)
 ```
 
-As you can see on the previous lines, we are connecting each clicked signal to different slots. In this example slots are normal class methods in charge of perform a determined task associated with our buttons. It is really important to decorate each method declaration with a @Slot(), that way, PySide6 knows internally how to register them into Qt and they will be invokable from Signals of QObjects when connected.
+앞의 예제에서 볼 수 있듯이, 각 clicked 시그널을 서로 다른 슬롯에 연결합니다. 이 예제에서 슬롯은 버튼과 관련된 결정된 작업을 수행하기로 담당한 일반 클래스 메서드입니다. @Slot() 키워드로 각 메서드 선언을 데코레이트하는 것이 매우 중요합니다. 이러한 방식으로 PySide6는 내부적으로 Qt에 함수를 등록하는 방법을 알고 있으며 연결되면 QObjects의 시그널로부터 호출될 수 있습니다.
 
 ```python
     @Slot()
@@ -3567,32 +3566,32 @@ As you can see on the previous lines, we are connecting each clicked signal to d
         self.items = 0
 ```
 
-Since these slots are methods, we can access the class variables, like our QTableWidget to interact with it.
+슬롯은 메서드이므로 QTableWidget과 같은 클래스 변수에 접근하여 상호작용할 수 있습니다.
 
-The mechanism to add elements into the table is described as the following:
+테이블에 요소를 추가하는 메커니즘은 다음과 같이 설명합니다:
 
-* get the description and price from the fields,
-* insert a new empty row to the table,
-* set the values for the empty row in each column,
-* clear the input text fields,
-* include the global count of table rows.
+* 필드로부터 설명 및 가격 가져오기,
+* 테이블에 새로운 빈 행 삽입하기,
+* 각 열 안에서 비어 있는 행에 대한 값을 설정함,
+* 입력 텍스트 필드 비우기,
+* 테이블 행의 전체 개수를 포함시킴.
 
-To exit the application you can use the quit() method of the unique QApplication instance, and to clear the content of the table you can just set the table row count, and the internal count to zero.
+애플리케이션을 종료하려면 유일한 QApplication 인스턴스의 quit() 메서드를 사용하면 됩니다. 그리고 테이블의 컨텐츠를 비우려면 그저 테이블 행 개수와 내부 개수를 0으로 설정하면 됩니다.
 
-#### Verification step
+#### 검증 단계
 
-Adding information to the table needs to be a critical action that require a verification step to avoid adding invalid information, for example, empty information.
+테이블에 정보를 추가하는 것은 유효하지 않은 정보(예. 비어 있는 정보)가 추가되는 것을 막기 위한 검증 단계를 요구하는 중대한 행동이 되어야 합니다.
 
-You can use a signal from QLineEdit called textChanged which will be emitted every time something inside changes, i.e.: each key stroke.
+내부에서 뭔가 바뀔 때마다 QLineEdit으로부터 방출되는 textChanged를 시그널로 사용할 수 있습니다. 예: 매번 발생하는 키 스트토크.
 
-You can connect two different object’s signal to the same slot, and this will be the case for your current application:
+2개의 서로 다른 객체의 시그널을 동일한 슬롯과 연결시킬 수 있습니다. 그리고 현재 애플리케이션이 이 경우에 해당합니다:
 
 ```python
         self.description.textChanged.connect(self.check_disable)
         self.price.textChanged.connect(self.check_disable)
 ```
 
-The content of the check_disable slot will be really simple:
+check_disable 슬롯의 컨텐츠는 매우 단순합니다:
 
 ```python
     @Slot()
@@ -3601,15 +3600,15 @@ The content of the check_disable slot will be really simple:
         self.add.setEnabled(enabled)
 ```
 
-You have two options, write a verification based on the current value of the string you retrieve, or manually get the whole content of both QLineEdit. The second is preferred in this case, so you can verify if the two inputs are not empty to enable the button Add.
+검증하는 방법은 2가지가 있습니다. 가져온 문자열의 현재 값을 기반으로 검증 코드를 작성하거나, 2개의 QLineEdit의 전체 내용을 수동으로 가져오는 것입니다. 이 경우 2번째 방법이 선호되므로 Add 버튼을 활성화하기 위해 2개의 입력 필드가 비어 있지 않은지 검증할 수 있습니다.
 
-Note: Qt also provides a special class called [QValidator](https://doc.qt.io/qtforpython/PySide6/QtGui/QValidator.html?highlight=qvalidator) that you can use to validate any input.
+주의: Qt는 어떤 입력이라도 검증하는 데 사용할 수 있는 [QValidator](https://doc.qt.io/qtforpython/PySide6/QtGui/QValidator.html?highlight=qvalidator)라는 특수 클래스도 제공합니다.
 
-#### Empty chart view
+#### 비어 있는 차트 뷰
 
-New items can be added to the table, and the visualization is so far OK, but you can accomplish more by representing the data graphically.
+테이블에 새로운 항목을 추가할 수 있습니다. 시각화는 지금까지 괜찮았지만, 데이터를 그래픽으로 표현해서 더 많은 것을 성취할 수 있습니다.
 
-First you will include an empty QChartView placeholder into the right side of your application.
+먼저 애플리케이션의 오른쪽에 비어 있는 QChartView placeholder를 포함시키십시오.
 
 ```python
         # Chart
@@ -3617,7 +3616,7 @@ First you will include an empty QChartView placeholder into the right side of yo
         self.chart_view.setRenderHint(QPainter.Antialiasing)
 ```
 
-Additionally the order of how you include widgets to the right QVBoxLayout will also change.
+또한, 오른쪽 QVBoxLayout에 위젯을 포함시키는 순서도 바뀔 것입니다.
 
 ```python
         form_layout = QFormLayout()
@@ -3631,13 +3630,13 @@ Additionally the order of how you include widgets to the right QVBoxLayout will 
         self.right.addWidget(self.clear)
 ```
 
-Notice that before we had a line with self.right.addStretch() to fill up the vertical space between the Add and the Clear buttons, but now, with the QChartView it will not be necessary.
+Add와 Clear 버튼 사이의 수직 공간을 채우기 위해 self.right.addStretch()라는 코드가 한 줄 있었지만 이제 QChartView가 들어가므로 더 이상 필요하지 않습니다.
 
-Also, you need include a Plot button if you want to do it on-demand.
+또한 on-demand로 하고 싶으면 Plot 버튼도 포함시켜야 합니다.
 
-#### Full application
+#### 전체 애플리케이션
 
-For the final step, you will need to connect the Plot button to a slot that creates a chart and includes it into your QChartView.
+마지막 단계에서는 Plot 버튼을 슬롯에 연결해야 합니다. 슬롯은 차트를 생성하고 이것을 QChartView에 포함시키는 역할을 합니다.
 
 ```python
         # Signals and Slots
@@ -3648,12 +3647,12 @@ For the final step, you will need to connect the Plot button to a slot that crea
         self.price.textChanged.connect(self.check_disable)
 ```
 
-That is nothing new, since you already did it for the other buttons, but now take a look at how to create a chart and include it into your QChartView.
+다른 버튼에 대해서도 이미 해보았기 때문에 새로울 것은 없습니다. 하지만 차트를 생성하고 그것을 QChartView에 포함시키는 것을 잘 보십시오.
 
 ```python
     @Slot()
     def plot_data(self):
-        # Get table information
+        # 테이블 정보 가져오기
         series = QPieSeries()
         for i in range(self.table.rowCount()):
             text = self.table.item(i, 0).text()
@@ -3666,22 +3665,22 @@ That is nothing new, since you already did it for the other buttons, but now tak
         self.chart_view.setChart(chart)
 ```
 
-The following steps show how to fill a QPieSeries:
+다음 단계는 QPieSeries를 채우는 방법을 보여줍니다:
 
-* create a QPieSeries,
-* iterate over the table row IDs,
-* get the items at the i position,
-* add those values to the series.
+* QPieSeries 생성하기,
+* 테이블 행 ID 기준으로 반복(iterate),
+* 위치 i에서 항목 가져오기,
+* 시리즈에 값 추가하기.
 
-Once the series has been populated with our data, you create a new QChart, add the series on it, and optionally set an alignment for the legend.
+시리즈에 데이터가 일단 채워지면, 새로운 QChart를 생성하고 그 차트에 시리즈를 추가하고 원할 경우 범례에 대한 정렬을 설정하십시오.
 
-The final line self.chart_view.setChart(chart) is in charge of bringing your newly created chart to the QChartView.
+코드의 마지막 라인 `self.chart_view.setChart(chart)`는 새로 생성된 차트를 QChartView로 가져오는 역할을 합니다.
 
-The application will look like this:
+애플리케이션은 다음과 같이 보일 것입니다:
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/645a2bc4-36b8-4fd9-abed-048b642eb127)
 
-And now you can see the whole code:
+이제 전체 코드를 보십시오:
 
 ```python
 # Copyright (C) 2022 The Qt Company Ltd.
@@ -3696,28 +3695,27 @@ from PySide6.QtWidgets import (QApplication, QFormLayout, QHeaderView,
                                QVBoxLayout, QWidget)
 from PySide6.QtCharts import QChartView, QPieSeries, QChart
 
-
 class Widget(QWidget):
     def __init__(self):
         super().__init__()
         self.items = 0
 
-        # Example data
+        # 예제 데이터
         self._data = {"Water": 24.5, "Electricity": 55.1, "Rent": 850.0,
                       "Supermarket": 230.4, "Internet": 29.99, "Bars": 21.85,
                       "Public transportation": 60.0, "Coffee": 22.45, "Restaurants": 120}
 
-        # Left
+        # 왼쪽
         self.table = QTableWidget()
         self.table.setColumnCount(2)
         self.table.setHorizontalHeaderLabels(["Description", "Price"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-        # Chart
+        # 차트
         self.chart_view = QChartView()
         self.chart_view.setRenderHint(QPainter.Antialiasing)
 
-        # Right
+        # 오른쪽
         self.description = QLineEdit()
         self.description.setClearButtonEnabled(True)
         self.price = QLineEdit()
@@ -3727,7 +3725,7 @@ class Widget(QWidget):
         self.clear = QPushButton("Clear")
         self.plot = QPushButton("Plot")
 
-        # Disabling 'Add' button
+        # 'Add' 버튼 비활성화하기
         self.add.setEnabled(False)
 
         form_layout = QFormLayout()
@@ -3740,19 +3738,19 @@ class Widget(QWidget):
         self.right.addWidget(self.chart_view)
         self.right.addWidget(self.clear)
 
-        # QWidget Layout
+        # QWidget 레이아웃
         self.layout = QHBoxLayout(self)
         self.layout.addWidget(self.table)
         self.layout.addLayout(self.right)
 
-        # Signals and Slots
+        # 시그널 및 슬롯
         self.add.clicked.connect(self.add_element)
         self.plot.clicked.connect(self.plot_data)
         self.clear.clicked.connect(self.clear_table)
         self.description.textChanged.connect(self.check_disable)
         self.price.textChanged.connect(self.check_disable)
 
-        # Fill example data
+        # 예제 데이터 채우기
         self.fill_table()
 
     @Slot()
@@ -3780,7 +3778,7 @@ class Widget(QWidget):
 
     @Slot()
     def plot_data(self):
-        # Get table information
+        # 테이블 정보 가져오기
         series = QPieSeries()
         for i in range(self.table.rowCount()):
             text = self.table.item(i, 0).text()
@@ -3808,34 +3806,32 @@ class Widget(QWidget):
         self.table.setRowCount(0)
         self.items = 0
 
-
 class MainWindow(QMainWindow):
     def __init__(self, widget):
         super().__init__()
         self.setWindowTitle("Tutorial")
 
-        # Menu
+        # 메뉴
         self.menu = self.menuBar()
         self.file_menu = self.menu.addMenu("File")
 
-        # Exit QAction
+        # 종료 QAction
         exit_action = self.file_menu.addAction("Exit", self.close)
         exit_action.setShortcut("Ctrl+Q")
 
         self.setCentralWidget(widget)
 
-
 if __name__ == "__main__":
-    # Qt Application
+    # Qt 애플리케이션
     app = QApplication(sys.argv)
     # QWidget
     widget = Widget()
-    # QMainWindow using QWidget as central widget
+    # 중앙 위젯으로 QWidget을 사용하는 QMainWindow
     window = MainWindow(widget)
     window.resize(800, 600)
     window.show()
 
-    # Execute application
+    # 애플리케이션 실행
     sys.exit(app.exec())
 ```
 
