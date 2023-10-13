@@ -2807,36 +2807,33 @@ FileSystemModule/qml/ColorScheme.qml
 
 ### 데이터 시각화 도구 튜토리얼
 
-이 튜토리얼에서는 Qt for Python의 데이터 시각화 기능에 대해 배울 것입니다. 우선 시각화할 오픈 데이터를 찾습니다. 예를 들면, US Geological Survey 웹사이트에 발표된 최근 1시간 동안 발생한 지진 규모에 대한 데이터가 있습니다. You could download the [All earthquakes](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.csv) open data in a CSV format for this tutorial.
+이 튜토리얼에서는 Qt for Python의 데이터 시각화 기능에 대해 배울 것입니다. 우선 시각화할 오픈 데이터를 찾습니다. 예를 들면, US Geological Survey 웹사이트에 발표된 최근 1시간 동안 발생한 지진 규모에 대한 데이터가 있습니다. 이 튜토리얼에서 사용할 [모든 지진](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.csv) 오픈 데이터를 CSV 포맷으로 다운로드할 수 있습니다.
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/d27b74de-6b26-4aad-8b82-95eb79380776)
 
-In the following chapters of this tutorial you’ll learn how to visualize data from a CSV in a line chart.
+이 튜토리얼의 다음 장에서는 CSV로부터 가져온 데이터를 선 그래프로 시각화하는 방법에 대해 배울 것입니다.
 
-You can download the sources from [here](https://code.qt.io/cgit/pyside/pyside-setup.git/tree/sources/pyside6/doc/tutorials/datavisualize).
+소스를 [여기](https://code.qt.io/cgit/pyside/pyside-setup.git/tree/sources/pyside6/doc/tutorials/datavisualize)에서 다운로드 할 수 있습니다.
 
-#### Chapter 1 - Reading data from a CSV
+#### 1장 - CSV로부터 데이터 읽어오기
 
-There are several ways to read data from a CSV file. The following are the most common ways:
+CSV 파일로부터 데이터를 읽어오는 방법은 여러 가지가 있습니다. 다음은 가장 널리 쓰이는 방법입니다:
 
-* Native reading
-* the [CSV module](https://docs.python.org/3/library/csv.html)
-* the [numpy module](https://www.numpy.org/)
-* the [pandas module](https://pandas.pydata.org/)
+* 네이티브 리딩
+* [CSV 모듈](https://docs.python.org/3/library/csv.html)
+* [numpy 모듈](https://www.numpy.org/)
+* [pandas 모듈](https://pandas.pydata.org/)
 
-In this chapter, you will learn to use pandas to read and filter CSV data. In addition, you could pass the data file through a command-line option to your script.
+이번 장에서는 pandas 모듈을 이용하여 CSV 데이터를 읽고 필터링하는 것을 배울 것입니다. 그리고 커맨드-라인 옵션을 통해 데이터 파일을 스크립트로 전달하는 것도 배울 것입니다.
 
-The following python script, `main.py`, demonstrates how to do it:
+다음 Python 스크립트 `main.py`에서 방법을 시연합니다:
 
 ```python
-
 import argparse
 import pandas as pd
 
-
 def read_data(fname):
     return pd.read_csv(fname)
-
 
 if __name__ == "__main__":
     options = argparse.ArgumentParser()
@@ -2846,9 +2843,9 @@ if __name__ == "__main__":
     print(data)
 ```
 
-The Python script uses the `argparse` module to accept and parse input from the command line. It then uses the input, which in this case is the filename, to read and print data to the prompt.
+Python 스크립트는 커맨드 라인으로부터 입력을 받아 파싱하기 위해 `argparse` 모듈을 사용합니다. 그리고 나서 입력(이 경우 파일이름)을 사용하여 데이터를 읽고 프롬프트에 출력합니다.
 
-Try running the script in the following way to check if you get desired output:
+다음과 같은 방법으로 스크립트를 실행하여 원하는 출력이 나오는지 확인하십시오:
 
 ```
 $python datavisualize1/main.py -f all_hour.csv
@@ -2864,25 +2861,23 @@ $python datavisualize1/main.py -f all_hour.csv
 [7 rows x 22 columns]
 ```
 
-#### Chapter 2 - Filtering data
+#### 2장 - 데이터 필터링
 
-In the previous chapter, you learned how to read and print data that is a bit raw. Now, try to select a few columns and handle them properly.
+이전 장에서, 데이터를 읽고 출력하는 것을 배웠으니 열을 몇 개 선택하고 적절하게 다루어 보겠습니다.
 
-Start with these two columns: Time (time) and Magnitude (mag). After getting the information from these columns, filter and adapt the data. Try formatting the date to Qt types.
+이 2개 열부터 시작하겠습니다: 시간(time), 진도(mag). 이 열들로부터 정보를 얻은 후에, 데이터를 필터링하고 적응시킵니다. 날짜를 Qt 타입으로 양식을 변경시킵니다.
 
-There is not much to do for the Magnitude column, as it’s just a floating point number. You could take special care to check if the data is correct. This could be done by filtering the data that follows the condition, “magnitude > 0”, to avoid faulty data or unexpected behavior.
+부동소수점 수이기 때문에 Magnitude 열에 대해서는 할 일이 별로 없습니다. 데이터가 올바른지 확인하기 위해 특별히 주의를 기울여야 합니다. 잘못된 데이터 또는 예상치 못한 동작을 막기 위해 "magnitude > 0" 조건을 따르는 데이터를 필터링해야 합니다.
 
-The Date column provides data in UTC format (for example, 2018-12-11T21:14:44.682Z), so you could easily map it to a QDateTime object defining the structure of the string. Additionally, you can adapt the time based on the timezone you are in, using QTimeZone.
+Date 열은 UTC 포맷(예를 들면, 2018-12-11T21:14:44.682Z)으로 데이터를 제공합니다. 그래서 문자열의 구조를 정의하는 QDateTime 객체에 쉽게 매핑할 수 있습니다. 또한 QTimeZone을 사용하여 당신이 속한 시간대를 기준으로 시간을 적응시킬 수 있습니다.
 
-The following script filters and formats the CSV data as described earlier:
+다음 스크립트는 앞에서 설명한 대로 CSV 데이터를 필터링하고 양식을 만듭니다:
 
 ```python
-
 import argparse
 import pandas as pd
 
 from PySide6.QtCore import QDateTime, QTimeZone
-
 
 def transform_date(utc, timezone=None):
     utc_fmt = "yyyy-MM-ddTHH:mm:ss.zzzZ"
@@ -2891,23 +2886,21 @@ def transform_date(utc, timezone=None):
         new_date.setTimeZone(timezone)
     return new_date
 
-
 def read_data(fname):
-    # Read the CSV content
+    # CSV 내용 읽어오기
     df = pd.read_csv(fname)
 
-    # Remove wrong magnitudes
+    # 잘못된 진도(magnitude) 제거하기
     df = df.drop(df[df.mag < 0].index)
     magnitudes = df["mag"]
 
-    # My local timezone
+    # 나의 로컬 시간대
     timezone = QTimeZone(b"Europe/Berlin")
 
-    # Get timestamp transformed to our timezone
+    # 나의 시간대로 변환된 timestamp 가져오기
     times = df["time"].apply(lambda x: transform_date(x, timezone))
 
     return times, magnitudes
-
 
 if __name__ == "__main__":
     options = argparse.ArgumentParser()
@@ -2917,80 +2910,75 @@ if __name__ == "__main__":
     print(data)
 ```
 
-Now that you have a tuple of QDateTime and float data, try improving the output further. That’s what you’ll learn in the following chapters.
+QDateTIme과 float 데이터 튜플(tuple)을 갖게 되었으니 출력을 더 개선해 보십시오. 다음 장에서 그 방법을 배울 것입니다.
 
-#### Chapter 3 - Create an empty QMainWindow
+#### 3장 - 빈 QMainWindow 만들기
 
-You can now think of presenting your data in a UI. A QMainWindow provides a convenient structure for GUI applications, such as a menu bar and status bar. The following image shows the layout that QMainWindow offers out-of-the box:
+이제 데이터를 UI로 표시하는 것을 생각해 볼 수 있습니다. QMainWindow는 메뉴 바, 상태 바 같은 GUI 애플리케이션을 위한 편리한 구조를 제공합니다. 다음 이미지는 QMainWindow가 제공하는 레이아웃을 보여줍니다:
 
-In this case, let your application inherit from QMainWindow, and add the following UI elements:
+이 경우, 애플리케이션이 QMainWindow에서 상속되도록 하고 다음 UI 요소를 추가하십시오:
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/b3fdd2cc-d05b-42b4-8d73-cb46cf879973)
 
-* A “File” menu to open a File dialog.
-* An “Exit” menu close the window.
-* A status message on the status bar when the application starts.
+* File 다이얼로그를 열기 위한 "File" 메뉴.
+* 창을 닫기 위한 "Exit" 메뉴.
+* 애플리케이션을 시작할 때 상태 바에 표시되는 상태 메시지.
 
-In addition, you can define a fixed size for the window or adjust it based on the resolution you currently have. In the following snippet, you will see how window size is defined based on available screen width (80%) and height (70%).
+또한 창에 고정된 크기를 정의하거나 현재 사용 중인 해상도를 기준으로 창 크기를 조절할 수 있습니다. 다음 코드에서는 가능한 스크린 너비(80%)와 높이(70%)를 기반으로 창 크기를 정의하는 방법을 볼 것입니다.
 
-Note: You can achieve a similar structure using other Qt elements like QMenuBar, QWidget, and QStatusBar. Refer the QMainWindow layout for guidance.
+주의: QMenuBar, QWidget, QStatusBar 같은 다른 Qt 요소를 이용하여 비슷한 구조를 만들 수 있습니다. 안내를 위해 QMainWindow 레이아웃을 참고하십시오.
 
 ```python
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import QMainWindow
 
-
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setWindowTitle("Eartquakes information")
 
-        # Menu
+        # 메뉴
         self.menu = self.menuBar()
         self.file_menu = self.menu.addMenu("File")
 
-        # Exit QAction
+        # 종료 QAction
         exit_action = QAction("Exit", self)
         exit_action.setShortcut(QKeySequence.Quit)
         exit_action.triggered.connect(self.close)
 
         self.file_menu.addAction(exit_action)
 
-        # Status Bar
+        # 상태 바
         self.status = self.statusBar()
         self.status.showMessage("Data loaded and plotted")
 
-        # Window dimensions
+        # 창 크기
         geometry = self.screen().availableGeometry()
         self.setFixedSize(geometry.width() * 0.8, geometry.height() * 0.7)
 ```
 
-Try running the script to see what output you get with it.
+어떤 출력이 나오는지 보려면 스크립트를 실행해 보십시오.
 
-#### Chapter 4 - Add a QTableView
+#### 4장 - QTableView 추가하기
 
-Now that you have a QMainWindow, you can include a centralWidget to your interface. Usually, a QWidget is used to display data in most data-driven applications. Use a table view to display your data.
+이제 QMainWindow가 생겼습니다. 인터페이스에 centralWidget을 포함시킬 수 있습니다. 일반적으로 QWidget은 대부분의 데이터 중심 애플리케이션에서 데이터를 표시하는 데 사용합니다. 데이터를 표시하기 위해 테이블 뷰를 사용하십시오.
 
-The first step is to add a horizontal layout with just a QTableView. You can create a QTableView object and place it inside a QHBoxLayout. Once the QWidget is properly built, pass the object to the QMainWindow as its central widget.
+처음에는 QTableView만으로 수평 레이아웃을 추가하는 것입니다. QTableView 객체를 만들고 QHBoxLayout 안에 배치합니다. 일단 QWidget이 제대로 만들어지면, 그 객체를 QMainWindow의 중앙 위젯으로 전달합니다.
 
-Remember that a QTableView needs a model to display information. In this case, you can use a QAbstractTableModel instance.
+QTableView는 정보를 표시할 모델이 필요하다는 것을 명심하십시오. 이 경우에는 QAbstractTableModel 인스턴스를 사용할 수 있습니다.
 
-Note
+주의: QTableWidget과 함께 제공되는 기본 항목 모델을 대신 사용할 수도 있습니다. QTableWidget은 데이터 모델을 구현할 필요가 없기 때문에 당신의 코드를 상당히 줄여주는 편리한 클래스입니다. 그러나 QTableWidget은 어떤 데이터와도 함께 사용할 수 없기 때문에 QTableView보다는 유연성이 떨어집니다. Qt의 모델-뷰 프레임워크에 대한 통찰을 더 얻고 싶으면 Model View Programming <https://doc.qt.io/qt-5/model-view-programming.html> 문서를 참고하십시오.
 
-You could also use the default item model that comes with a QTableWidget instead. QTableWidget is a convenience class that reduces your codebase considerably as you don’t need to implement a data model. However, it’s less flexible than a QTableView, as QTableWidget cannot be used with just any data. For more insight about Qt’s model-view framework, refer to the Model View Programming <https://doc.qt.io/qt-5/model-view-programming.html> documentation.
+QTableView에 대한 모델을 구현하면 다음을 할 수 있습니다: - 헤더 설정, - 셀 값의 포맷 조작 (현재 예제에는 UTC 시간, 부동 소수점 수가 있음), - 텍스트 정렬과 같은 스타일 프로퍼티 설정, - 셀 또는 셀 컨텐츠에 대한 컬러 프로퍼티 설정.
 
-Implementing the model for your QTableView, allows you to: - set the headers, - manipulate the formats of the cell values (remember we have UTC time and float numbers), - set style properties like text alignment, - and even set color properties for the cell or its content.
+QAbstractTable의 자식 클래스를 생성하려면 가상 메서드 rowCount(), columnCount(), data()를 재구현해야 합니다. 이렇게 하면 데이터가 제대로 처리되는지 확인할 수 있습니다. 또한 뷰에 헤더 정보를 제공하기 위해 headerData() 메서드를 재구현하십시오.
 
-To subclass the QAbstractTable, you must reimplement its virtual methods, rowCount(), columnCount(), and data(). This way, you can ensure that the data is handled properly. In addition, reimplement the headerData() method to provide the header information to the view.
-
-Here is a script that implements the CustomTableModel:
+이것은 CustomTableModel을 구현하는 스크립트입니다.:
 
 ```python
-
 from PySide6.QtCore import Qt, QAbstractTableModel, QModelIndex
 from PySide6.QtGui import QColor
-
 
 class CustomTableModel(QAbstractTableModel):
     def __init__(self, data=None):
@@ -3037,28 +3025,26 @@ class CustomTableModel(QAbstractTableModel):
         return None
 ```
 
-Now, create a QWidget that has a QTableView, and connect it to your CustomTableModel.
+이제 QTableView를 가진 QWidget을 만들고, CustomTableModel에 연결시킵니다.
 
 ```python
-
 from PySide6.QtWidgets import (QHBoxLayout, QHeaderView, QSizePolicy,
                                QTableView, QWidget)
 
 from table_model import CustomTableModel
 
-
 class Widget(QWidget):
     def __init__(self, data):
         QWidget.__init__(self)
 
-        # Getting the Model
+        # 모델 가져오기
         self.model = CustomTableModel(data)
 
-        # Creating a QTableView
+        # QTableView 생성하기
         self.table_view = QTableView()
         self.table_view.setModel(self.model)
 
-        # QTableView Headers
+        # QTableView 헤더
         self.horizontal_header = self.table_view.horizontalHeader()
         self.vertical_header = self.table_view.verticalHeader()
         self.horizontal_header.setSectionResizeMode(
@@ -3069,57 +3055,55 @@ class Widget(QWidget):
                              )
         self.horizontal_header.setStretchLastSection(True)
 
-        # QWidget Layout
+        # QWidget 레이아웃
         self.main_layout = QHBoxLayout()
         size = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
 
-        ## Left layout
+        ## 왼쪽 레이아웃
         size.setHorizontalStretch(1)
         self.table_view.setSizePolicy(size)
         self.main_layout.addWidget(self.table_view)
 
-        # Set the layout to the QWidget
+        # 레이아웃을 QWidget으로 설정
         self.setLayout(self.main_layout)
 ```
 
-You also need minor changes to the `main_window.py` and `main.py` from chapter 3 to include the Widget inside the MainWindow.
+MainWindow 내부에 Widget을 포함시키기 위해 3장의 `main_window.py`와 `main.py`를 약간 변경시켜야 합니다.
 
-In the following snippets you’ll see those changes highlighted:
+다음 코드에서 강조된 변경사항을 보게 될 것입니다:
 
 ```python
-
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import QMainWindow
-
 
 class MainWindow(QMainWindow):
     def __init__(self, widget):
         QMainWindow.__init__(self)
         self.setWindowTitle("Eartquakes information")
         self.setCentralWidget(widget)
-        # Menu
+
+        # 메뉴
         self.menu = self.menuBar()
         self.file_menu = self.menu.addMenu("File")
 
-        ## Exit QAction
+        ## 종료 QAction
         exit_action = QAction("Exit", self)
         exit_action.setShortcut(QKeySequence.Quit)
         exit_action.triggered.connect(self.close)
 
         self.file_menu.addAction(exit_action)
 
-        # Status Bar
+        # 상태 바
         self.status = self.statusBar()
         self.status.showMessage("Data loaded and plotted")
 
-        # Window dimensions
+        # 창 크기
         geometry = self.screen().availableGeometry()
         self.setFixedSize(geometry.width() * 0.8, geometry.height() * 0.7)
 ```
 
 ```python
-
 import sys
 import argparse
 import pandas as pd
@@ -3129,7 +3113,6 @@ from PySide6.QtWidgets import QApplication
 from main_window import MainWindow
 from main_widget import Widget
 
-
 def transform_date(utc, timezone=None):
     utc_fmt = "yyyy-MM-ddTHH:mm:ss.zzzZ"
     new_date = QDateTime().fromString(utc, utc_fmt)
@@ -3137,23 +3120,21 @@ def transform_date(utc, timezone=None):
         new_date.setTimeZone(timezone)
     return new_date
 
-
 def read_data(fname):
-    # Read the CSV content
+    # CSV 내용 읽어오기
     df = pd.read_csv(fname)
 
-    # Remove wrong magnitudes
+    # 잘못된 진도(magnitude) 제거하기
     df = df.drop(df[df.mag < 0].index)
     magnitudes = df["mag"]
 
-    # My local timezone
+    # 나의 로컬 시간대
     timezone = QTimeZone(b"Europe/Berlin")
 
-    # Get timestamp transformed to our timezone
+    # 나의 시간대로 변환된 timestamp 가져오기
     times = df["time"].apply(lambda x: transform_date(x, timezone))
 
     return times, magnitudes
-
 
 if __name__ == "__main__":
     options = argparse.ArgumentParser()
@@ -3171,16 +3152,15 @@ if __name__ == "__main__":
     sys.exit(app.exec())
 ```
 
-#### Chapter 5 - Add a chart view
+#### 5장 - 차트 뷰 추가하기
 
-A table is nice to present data, but a chart is even better. For this, you need the QtCharts module that provides many types of plots and options to graphically represent data.
+테이블은 데이터를 표현하는 데 매우 좋습니다. 하지만 차트는 훨씬 좋습니다. 이를 위해서는 다양한 유형의 플롯과 데이터를 그래픽으로 표현할 수 있는 옵션을 제공하는 QtCharts 모듈이 필요합니다.
 
-The placeholder for a plot is a QChartView, and inside that Widget you can place a QChart. As a first step, try including only this without any data to plot.
+플롯을 위한 placeholder는 QChartView입니다. 그리고 이 Widget 내부에 QChart를 배치할 수 있습니다. 처음에는 플롯할 데이터 없이 QChart를 포함시켜 보겠습니다.
 
-Make the following highlighted changes to `main_widget.py` from the previous chapter to add a QChartView:
+QChartView를 추가하여 이전 장의 `main_widget.py`에 다음의 강조된 변경사항을 만들어 보겠습니다:
 
 ```python
-
 from PySide6.QtCore import QDateTime, Qt
 from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import (QWidget, QHeaderView, QHBoxLayout, QTableView,
@@ -3189,61 +3169,59 @@ from PySide6.QtCharts import QChart, QChartView, QLineSeries, QDateTimeAxis, QVa
 
 from table_model import CustomTableModel
 
-
 class Widget(QWidget):
     def __init__(self, data):
         QWidget.__init__(self)
 
-        # Getting the Model
+        # 모델 가져오기
         self.model = CustomTableModel(data)
 
-        # Creating a QTableView
+        # QTableView 생성하기
         self.table_view = QTableView()
         self.table_view.setModel(self.model)
 
-        # QTableView Headers
+        # QTableView 헤더
         self.horizontal_header = self.table_view.horizontalHeader()
         self.vertical_header = self.table_view.verticalHeader()
         self.horizontal_header.setSectionResizeMode(QHeaderView.ResizeToContents)
         self.vertical_header.setSectionResizeMode(QHeaderView.ResizeToContents)
         self.horizontal_header.setStretchLastSection(True)
 
-        # Creating QChart
+        # QChart 생성하기
         self.chart = QChart()
         self.chart.setAnimationOptions(QChart.AllAnimations)
 
-        # Creating QChartView
+        # QChartView 생성하기
         self.chart_view = QChartView(self.chart)
         self.chart_view.setRenderHint(QPainter.Antialiasing)
 
-        # QWidget Layout
+        # QWidget 레이아웃
         self.main_layout = QHBoxLayout()
         size = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
 
-        ## Left layout
+        ## 왼쪽 레이아웃
         size.setHorizontalStretch(1)
         self.table_view.setSizePolicy(size)
         self.main_layout.addWidget(self.table_view)
 
-        ## Right Layout
+        ## 오른쪽 레이아웃
         size.setHorizontalStretch(4)
         self.chart_view.setSizePolicy(size)
         self.main_layout.addWidget(self.chart_view)
 
-        # Set the layout to the QWidget
+        # 레이아웃을 QWidget으로 설정
         self.setLayout(self.main_layout)
 ```
 
-#### Chapter 6 - Plot the data in the ChartView
+#### 6장 - ChartView 안에 데이터 Plot하기
 
-The last step of this tutorial is to plot the CSV data inside our QChart. For this, you need to go over our data and include the data on a QLineSeries.
+이 튜토리얼의 마지막 단계는 QChart 내부에 CSV 데이터를 플롯하는 것입니다. 이를 위해서는 데이터를 검토하고 QLineSeries에 데이터를 포함시켜야 합니다.
 
-After adding the data to the series, you can modify the axis to properly display the QDateTime on the X-axis, and the magnitude values on the Y-axis.
+데이터를 시리즈에 추가한 후에 X-축에 QDateTime를, Y-축에 진도 값을 적절히 표시하도록 축을 변경할 수 있습니다.
 
-Here is the updated `main_widget.py` that includes an additional function to plot data using a QLineSeries:
+다음은 QLineSeries를 이용하여 데이터를 플롯하기 위한 추가 함수를 포함시킨 업데이트된 `main_widget.py`입니다.
 
 ```python
-
 from PySide6.QtCore import QDateTime, Qt
 from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import (QWidget, QHeaderView, QHBoxLayout, QTableView,
@@ -3252,19 +3230,18 @@ from PySide6.QtCharts import QChart, QChartView, QLineSeries, QDateTimeAxis, QVa
 
 from table_model import CustomTableModel
 
-
 class Widget(QWidget):
     def __init__(self, data):
         QWidget.__init__(self)
 
-        # Getting the Model
+        # 모델 가져오기
         self.model = CustomTableModel(data)
 
-        # Creating a QTableView
+        # QTableView 생성하기
         self.table_view = QTableView()
         self.table_view.setModel(self.model)
 
-        # QTableView Headers
+        # QTableView 헤더
         resize = QHeaderView.ResizeToContents
         self.horizontal_header = self.table_view.horizontalHeader()
         self.vertical_header = self.table_view.verticalHeader()
@@ -3272,40 +3249,40 @@ class Widget(QWidget):
         self.vertical_header.setSectionResizeMode(resize)
         self.horizontal_header.setStretchLastSection(True)
 
-        # Creating QChart
+        # QChart 생성하기
         self.chart = QChart()
         self.chart.setAnimationOptions(QChart.AllAnimations)
         self.add_series("Magnitude (Column 1)", [0, 1])
 
-        # Creating QChartView
+        # QChartView 생성하기
         self.chart_view = QChartView(self.chart)
         self.chart_view.setRenderHint(QPainter.Antialiasing)
 
-        # QWidget Layout
+        # QWidget 레이아웃
         self.main_layout = QHBoxLayout()
         size = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
 
-        # Left layout
+        # 왼쪽 레이아웃
         size.setHorizontalStretch(1)
         self.table_view.setSizePolicy(size)
         self.main_layout.addWidget(self.table_view)
 
-        # Right Layout
+        # 오른쪽 레이아웃
         size.setHorizontalStretch(4)
         self.chart_view.setSizePolicy(size)
         self.main_layout.addWidget(self.chart_view)
 
-        # Set the layout to the QWidget
+        # 레이아웃을 QWidget으로 설정
         self.setLayout(self.main_layout)
 
     def add_series(self, name, columns):
-        # Create QLineSeries
+        # QLineSeries 생성하기
         self.series = QLineSeries()
         self.series.setName(name)
 
-        # Filling QLineSeries
+        # QLineSeries 채우기
         for i in range(self.model.rowCount()):
-            # Getting the data
+            # 데이터 가져오기
             t = self.model.index(i, 0).data()
             date_fmt = "yyyy-MM-dd HH:mm:ss.zzz"
 
@@ -3317,14 +3294,14 @@ class Widget(QWidget):
 
         self.chart.addSeries(self.series)
 
-        # Setting X-axis
+        # X-축 설정하기
         self.axis_x = QDateTimeAxis()
         self.axis_x.setTickCount(10)
         self.axis_x.setFormat("dd.MM (h:mm)")
         self.axis_x.setTitleText("Date")
         self.chart.addAxis(self.axis_x, Qt.AlignBottom)
         self.series.attachAxis(self.axis_x)
-        # Setting Y-axis
+        # Y-축 설정하기
         self.axis_y = QValueAxis()
         self.axis_y.setTickCount(10)
         self.axis_y.setLabelFormat("%.2f")
@@ -3332,40 +3309,40 @@ class Widget(QWidget):
         self.chart.addAxis(self.axis_y, Qt.AlignLeft)
         self.series.attachAxis(self.axis_y)
 
-        # Getting the color from the QChart to use it on the QTableView
+        # QTableView에서 사용하기 위해 QChart로부터 컬러 가져오기
         color_name = self.series.pen().color().name()
         self.model.color = f"{color_name}"
 ```
 
-Now, run the application to visualize the earthquake magnitudes data at different times.
+이제 서로 다른 시간에 지진 진도 데이터를 시각화하기 위해 애플리케이션을 실행하십시오.
 
 ![image](https://github.com/Soonbum/Qt_for_Python/assets/16474083/c85ccff9-4c32-49bc-b935-842ef4a1b99b)
 
-Try modifying the sources to get different output. For example, you could try to plot more data from the CSV.
+서로 다른 출력을 얻기 위해 소스를 수정해 보십시오. 예를 들어, CSV로부터 더 많은 데이터를 플롯해 보십시오.
 
 ### 경비 계산 도구 튜토리얼
 
-In this tutorial you will learn the following concepts:
+이 튜토리얼에서는 다음 개념을 배우게 될 것입니다:
 
-* creating user interfaces programatically,
-* layouts and widgets,
-* overloading Qt classes,
-* connecting signal and slots,
-* interacting with QWidgets,
-* and building your own application.
+* 사용자 인터페이스를 프로그램으로 생성하기,
+* 레이아웃과 위젯,
+* Qt 클래스 오버로딩,
+* 시그널과 슬롯 연결하기,
+* QWidgets으로 상호작용하기,
+* 나만의 애플리케이션 만들기.
 
-The requirements:
+요구사항:
 
-* A simple window for the application ([QMainWindow](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QMainWindow.html)).
-* A table to keep track of the expenses ([QTableWidget](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QTableWidget.html)).
-* Two input fields to add expense information ([QLineEdit](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QLineEdit.html)).
-* Buttons to add information to the table, plot data, clear table, and exit the application ([QPushButton](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QPushButton.html)).
-* A verification step to avoid invalid data entry.
-* A chart to visualize the expense data ([QChart](https://doc.qt.io/qtforpython/PySide6/QtCharts/QChart.html)) that will be embedded in a chart view ([QChartView](https://doc.qt.io/qtforpython/PySide6/QtCharts/QChartView.html)).
+* 애플리케이션을 위한 간단한 창. ([QMainWindow](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QMainWindow.html))
+* 비용을 추적하기 위한 테이블. ([QTableWidget](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QTableWidget.html))
+* 비용 정보를 추가하기 위한 2개의 입력 필드. ([QLineEdit](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QLineEdit.html))
+* 테이블에 정보를 추가하거나, 데이터를 플롯하건, 테이블을 비우거나, 애플리케이션을 종료하기 위한 버튼. ([QPushButton](https://doc.qt.io/qtforpython/PySide6/QtWidgets/QPushButton.html))
+* 유효하지 않은 데이터 엔트리를 방지하기 위한 검증 과정.
+* 비용 데이터를 시각화하기 위한 차트. ([QChart](https://doc.qt.io/qtforpython/PySide6/QtCharts/QChart.html)) 그리고 이 차트는 차트 뷰에 내장시킬 것입니다. ([QChartView](https://doc.qt.io/qtforpython/PySide6/QtCharts/QChartView.html))
 
-#### Empty window
+#### 비어 있는 창
 
-The base structure for a QApplication is located inside the if __name__ == “__main__”: code block.
+QApplication의 기본 구조는 `if __name__ == "__main__":` 코드 블록 내부에 있습니다.
 
 ```python
   if __name__ == "__main__":
@@ -3374,7 +3351,7 @@ The base structure for a QApplication is located inside the if __name__ == “__
       sys.exit(app.exec())
 ```
 
-Now, to start the development, create an empty window called MainWindow. You could do that by defining a class that inherits from QMainWindow.
+이제 개발을 시작하려면 MainWindow라는 비어 있는 창을 생성하십시오. QMainWindow로부터 상속하는 클래스를 정의해서 이것을 할 수 있습니다.
 
 ```python
 class MainWindow(QMainWindow):
@@ -3383,18 +3360,18 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Tutorial")
 
 if __name__ == "__main__":
-    # Qt Application
+    # Qt 애플리케이션
     app = QApplication(sys.argv)
 
     window = MainWindow()
     window.resize(800, 600)
     window.show()
 
-    # Execute application
+    # 애플리케이션 실행
     sys.exit(app.exec())
 ```
 
-Now that our class is defined, create an instance of it and call show().
+이제 클래스가 정의되었습니다. 인스턴스를 생성하기 show()를 호출하십시오.
 
 ```python
 class MainWindow(QMainWindow):
@@ -3403,18 +3380,18 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Tutorial")
 
 if __name__ == "__main__":
-    # Qt Application
+    # Qt 애플리케이션
     app = QApplication(sys.argv)
 
     window = MainWindow()
     window.resize(800, 600)
     window.show()
 
-    # Execute application
+    # 애플리케이션 종료
     sys.exit(app.exec())
 ```
 
-#### Menu bar
+#### 메뉴 바
 
 Using a QMainWindow gives some features for free, among them a menu bar. To use it, you need to call the method menuBar() and populate it inside the MainWindow class.
 
@@ -3423,11 +3400,11 @@ Using a QMainWindow gives some features for free, among them a menu bar. To use 
         super().__init__()
         self.setWindowTitle("Tutorial")
 
-        # Menu
+        # 메뉴
         self.menu = self.menuBar()
         self.file_menu = self.menu.addMenu("File")
 
-        # Exit QAction
+        # 종류 QAction
         exit_action = self.file_menu.addAction("Exit", self.close)
         exit_action.setShortcut("Ctrl+Q")
 ```
@@ -3447,7 +3424,7 @@ class Widget(QWidget):
     def __init__(self):
         super().__init__()
 
-        # Example data
+        # 예제 데이터
         self._data = {"Water": 24.5, "Electricity": 55.1, "Rent": 850.0,
                       "Supermarket": 230.4, "Internet": 29.99, "Bars": 21.85,
                       "Public transportation": 60.0, "Coffee": 22.45, "Restaurants": 120}
