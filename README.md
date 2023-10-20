@@ -3881,29 +3881,28 @@ Qt는 넓은 분야의 여러 기술을 가지고 있습니다. 다음 주제들
 
 ### C++ 애플리케이션을 Python으로 포팅하기
 
-Qt for Python lets you use Qt APIs in a Python application. So the next question is: What does it take to port an existing C++ application? Try porting a Qt C++ application to Python to understand this.
+Qt for Python은 Python 애플리케이션에서 Qt API를 사용할 수 있게 해줍니다. 그래서 다음 질문은: 기존 C++ 애플리케이션을 포팅할 때 무엇을 해야 합니까? 이것을 이해하기 위해 Qt C++ 애플리케이션을 Python으로 포팅해 보십시오.
 
-Before you start, ensure that all the prerequisites for Qt for Python are met. See [Getting Started](https://doc.qt.io/qtforpython-6/gettingstarted/index.html) for more information. In addition, familiarize yourself with the basic differences between Qt in C++ and in Python.
+시작하기 전에 Qt for Python에 대한 모든 전제조건을 만족해야 합니다. 더 많은 정보를 보려면 [시작하기](https://doc.qt.io/qtforpython-6/gettingstarted/index.html)를 보십시오. 추가로 C++과 Python에서 Qt의 기본 차이점에 대해 익숙해지십시오.
 
-#### Basic differences
+#### 기본 차이점
 
-This section highlights some of the basic differences between C++ and Python, and how Qt differs between these two contexts.
+이 섹션에서는 C++과 Python 간의 기본 차이점의 일부를 보여주고, Qt가 두 문맥 간에 어떻게 다른지 보여드리겠습니다.
 
 #### C++ vs Python
 
-* In the interest of code reuse, both C++ and Python provide ways for one file of code to use facilities provided by another. In C++, this is done using the `#include` directive to access the API definition of the reused code. The Python equivalent is an `import` statement.
-* The constructor of a C++ class shares the name of its class and automatically calls the constructor of any base-classes (in a predefined order) before it runs. In Python, the `__init__()` method is the constructor of the class, and it can explicitly call base-class constructors in any order.
-* C++ uses the keyword, `this`, to implicitly refer to the current object. In python, you need to explicitly mention the current object as the first parameter to each instance method of the class; it is conventionally named `self`.
-* And more importantly, forget about curly braces, {}, and semi-colon, ;.
-* Precede variable definitions with the `global` keyword, only if they need global scope.
+* 코드 재사용 관점에서 볼 때, C++과 Python 모두 하나의 코드 파일이 다른 언어 환경에서 쉽게 사용할 수 있는 기능을 제공합니다. C++에서 재사용된 코드의 API 정의에 접근하려면 `#include` 지시어를 사용하면 됩니다. 이것은 Python에서 `import` 구문과 같습니다.
+* C++ 클래스의 생성자는 클래스 이름과 같으며 실행하기 전에 (정의한 순서대로) 모든 베이스 클래스의 생성자를 자동으로 호출합니다. Python에서 `__init__()` 메서드가 클래스의 생성자이며 어떤 순서로든 베이스 클래스의 생성자를 명시적으로 호출할 수 있습니다.
+* C++에서는 현재 객체를 암묵적으로 참조할 때 `this` 키워드를 사용합니다. Python에서는 클래스의 각 인스턴스 메서드의 1번째 파라미터로 현재 객체를 명시적으로 언급해야 합니다; 관례적으로 그 이름을 `self`라고 합니다.
+* 더 중요한 것은 Python의 경우 {}와 ; 기호를 잊어 버리세요.
+* 전역 변수가 필요한 경우에만 `global` 키워드를 변수 정의 앞에 붙이십시오.
 
 ```python
 var = None
 def func(key, value = None):
-  """Does stuff with a key and an optional value.
+  """키와 옵션 값을 사용합니다.
 
-  If value is omitted or None, the value from func()'s
-  last call is reused.
+  만약 값을 생략하거나 None인 경우, func()의 마지막 호출의 값을 재사용합니다.
   """
   global var
   if value is None:
@@ -3915,11 +3914,11 @@ def func(key, value = None):
   doStuff(key, value)
 ```
 
-In this example, `func()` would treat `var` as a local name without the global statement. This would lead to a `NameError` in the `value is None` handling, on accessing `var`. For more information about this, see [Python refernce documentation](https://doc.qt.io/qtforpython-6/tutorials/portingguide/pythonrefdoc).
+이 예제에서 `func()`는 `var`를 global 구문이 없는 로컬 이름으로 취급할 것입니다. `var`에 접근할 때 `value is None` 처리 과정에서 `NameError`이 발생할 것입니다. 더 많은 정보는 [Python 레퍼런스 문서](https://doc.qt.io/qtforpython-6/tutorials/portingguide/pythonrefdoc)를 보십시오.
 
-Tip: Python being an interpreted language, most often the easiest way is to try your idea in the interperter. You could call the `help()` function in the interpreter on any built-in function or keyword in Python. For example, a call to `help(import)` should provide documentation about the `import` statment
+팁: Python은 인터프리터 언어이기 때문에, 아이디어를 실현해 보는 흔하고 쉬운 방법은 인터프리터 안에서 하는 것입니다. Python에서 빌트인 함수나 키워드에 대해 인터프리터에서 `help()` 함수를 호출해 보십시오. 예를 들어, `help(import)`를 호출하면 `import` 구문에 대한 문서를 제공해 줄 것입니다.
 
-Last but not the least, try out a few examples to familiarize yourself with the Python coding style and follow the guidelines outlined in the [PEP8 - Style Guide](https://doc.qt.io/qtforpython-6/tutorials/portingguide/pep8).
+마지막으로 Python 코딩 스타일에 익숙해지도록 몇 가지 예제를 따라해 보고 [PEP8 - 스타일 가이드](https://doc.qt.io/qtforpython-6/tutorials/portingguide/pep8)에 설명된 가이드라인을 따르십시오.
 
 ```python
 import sys
@@ -3932,25 +3931,24 @@ label.show()
 sys.exit(app.exec())
 ```
 
-Note: Qt provides classes that are meant to manage the application-specific requirements depending on whether the application is console-only (QCoreApplication), GUI with QtWidgets (QApplication), or GUI without QtWidgets (QGuiApplication). These classes load necessary plugins, such as the GUI libraries required by an application. In this case, it is QApplication that is initialized first as the application has a GUI with QtWidgets.
+주의: Qt는 애플리케이션별 요구사항에 따라 요구사항을 관리하기 위한 클래스를 제공합니다. 콘솔 전용이면 QCoreApplication, QtWidgets이 포함된 GUI이면 QApplication, QtWidgets이 없는 GUI는 QGuiApplication. 이 클래스들은 애플리케이션이 요구하는 GUI 라이브러리와 같은 필수 플러그인을 로드합니다. 이 경우 애플리케이션이 QtWidgets가 있는 GUI를 갖고 있으므로 QApplication이 먼저 초기화됩니다.
 
-#### Qt in the C++ and Python context
+#### C++과 Python 문맥에서의 Qt
 
-Qt behaves the same irrespective of whether it is used in a C++ or a Python application. Considering that C++ and Python use different language semantics, some differences between the two variants of Qt are inevitable. Here are a few important ones that you must be aware of:
+Qt는 C++이나 Python 애플리케이션에 상관없이 동일하게 동작합니다. C++과 Python이 서로 다른 의미론을 사용한다는 것을 고려한다면 두 Qt의 변형 간의 차이점은 불가피합니다. 여기에 주의해야 할 몇 가지 중요한 사항이 있습니다:
 
-* Qt Properties: `Q_PROPERTY` macros are used in C++ to add a public member variable with getter and setter functions. Python’s alternative for this is the `@property` decorator before the getter and setter function definitions.
-* Qt Signals and Slots: Qt offers a unique callback mechanism, where a signal is emitted to notify the occurrence of an event, so that slots connected to this signal can react to it. In C++, the class definition must define the slots under the `public Q_SLOTS:` and signals under `Q_SIGNALS:` access specifier. You connect these two using one of the several variants of the QObject::connect() function. Python’s equivalent for this is the @Slot` decorator just before the function definition. This is necessary to register the slots with the QtMetaObject.
-* QString, QVariant, and other types
-  - Qt for Python does not provide access to QString and QVariant. You must use Python’s native types instead.
-  - QChar and QStringRef are represented as Python strings, and QStringList is converted to a list of strings.
-  - QDate, QDateTime, QTime, and QUrl’s __hash__() methods return a string representation so that identical dates (and identical date/times or times or URLs) have identical hash values.
-  - QTextStream’s bin(), hex(), and oct() functions are renamed to bin_(), hex_(), and oct_() respectively. This should avoid name conflicts with Python’s built-in functions.
-* QByteArray: A QByteArray is treated as a list of bytes without encoding. Python 3 uses “bytes”. QString is represented as an encoded human readable string, which means it is a “str”.
+* Qt 프로퍼티: `Q_PROPERTY` 매크로는 C++에서 getter와 setter 함수를 가진 public 멤버 변수를 추가할 때 사용합니다. 이에 대한 Python의 대안은 getter와 setter 함수 정의 앞에 `@property` 데코레이터를 두는 것입니다.
+* Qt 시그널과 슬롯: Qt는 이벤트 발생을 알리기 위해 시그널을 방출하는 독특한 콜백 메커니즘을 제공합니다. 그래서 이 시그널에 연결된 슬롯들이 이에 반응할 수 있습니다. C++의 경우 클래스 정의는 반드시 `public Q_SLOTS:` 접근 지정자 아래에 슬롯을 정의하고 `Q_SIGNALS:` 접근 지정자 아래에 시그널을 정의해야 합니다. QObject::connect() 함수의 여러 변형 중 하나를 사용하여 이 둘을 연결하십시오. Python에서 이에 대응하는 것은 함수 정의 직전에 나오는 `@Slot` 데코레이터입니다. 이것은 슬롯을 QtMetaObject에 등록하는 데 필요합니다.
+* QString, QVariant, 그 외 타입
+  - Qt for Python은 QString과 QVariant에 대한 접근을 제공하지 않습니다. 대신 Python의 네이티브 타입을 사용해야 합니다.
+  - QChar와 QStringRef는 Python string이 대신하고, QStringList는 string의 list로 변환됩니다.
+  - QDate, QDateTime, QTime, QUrl의 __hash__() 메서드는 문자열 표현식을 리턴합니다. 그래서 동일한 날짜(그리고 날짜/시간, 시간, URL)에 대해서 동알한 해시 값을 갖습니다.
+  - QTextStream의 bin(), hex(), oct() 함수는 각각 bin_(), hex_(), oct_()로 이름이 바뀌었습니다. 이것은 Python의 빌트인 함수와 이름이 충돌하지 않기 위해서입니다.
+* QByteArray: QByteArray는 인코딩하지 않은 byte의 list로 취급합니다. Python 3는 "bytes"를 사용합니다. QString은 사람을 읽을 수 있는 인코딩된 string이며 "str"을 의미합니다.
 
-Here is the improved version of the Hello World example, demonstrating some of these differences:
+다음은 이러한 차이점 일부를 보여주는 향상된 버전의 Hello World 예제입니다:
 
 ```python
-
 import sys
 import random
 
@@ -3989,21 +3987,19 @@ if __name__ == "__main__":
     sys.exit(app.exec())
 ```
 
-Note: The `if` block is just a good practice when developing a Python application. It lets the Python file behave differently depending on whether it is imported as a module in another file or run directly. The `__name__` variable will have different values in these two scenarios. It is `__main__` when the file is run directly, and the module’s file name (`hello_world_ex` in this case) when imported as a module. In the later case, everything defined in the module except the if block is available to the importing file.
+주의: `if` 블록은 Python 애플리케이션을 개발할 때 좋은 방법일 뿐입니다. 다른 파일에서 이 Python 파일을 모듈로 가져오는지, 혹은 직접 실행하는지에 따라 다르게 작동합니다. `__name__` 변수는 이 2가지 시나리오에서 서로 다른 값을 갖게 됩니다. 파일을 직접 실행할 경우 그 값은 `__main__`이 되고, 모듈로 가져와서 실행하게 되면 모듈의 파일 이름(이 경우 `hello_world_ex`)이 됩니다. 후자의 경우, `if` 블록 외에 모듈에서 정의한 것은 import하는 파일에서 모두 이용가능합니다.
 
-Notice that the QPushButton’s `clicked` signal is connected to the `magic` function to randomly change the QLabel’s `text` property. The @Slot` decorator marks the methods that are slots and informs the QtMetaObject about them.
+여기에서 QPushButton의 `clicked` 시그널은 `magic` 함수에 연결되는데 이것은 QLabel의 `text` 프로퍼티를 임의로 변경합니다. `@Slot` 데코레이터는 이 메서드가 슬롯이라는 것을 표시하고 QtMetaObject에게 슬롯을 알려줍니다.
 
-#### Porting a Qt C++ example
+#### Qt C++ 예제 포팅하기
 
-Qt offers several C++ examples to showcase its features and help beginners learn. You can try porting one of these C++ examples to Python. The [books SQL example](https://code.qt.io/cgit/qt/qtbase.git/tree/examples/sql/books) is a good starting point as it does not require you to write UI-specific code in Python, but can use its `.ui` file instead.
+Qt는 C++의 특징을 보여주고 초보자의 학습을 돕기 위해 몇 가지 C++ 예제를 제공합니다. 이 C++ 예제들 중 하나를 골라 Python으로 포팅해 보실 수 있습니다. [books SQL example](https://code.qt.io/cgit/qt/qtbase.git/tree/examples/sql/books)은 Python에서 UI 관련 코드를 작성하지 않을 수 있으므로 좋은 시작점이 될 수 있습니다. 하지만 대신 `.ui` 파일을 사용할 수 있습니다.
 
-The following chapters guides you through the porting process:
+다음 장은 포팅 과정을 통해 가이드 해줄 것입니다:
 
-[Chapter 1: initDb.h to createDb.py](https://doc.qt.io/qtforpython-6/tutorials/portingguide/chapter1/chapter1.html)
-[Chapter 2: bookdelegate.cpp to bookdelegate.py](https://doc.qt.io/qtforpython-6/tutorials/portingguide/chapter2/chapter2.html)
-[Chapter 3: Port bookdwindow.cpp to bookwindow.py](https://doc.qt.io/qtforpython-6/tutorials/portingguide/chapter3/chapter3.html)
-
-[링크](https://doc.qt.io/qtforpython-6/tutorials/portingguide/index.html)
+[1장: initDb.h에서 createDb.py로](https://doc.qt.io/qtforpython-6/tutorials/portingguide/chapter1/chapter1.html)
+[2장: bookdelegate.cpp에서 bookdelegate.py로](https://doc.qt.io/qtforpython-6/tutorials/portingguide/chapter2/chapter2.html)
+[3장: Port bookdwindow.cpp에서 bookwindow.py로](https://doc.qt.io/qtforpython-6/tutorials/portingguide/chapter3/chapter3.html)
 
 ### PySide6 애플리케이션의 C++ 확장 디버그하는 방법
 
