@@ -4007,6 +4007,10 @@ Qt는 C++의 특징을 보여주고 초보자의 학습을 돕기 위해 몇 가
 
 ## 예제
 
+Qt for Python이 제공하는 예제 모음은 새로운 사용자가 모듈의 다양한 유저 케이스를 이해하는 데 도움을 줍니다.
+
+모든 예제는 [examples](https://code.qt.io/cgit/pyside/pyside-setup.git/tree/examples) 디렉토리의 [pyside-setup](https://code.qt.io/cgit/pyside/pyside-setup.git/) 리포지토리 내부에서 모두 찾을 수 있습니다.
+
 [링크](https://doc.qt.io/qtforpython-6/examples/index.html)
 
 ## 비디오
